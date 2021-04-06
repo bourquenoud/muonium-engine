@@ -1,0 +1,7 @@
+#ignore the build directories
+/Debug
+/Release
+
+#Ignore the eclipse project
+.cproject
+.project
