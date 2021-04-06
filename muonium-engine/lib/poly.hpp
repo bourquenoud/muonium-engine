@@ -8,7 +8,7 @@
 #ifndef POLY_H_
 #define POLY_H_
 
-#include "poly/Triangle.h"
-#include "poly/Poly.h"
+#include "poly/Triangle.hpp"
+#include "poly/Poly.hpp"
 
 #endif /* POLY_H_ */

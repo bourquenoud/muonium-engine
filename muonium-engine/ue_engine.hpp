@@ -9,9 +9,9 @@
 #define UE_ENGINE_H_
 
 //Set the configuration for the engine
-#include "ue_config.h"
+#include "ue_config.hpp"
 
-#include "linal.h"
-#include "poly.h"
+#include "linal.hpp"
+#include "poly.hpp"
 
 #endif /* UE_ENGINE_H_ */

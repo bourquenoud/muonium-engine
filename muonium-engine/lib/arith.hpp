@@ -8,6 +8,6 @@
 #ifndef ARITH_H_
 #define ARITH_H_
 
-#include "arith/Real.h"
+#include "arith/Real.hpp"
 
 #endif /* ARITH_H_ */

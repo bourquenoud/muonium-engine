@@ -8,7 +8,7 @@
 #ifndef TEXTURE_H_
 #define TEXTURE_H_
 
-#include "texture/Colour.h"
-#include "texture/Texture.h"
+#include "texture/Colour.hpp"
+#include "texture/Texture.hpp"
 
 #endif /* TEXTURE_H_ */

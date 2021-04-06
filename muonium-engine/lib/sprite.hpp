@@ -8,6 +8,6 @@
 #ifndef SPRITE_H_
 #define SPRITE_H_
 
-#include "sprite/Sprite.h"
+#include "sprite/Sprite.hpp"
 
 #endif /* SPRITE_H_ */
