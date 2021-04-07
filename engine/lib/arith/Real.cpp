@@ -9,6 +9,43 @@
 
 namespace ue
 {
+ /****Constructor****///USING FLOATING POINT OPERATIONS
+#ifdef UE_OPTION_ARITHMETIC_FLOAT
+  Real::Real()
+  {
+
+  }
+  Real::Real(int a)
+  {
+    val = (float)a;
+  }
+  Real::Real(float a)
+  {
+    val = a;
+  }
+  Real::Real(float a)
+  {
+    val = (float)a;
+  }
+//USING 32bits FIXED POINT OPERATIONS
+#else
+#ifdef UE_OPTION_ARITHMETIC_FIXED32
+  Real::Real()
+  {
+
+  }
+  Real::Real(int a)
+  {
+    val = (Fixed32)a;
+  }
+  Real::Real(float a)
+  {
+    val = (Fixed32)a;
+  }
+#endif //UE_OPTION_ARITHMETIC_FIXED32
+#endif //UE_OPTION_ARITHMETIC_FLOAT
+
+
 /****Arithmetic****/
 Real Real::operator+() //Unary +
 {
@@ -31,7 +68,7 @@ Real Real::operator+(Real a)//add
 Real Real::operator-(Real a)//sub
 {
 	Real temp;
-	temp.val = val + a.val;
+	temp.val = val - a.val;
 	return temp;
 }
 Real Real::operator*(Real a)//mult
@@ -88,22 +125,22 @@ Real Real::operator=(Real a)//assign
 }
 Real Real::operator+=(Real a)//add
 {
-	this->val = val + a;
+	this->val = val + a.val;
 	return *this;
 }
 Real Real::operator-=(Real a)//sub
 {
-	this->val = val - a;
+	this->val = val - a.val;
 	return *this;
 }
 Real Real::operator*=(Real a)//mult
 {
-	this->val = val * a;
+	this->val = val * a.val;
 	return *this;
 }
 Real Real::operator/=(Real a)//div
 {
-	this->val = val / a;
+	this->val = val / a.val;
 	return *this;
 }
 /*Real Real::operator%=(Real a)//mod
@@ -140,7 +177,6 @@ bool Real::operator>=(Real a)//bigger or equal
 }
 
 //****Typecast****//
-#ifdef UE_OPTION_ARITHMETIC_FLOAT
 Real::operator int8_t()
 {
 	return (int8_t)(this->val);
@@ -153,44 +189,9 @@ Real::operator int32_t()
 {
 	return (int32_t)(this->val);
 }
-#else
-#ifdef UE_OPTION_ARITHMETIC_FIXED32
-Real::operator int8_t()
+Real::operator float()
 {
-	return (int8_t)(this->val >> 16);
-}
-Real::operator int16_t()
-{
-	return (int16_t)(this->val >> 16);
-}
-Real::operator int32_t()
-{
-	return (int32_t)(this->val >> 16);
-}
-#endif //UE_OPTION_ARITHMETIC_FIXED32
-#endif //UE_OPTION_ARITHMETIC_FLOAT
-
-
-void Real::toStr(char* c)//Write to the buffer without size limit
-{
-	/*
-	char* ptr = c;
-	Real temp = *this;
-	bool sign = (temp > R(0));
-	if(!sign)
-	{
-		temp = -temp;
-		*(ptr++) = '-';
-	}
-
-	while(temp > R(0))
-	{
-		*(ptr++) = ((temp %) + );
-	}*/
-}
-void Real::toStr(char* c, uint32_t len)//Write to the buffer with size limit
-{
-
+  return (float)(this->val);
 }
 }
 

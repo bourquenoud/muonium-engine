@@ -8,18 +8,37 @@
 #ifndef VECTOR4_H_
 #define VECTOR4_H_
 
+#include <cmath>
+#include "../../arith.hpp"
+
 namespace ue {
 
-class Vector4 {
-public:
-	Vector4() {
-		// TODO Auto-generated constructor stub
+  class Vector4
+  {
+  public:
+    Real x;
+    Real y;
+    Real z;
+    Real w;
 
-	}
-	virtual ~Vector4() {
-		// TODO Auto-generated destructor stub
-	}
-};
+    Vector4 operator+(Vector4 b);
+    Vector4 operator-(Vector4 b);
+    Vector4 operator-();
+    Vector4 operator*(Real val);
+    Real operator*(Vector4 b); //Dot product
+
+    bool operator==(Vector4);
+
+    Real norm(void);
+    Vector4 normalise(void);
+
+    static const Vector4 ZERO;
+    static const Vector4 ONE;
+    static const Vector4 X;
+    static const Vector4 Y;
+    static const Vector4 Z;
+    static const Vector4 W;
+  };
 
 }
 

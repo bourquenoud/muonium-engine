@@ -8,7 +8,8 @@
 #ifndef UE_CONFIG_H_
 #define UE_CONFIG_H_
 
-#define UE_OPTION_ARITHMETIC_FLOAT
+#define UE_OPTION_ARITHMETIC_FIXED32
+#define UE_OPTION_CPP17_SYNTAX
 
 
 #endif /* UE_CONFIG_H_ */

@@ -17,68 +17,84 @@
 #define REAL_H_
 
 #include <cstdint>
+#include "engine/ue_config.hpp"
 #include "fixed/Fixed32.hpp"
-
-#define UE_OPTION_ARITHMETIC_FLOAT
-
-#define R(x) ((Real){x})
 
 namespace ue {
 
-class Real
-{
-public:
-//USING FLOATING POINT OPERATIONS
+  class Real
+  {
+  public:
+    //USING FLOATING POINT OPERATIONS
 #ifdef UE_OPTION_ARITHMETIC_FLOAT
-	float val;
-//USING 32bits FIXED POINT OPERATIONS
+    float val;
+    //USING 32bits FIXED POINT OPERATIONS
 #else
 #ifdef UE_OPTION_ARITHMETIC_FIXED32
-	Fixed32 val;
+    Fixed32 val;
 #endif //UE_OPTION_ARITHMETIC_FIXED32
 #endif //UE_OPTION_ARITHMETIC_FLOAT
 
-	//****Arithmetic****
-	Real operator+(); //Unary +
-	Real operator-(); //Unary -
-	Real operator+(Real);//add
-	Real operator-(Real);//sub
-	Real operator*(Real);//mult
-	Real operator/(Real);//div
-	Real operator%(Real);//mod
+    //****Constructor****
+    Real();
+    Real(int);
+    Real(float);
+#ifdef UE_OPTION_CPP17_SYNTAX
+    constexpr Real(long double a) : val(a)
+    {
+      val = (float)a;
+    }
+#endif
 
-	//****Inc/dec****
-	Real operator++();//pre inc
-	Real operator--();//pre dec
-	Real operator++(int);//post inc
-	Real operator--(int);//post dec
+    //****Arithmetic****
+    Real operator+(); //Unary +
+    Real operator-(); //Unary -
+    Real operator+(Real);//add
+    Real operator-(Real);//sub
+    Real operator*(Real);//mult
+    Real operator/(Real);//div
+    Real operator%(Real);//mod
 
-	//****Assignment****
-	Real operator=(Real);//assign
-	Real operator+=(Real);//add
-	Real operator-=(Real);//sub
-	Real operator*=(Real);//mult
-	Real operator/=(Real);//div
-	Real operator%=(Real);//mod
+    //****Inc/dec****
+    Real operator++();//pre inc
+    Real operator--();//pre dec
+    Real operator++(int);//post inc
+    Real operator--(int);//post dec
 
-	//****Comparison****
-	bool operator==(Real);//equal
-	bool operator!=(Real);//not equal
-	bool operator<(Real);//smaller
-	bool operator>(Real);//bigger
-	bool operator<=(Real);//smaller or equal
-	bool operator>=(Real);//bigger or equal
+    //****Assignment****
+    Real operator=(Real);//assign
+    Real operator+=(Real);//add
+    Real operator-=(Real);//sub
+    Real operator*=(Real);//mult
+    Real operator/=(Real);//div
+    Real operator%=(Real);//mod
 
-	//****typecast****
-	operator int8_t();
-	operator int16_t();
-	operator int32_t();
+    //****Comparison****
+    bool operator==(Real);//equal
+    bool operator!=(Real);//not equal
+    bool operator<(Real);//smaller
+    bool operator>(Real);//bigger
+    bool operator<=(Real);//smaller or equal
+    bool operator>=(Real);//bigger or equal
 
-	//****Conversion****
-	void toStr(char*);//Write to the buffer size without limit
-	void toStr(char*, uint32_t);//Write to the buffer size with limit
+    //****typecast****
+    operator int8_t();
+    operator int16_t();
+    operator int32_t();
+    operator float();
 
-};
+  };
 }
+
+//Literal definition
+#ifdef UE_OPTION_CPP17_SYNTAX
+#define R(X) (X##_r)
+constexpr ue::Real operator"" _r(long double a)
+{
+  return ue::Real(a);
+}
+#else
+#define R(X) ((Real)X)
+#endif //UE_OPTION_CPP17_SYNTAX
 
 #endif /* REAL_H_ */

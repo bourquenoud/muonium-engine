@@ -9,7 +9,6 @@
 #define UE_ENGINE_H_
 
 //Set the configuration for the engine
-#include "ue_config.hpp"
 
 #include "lib/arith.hpp"
 #include "lib/linal.hpp"

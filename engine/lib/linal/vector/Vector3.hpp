@@ -8,18 +8,36 @@
 #ifndef VECTOR3_H_
 #define VECTOR3_H_
 
+#include <cmath>
+#include "../../arith.hpp"
+
 namespace ue {
 
-class Vector3 {
-public:
-	Vector3() {
-		// TODO Auto-generated constructor stub
+  class Vector3
+  {
+  public:
+    Real x;
+    Real y;
+    Real z;
 
-	}
-	virtual ~Vector3() {
-		// TODO Auto-generated destructor stub
-	}
-};
+    Vector3 operator+(Vector3 b);
+    Vector3 operator-(Vector3 b);
+    Vector3 operator-();
+    Vector3 operator*(Real val);
+    Real operator*(Vector3 b); //Dot product
+
+    bool operator==(Vector3);
+
+    Vector3 cross(Vector3 b);
+    Real norm(void);
+    Vector3 normalise(void);
+
+    static const Vector3 ZERO;
+    static const Vector3 ONE;
+    static const Vector3 X;
+    static const Vector3 Y;
+    static const Vector3 Z;
+  };
 
 }
 

@@ -8,18 +8,23 @@
 #ifndef MATRIX4_H_
 #define MATRIX4_H_
 
+#include "../../arith.hpp"
+#include "../vector/Vector4.hpp"
+
 namespace ue {
 
-class Matrix4 {
-public:
-	Matrix4() {
-		// TODO Auto-generated constructor stub
+  class Matrix4
+  {
+  public:
+    Real d[4][4];
+    Matrix4 operator-();
+    Matrix4 operator+(Matrix4 B);
+    Matrix4 operator-(Matrix4 B);
+    Matrix4 operator*(Matrix4 B);
+    Vector4 operator*(Vector4 v);
+    Real* operator[](int);
+  };
 
-	}
-	virtual ~Matrix4() {
-		// TODO Auto-generated destructor stub
-	}
-};
 
 }
 

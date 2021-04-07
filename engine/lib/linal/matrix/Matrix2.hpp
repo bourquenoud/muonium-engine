@@ -8,18 +8,23 @@
 #ifndef MATRIX2_H_
 #define MATRIX2_H_
 
+#include "../../arith.hpp"
+#include "../vector/Vector2.hpp"
+
 namespace ue {
 
-class Matrix2 {
-public:
-	Matrix2() {
-		// TODO Auto-generated constructor stub
+  class Matrix2
+  {
+  public:
+    Real d[2][2];
+    Matrix2 operator-();
+    Matrix2 operator+(Matrix2 B);
+    Matrix2 operator-(Matrix2 B);
+    Matrix2 operator*(Matrix2 B);
+    Vector2 operator*(Vector2 v);
+    Real* operator[](int);
 
-	}
-	virtual ~Matrix2() {
-		// TODO Auto-generated destructor stub
-	}
-};
+  };
 
 }
 

@@ -16,45 +16,62 @@
 #define FIXED32_H_
 
 #include <cstdint>
+#include <cmath>
 
 namespace ue
 {
 
-class Fixed32
-{
-	int32_t val;
+  class Fixed32
+  {
+  public:
+    int32_t val;
 
-	//****Arithmetic****
-	Fixed32 operator+(); //Unary +
-	Fixed32 operator-(); //Unary -
-	Fixed32 operator+(Fixed32);//add
-	Fixed32 operator-(Fixed32);//sub
-	Fixed32 operator*(Fixed32);//mult
-	Fixed32 operator/(Fixed32);//div
-	Fixed32 operator%(Fixed32);//mod
+    //****Constructor****
+    Fixed32();
+    Fixed32(int32_t);
+    Fixed32(float);
+    constexpr Fixed32(long double a) : val(a)
+    {
+      val = (int32_t)round(a * (1<<16));
+    }
 
-	//****Inc/dec****
-	Fixed32 operator++();//pre inc
-	Fixed32 operator--();//pre dec
-	Fixed32 operator++(int);//post inc
-	Fixed32 operator--(int);//post dec
+    //****Arithmetic****
+    Fixed32 operator+(); //Unary +
+    Fixed32 operator-(); //Unary -
+    Fixed32 operator+(Fixed32);//add
+    Fixed32 operator-(Fixed32);//sub
+    Fixed32 operator*(Fixed32);//mult
+    Fixed32 operator/(Fixed32);//div
+    Fixed32 operator%(Fixed32);//mod
 
-	//****Assignment****
-	Fixed32 operator=(Fixed32);//assign
-	Fixed32 operator+=(Fixed32);//add
-	Fixed32 operator-=(Fixed32);//sub
-	Fixed32 operator*=(Fixed32);//mult
-	Fixed32 operator/=(Fixed32);//div
-	Fixed32 operator%=(Fixed32);//mod
+    //****Inc/dec****
+    Fixed32 operator++();//pre inc
+    Fixed32 operator--();//pre dec
+    Fixed32 operator++(int);//post inc
+    Fixed32 operator--(int);//post dec
 
-	//****Comparison****
-	bool operator==(Fixed32);//equal
-	bool operator!=(Fixed32);//not equal
-	bool operator<(Fixed32);//smaller
-	bool operator>(Fixed32);//bigger
-	bool operator<=(Fixed32);//smaller or equal
-	bool operator>=(Fixed32);//bigger or equal
-};
+    //****Assignment****
+    Fixed32 operator=(Fixed32);//assign
+    Fixed32 operator+=(Fixed32);//add
+    Fixed32 operator-=(Fixed32);//sub
+    Fixed32 operator*=(Fixed32);//mult
+    Fixed32 operator/=(Fixed32);//div
+    Fixed32 operator%=(Fixed32);//mod
+
+    //****Comparison****
+    bool operator==(Fixed32);//equal
+    bool operator!=(Fixed32);//not equal
+    bool operator<(Fixed32);//smaller
+    bool operator>(Fixed32);//bigger
+    bool operator<=(Fixed32);//smaller or equal
+    bool operator>=(Fixed32);//bigger or equal
+
+    //****Typecast****
+    operator int8_t();
+    operator int16_t();
+    operator int32_t();
+    operator float();
+  };
 
 }
 

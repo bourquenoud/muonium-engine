@@ -1,6 +1,7 @@
 #ignore the build directories
 /Debug
 /Release
+/Test
 
 #Ignore the eclipse project
 .cproject
