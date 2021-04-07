@@ -5,22 +5,23 @@
  *      Author: mathieu
  */
 
-#ifndef TEXTURE_H_
-#define TEXTURE_H_
+#ifndef TEXTURE2_H_
+#define TEXTURE2_H_
+
+#include <cstdint>
+
+#include "Colour.hpp"
 
 namespace ue {
 
-class Texture {
-public:
-	Texture() {
-		// TODO Auto-generated constructor stub
-
-	}
-	virtual ~Texture() {
-		// TODO Auto-generated destructor stub
-	}
-};
+  class Texture
+  {
+  public:
+    uint32_t width;
+    uint32_t height;
+    Colour* pixel;
+  };
 
 }
 
-#endif /* TEXTURE_H_ */
+#endif /* TEXTURE2_H_ */

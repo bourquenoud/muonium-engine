@@ -8,10 +8,27 @@
 #ifndef COLOUR_H_
 #define COLOUR_H_
 
+#include <cstdint>
+
+#include "../../ue_config.hpp"
+
 namespace ue {
 
-class Colour {
-};
+#ifdef UE_CONFIG_COLOUR_RGBA
+  struct CoulourRGB
+  {
+          uint32_t r : 8;
+          uint32_t g : 8;
+          uint32_t b : 8;
+          uint32_t a : 8;
+  };
+#endif
+
+  union Colour
+  {
+          uint32_t raw;
+          CoulourRGB colour;
+  };
 
 }
 

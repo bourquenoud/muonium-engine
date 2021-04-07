@@ -8,6 +8,8 @@
 #ifndef TRIANGLE_H_
 #define TRIANGLE_H_
 
+#include "../../ue_config.hpp"
+
 #include "../arith.hpp"
 #include "../linal.hpp"
 

@@ -13,6 +13,7 @@
 #define UE_CONFIG_CPP17_SYNTAX
 #define UE_CONFIG_TEXTURE
 #define UE_CONFIG_NORMAL
+#define UE_CONFIG_COLOUR_RGBA
 
 
 #endif /* UE_CONFIG_H_ */
