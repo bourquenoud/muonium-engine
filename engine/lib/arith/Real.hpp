@@ -26,25 +26,25 @@ namespace ue {
   {
   public:
     //USING FLOATING POINT OPERATIONS
-#ifdef UE_OPTION_ARITHMETIC_FLOAT
+#ifdef UE_CONFIG_ARITHMETIC_FLOAT
     float val;
     //USING 32bits FIXED POINT OPERATIONS
 #else
-#ifdef UE_OPTION_ARITHMETIC_FIXED32
+#ifdef UE_CONFIG_ARITHMETIC_FIXED32
     Fixed32 val;
-#endif //UE_OPTION_ARITHMETIC_FIXED32
-#endif //UE_OPTION_ARITHMETIC_FLOAT
+#endif //UE_CONFIG_ARITHMETIC_FIXED32
+#endif //UE_CONFIG_ARITHMETIC_FLOAT
 
     //****Constructor****
     Real();
     Real(int);
     Real(float);
-#ifdef UE_OPTION_CPP17_SYNTAX
+#ifdef UE_CONFIG_CPP17_SYNTAX
     constexpr Real(long double a) : val(a)
     {
       val = (float)a;
     }
-#endif
+#endif //UE_CONFIG_CPP17_SYNTAX
 
     //****Arithmetic****
     Real operator+(); //Unary +
@@ -87,7 +87,7 @@ namespace ue {
 }
 
 //Literal definition
-#ifdef UE_OPTION_CPP17_SYNTAX
+#ifdef UE_CONFIG_CPP17_SYNTAX
 #define R(X) (X##_r)
 constexpr ue::Real operator"" _r(long double a)
 {
@@ -95,6 +95,6 @@ constexpr ue::Real operator"" _r(long double a)
 }
 #else
 #define R(X) ((Real)X)
-#endif //UE_OPTION_CPP17_SYNTAX
+#endif //UE_CONFIG_CPP17_SYNTAX
 
 #endif /* REAL_H_ */

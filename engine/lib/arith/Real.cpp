@@ -10,7 +10,7 @@
 namespace ue
 {
  /****Constructor****///USING FLOATING POINT OPERATIONS
-#ifdef UE_OPTION_ARITHMETIC_FLOAT
+#ifdef UE_CONFIG_ARITHMETIC_FLOAT
   Real::Real()
   {
 
@@ -23,13 +23,9 @@ namespace ue
   {
     val = a;
   }
-  Real::Real(float a)
-  {
-    val = (float)a;
-  }
 //USING 32bits FIXED POINT OPERATIONS
 #else
-#ifdef UE_OPTION_ARITHMETIC_FIXED32
+#ifdef UE_CONFIG_ARITHMETIC_FIXED32
   Real::Real()
   {
 
@@ -42,8 +38,8 @@ namespace ue
   {
     val = (Fixed32)a;
   }
-#endif //UE_OPTION_ARITHMETIC_FIXED32
-#endif //UE_OPTION_ARITHMETIC_FLOAT
+#endif //UE_CONFIG_ARITHMETIC_FIXED32
+#endif //UE_CONFIG_ARITHMETIC_FLOAT
 
 
 /****Arithmetic****/

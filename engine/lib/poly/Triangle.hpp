@@ -8,15 +8,32 @@
 #ifndef TRIANGLE_H_
 #define TRIANGLE_H_
 
+#include "../arith.hpp"
+#include "../linal.hpp"
+
 namespace ue {
+  struct Triangle
+  {
+    //Vertex
+    Vector3* va;
+    Vector3* vb;
+    Vector3* vc;
 
-class Triangle {
-public:
-	Triangle() {
-		// TODO Auto-generated constructor stub
+#ifdef UE_CONFIG_TEXTURE
+    //Texture vertex
+    Vector2* vta;
+    Vector2* vtb;
+    Vector2* vtc;
+#endif
 
-	}
-};
+#ifdef UE_CONFIG_NORMAL
+    //Normal vector
+    Vector3* vna;
+    Vector3* vnb;
+    Vector3* vnc;
+
+#endif
+  };
 
 }
 
