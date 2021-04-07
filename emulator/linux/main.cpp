@@ -2,6 +2,8 @@
  *
  */
 
+#ifdef UNDEF
+
 using namespace std;
 
 #include <iostream>
@@ -106,7 +108,7 @@ object_t objects[50];
 
 //TODO: quaternion and rotation stuff
 //Main
-int main(void)
+void __NONE__()//int main(void)
 {
 	srand((unsigned) time(0));
 
@@ -791,3 +793,5 @@ void drawText(SDL_Surface* screen, const char* string, uint8_t size, int x, int 
 
 	TTF_CloseFont(font);
 }
+
+#endif //UNDEF
