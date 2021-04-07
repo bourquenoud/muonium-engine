@@ -39,8 +39,13 @@ namespace ue {
     Real();
     Real(int);
     Real(float);
-#ifdef UE_CONFIG_CPP17_SYNTAX
+#if __cplusplus >= 201703L
     constexpr Real(long double a) : val(a)
+    {
+      val = (float)a;
+    }
+#else
+    Real(double a)
     {
       val = (float)a;
     }
@@ -87,7 +92,7 @@ namespace ue {
 }
 
 //Literal definition
-#ifdef UE_CONFIG_CPP17_SYNTAX
+#if __cplusplus >= 201703L
 #define R(X) (X##_r)
 constexpr ue::Real operator"" _r(long double a)
 {

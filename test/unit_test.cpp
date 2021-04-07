@@ -13,8 +13,12 @@
 #include "engine/ue_config.hpp"
 #include "engine/ue_engine.hpp"
 
-#define unit_test(X) cout << endl << #X "..." << endl; cout << ((unittest::X())? #X " OK": #X " FAILED") << endl
-#define test(X, Y) if (!(X)){Y = false;}; cout << #X << ":\t" << ((X)?"ok":"<-------FAILED") << endl
+#define unit_test(X) cout << endl << "-------------"#X"-------------"\
+  << endl << "Line:\tTest:\t\t\tResult:" << endl; cout <<\
+  ((unittest::X())?"\t\t\t\t<<OK>>": "\t\t\t\t<<FAILED>>") << endl
+
+#define test(X, Y) if (!(X)){Y = false;};cout << __LINE__ << "\t"\
+  << #X << "\t" << ((X)?" <OK>":(" <FAILED>")) << endl
 
 using namespace ue;
 using namespace std;
