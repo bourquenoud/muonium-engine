@@ -5,8 +5,8 @@
  *      Author: mathieu
  */
 
-#ifndef POLY_H_
-#define POLY_H_
+#ifndef POLY2_H_
+#define POLY2_H_
 
 #include "../arith.hpp"
 #include "../linal.hpp"
