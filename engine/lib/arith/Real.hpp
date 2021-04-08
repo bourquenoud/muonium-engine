@@ -85,6 +85,9 @@ namespace ue {
     operator int8_t();
     operator int16_t();
     operator int32_t();
+    operator uint8_t();
+    operator uint16_t();
+    operator uint32_t();
     operator float();
 
     //****basic arithmetics****
