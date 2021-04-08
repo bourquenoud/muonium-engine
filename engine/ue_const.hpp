@@ -9,6 +9,7 @@
 #define UE_CONST_HPP_
 
 //Colour mode
+//TODO: put that in an enum
 #define RGBA8888 1
 #define ARGB8888 2
 #define ARGB1555 3
