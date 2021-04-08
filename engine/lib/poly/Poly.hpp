@@ -20,20 +20,21 @@ namespace ue {
   class Poly
   {
   public:
-    Vector3 center;
+    Quaternion rotation;
+    Vector3 position;
     Triangle* faces;
     uint32_t faceCount;
 
     Vector3* vertices;
     uint32_t vertexCount;
 
-#ifdef UE_CONFIG_TEXTURE
+#if UE_CONFIG_ENABLE_TEXTURE == true
     Texture texture;
     Vector2* textureVerts;
     uint32_t textureCount;
 #endif //UE_CONFIG_TEXTURE
 
-#ifdef UE_CONFIG_NORMAL
+#if UE_CONFIG_ENABLE_NORMAL == true
     Vector3* normals;
     uint32_t normalCount;
 #endif //UE_CONFIG_NORMAL

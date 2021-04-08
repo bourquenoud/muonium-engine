@@ -2,6 +2,7 @@
  *
  */
 
+#define DEF
 #ifdef UNDEF
 
 using namespace std;

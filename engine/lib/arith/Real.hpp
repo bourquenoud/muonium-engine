@@ -26,14 +26,12 @@ namespace ue {
   {
   public:
     //USING FLOATING POINT OPERATIONS
-#ifdef UE_CONFIG_ARITHMETIC_FLOAT
+#if UE_CONFIG_ARITHMETIC == FLOAT
     float val;
     //USING 32bits FIXED POINT OPERATIONS
-#else
-#ifdef UE_CONFIG_ARITHMETIC_FIXED32
+#elif UE_CONFIG_ARITHMETIC == FIXED32
     Fixed32 val;
-#endif //UE_CONFIG_ARITHMETIC_FIXED32
-#endif //UE_CONFIG_ARITHMETIC_FLOAT
+#endif //UE_CONFIG_ARITHMETIC
 
     //****Constructor****
     Real();

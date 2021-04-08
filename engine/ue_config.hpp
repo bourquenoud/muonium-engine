@@ -10,10 +10,40 @@
 
 #include "ue_const.hpp"
 
-#define UE_CONFIG_ARITHMETIC_FIXED32
-//#define UE_CONFIG_ARITHMETIC_FLOAT
-#define UE_CONFIG_TEXTURE
-#define UE_CONFIG_NORMAL
+/*
+ * Define the arithmetic type used.
+ *
+ * To speed up calculations for MCU without FPU, it is possible
+ * to enable a fixed point arithmetic mode. Objects have to be properly
+ * scaled before.
+ * The fixed point is 16.16 signed. Range is 32'767.99998 to -32'768.00000
+ * step is 1/65536 = 15.25878906e-6
+ *
+ * Mode available
+ * FLOAT
+ * FIXED32
+ */
+#define UE_CONFIG_ARITHMETIC FIXED32
+
+/*
+ * Enable render texture
+ *
+ * Rendering textures makes the computation a bit slower and uses more memory.
+ *
+ * true or false
+ */
+#define UE_CONFIG_ENABLE_TEXTURE true
+
+/*
+ * Enable normals
+ *
+ * Interpolate normals to make a smoother surface. Enabling this will disable
+ * light precomputing and makes the rendering slower. Disabling it will make the
+ * object angle sharp
+ *
+ * true or false
+ */
+#define UE_CONFIG_ENABLE_NORMAL true
 
 /*
  * Define the colour mode of the buffer.

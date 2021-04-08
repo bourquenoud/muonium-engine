@@ -16,12 +16,21 @@ namespace ue
 
   Poly::Poly(const Poly& object)
   {
-    center = object.center;
+    rotation = object.rotation;
+    position = object.position;
     faceCount = object.faceCount;
     faces = object.faces;
+    vertices = object.vertices;
+
+#if UE_CONFIG_ENABLE_TEXTURE == true
     texture = object.texture;
     textureVerts = object.textureVerts;
     textureCount = object.vertexCount;
-    vertices = object.vertices;
+#endif
+
+#if UE_CONFIG_ENABLE_NORMAL == true
+    normals = object.normals;
+    normalCount = object.normalCount;
+#endif
   }
 }

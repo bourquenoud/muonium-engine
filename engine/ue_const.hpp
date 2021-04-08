@@ -8,6 +8,10 @@
 #ifndef UE_CONST_HPP_
 #define UE_CONST_HPP_
 
+//Arithmetic modes
+#define FIXED32 1
+#define FLOAT 2
+
 //Colour mode
 //TODO: put that in an enum
 #define RGBA8888 1
