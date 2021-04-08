@@ -179,15 +179,15 @@ namespace ue
   {
     return (int32_t)(this->val>>16);
   }
-  operator uint8_t()
+  Fixed32::operator uint8_t()
   {
     return (uint8_t)(val>>16);
   }
-  operator uint16_t()
+  Fixed32::operator uint16_t()
   {
     return (uint16_t)(val>>16);
   }
-  operator uint32_t()
+  Fixed32::operator uint32_t()
   {
     return (uint32_t)(val>>16);
   }

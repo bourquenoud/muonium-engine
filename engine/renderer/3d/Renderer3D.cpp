@@ -126,7 +126,17 @@ namespace ue
       {
         for(uint16_t x = (uint32_t)minCorner.x; x < (uint32_t)maxCorner.x; x++)
           {
+            //TODO: use a | sign bit computation instead
+            if(w0 > R(0) && w1 > R(0) && w2 > R(0))
+              {
+                Real z = w0 * t.vc->z + w1 * t.va->z + w2 * t.vb->z;
 
+                //Check the depth and draw if closer
+                if(z < depthBuffer[x+y*depthBuffer.width])
+                  {
+
+                  }
+              }
 
             w0 += k[0][0];
             w1 += k[1][0];

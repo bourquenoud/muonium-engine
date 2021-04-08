@@ -191,15 +191,15 @@ namespace ue
   {
           return (int32_t)(this->val);
   }
-  operator uint8_t()
+  Real::operator uint8_t()
   {
     return (uint8_t)(val);
   }
-  operator uint16_t()
+  Real::operator uint16_t()
   {
     return (uint16_t)(val);
   }
-  operator uint32_t()
+  Real::operator uint32_t()
   {
     return (uint32_t)(val);
   }
