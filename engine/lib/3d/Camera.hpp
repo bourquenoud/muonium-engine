@@ -25,7 +25,6 @@ namespace ue
   class Camera : public ue::Object3D
   {
   public:
-    //XXX probably better to use a 3x3 matrix if no scaling is involved
     Matrix3 worldToCamera;
     Real angleOfView;
     Real b;
@@ -51,9 +50,9 @@ namespace ue
     );
 
     /** TODO: Finish description
-     *
+     * Convert a a world position to a raster position
      */
-    Vector3 toRaster(Vector3);
+    Vector3 toRaster(Vector3 v);
 
   };
 

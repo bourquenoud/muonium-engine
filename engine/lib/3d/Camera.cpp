@@ -66,7 +66,7 @@ namespace ue
 
     //Project to screen
     vert = Vector3(
-        (R(1.0) + near * vert.x / -vert.z) * R(0.5) * (Real)width,
+        (R(1.0) + near * vert.x / -vert.z) * R(0.5) * (Real)width, //XXX Maybe store width as real ?
         (R(1.0) + near * vert.y / vert.z) * R(0.5) * (Real)height,
         -vert.z);
 
