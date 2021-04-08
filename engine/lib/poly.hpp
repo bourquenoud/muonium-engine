@@ -10,5 +10,6 @@
 
 #include "3d/Triangle.hpp"
 #include "3d/Poly.hpp"
+#include "3d/Camera.hpp"
 
 #endif /* _3D_H_ */

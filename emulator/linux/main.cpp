@@ -1,9 +1,8 @@
 /*
  *
  */
-
-#define DEF
-#ifdef UNDEF
+#define LINUX_EMULATOR_MAIN
+#ifdef LINUX_EMULATOR_MAIN
 
 using namespace std;
 
@@ -109,7 +108,7 @@ object_t objects[50];
 
 //TODO: quaternion and rotation stuff
 //Main
-void __NONE__()//int main(void)
+int main(void)
 {
 	srand((unsigned) time(0));
 

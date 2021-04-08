@@ -25,8 +25,8 @@ namespace ue
   class Camera : public ue::Object3D
   {
   public:
-    Matrix3 worldToCamera;
-    Real angleOfView;
+    Matrix4 worldToCamera;
+    Real fov_deg;
     Real b;
     Real l;
     Real t;
@@ -54,6 +54,9 @@ namespace ue
      */
     Vector3 toRaster(Vector3 v);
 
+  private:
+    //Compute the projection matrix according to the camera parameters
+    void computeProjectionMatrix();
   };
 
 }

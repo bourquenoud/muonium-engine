@@ -27,7 +27,7 @@ namespace ue
     r = ((filmApertureWidth / 2) / focalLength) * nearClippingPLane;
 
     // field of view (horizontal)
-    //float fov = 2 * 180 / M_PI * atanf((filmApertureWidth / 2) / focalLength);
+    fov_deg = 2 * 180 / M_PI * atanf((filmApertureWidth / 2) / focalLength);
 
     float xscale = 1;
     float yscale = 1;
@@ -59,10 +59,38 @@ namespace ue
     l = -r;
   }
 
+#define FOV_FACTOR 8.72664626e-3
+  void Camera::computeProjectionMatrix()
+  {
+    Real S = 1/(tanf((float)fov_deg * FOV_FACTOR));
+
+    worldToCamera[0][0] = S;
+    worldToCamera[0][1] = 0;
+    worldToCamera[0][2] = 0;
+    worldToCamera[0][3] = 0;
+
+    worldToCamera[1][0] = 0;
+    worldToCamera[1][1] = S;
+    worldToCamera[1][2] = 0;
+    worldToCamera[1][3] = 0;
+
+    worldToCamera[2][0] = 0;
+    worldToCamera[2][1] = 0;
+    worldToCamera[2][2] = -far/(far-near);
+    worldToCamera[2][3] = -1;
+
+    worldToCamera[3][0] = 0;
+    worldToCamera[3][1] = 0;
+    worldToCamera[3][2] = -far*near/(far-near);
+    worldToCamera[3][3] = 0;
+  }
+
   Vector3 Camera::toRaster(Vector3 vert)
   {
+    /*
     //Rotate
     vert = worldToCamera * vert;
+    */
 
     //Project to screen
     vert = Vector3(

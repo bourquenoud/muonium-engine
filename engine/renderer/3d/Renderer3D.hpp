@@ -19,9 +19,10 @@ namespace ue
 
   class Renderer3D {
   public:
-    Poly* objList;
     FrameBuffer frameBuffer;
     DepthBuffer depthBuffer;
+    Camera worldCamera;
+    Poly* objectList;
   };
 
 }
