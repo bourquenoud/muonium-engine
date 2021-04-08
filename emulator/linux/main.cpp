@@ -1,7 +1,9 @@
 /*
  *
  */
-#define LINUX_EMULATOR_MAIN
+
+
+//#define LINUX_EMULATOR_MAIN
 #ifdef LINUX_EMULATOR_MAIN
 
 using namespace std;
@@ -795,3 +797,4 @@ void drawText(SDL_Surface* screen, const char* string, uint8_t size, int x, int 
 }
 
 #endif //UNDEF
+//*/

@@ -197,25 +197,25 @@ namespace ue
   }
 
   //****Basic arithmetic****
-  static Real Real::min(Real a,Real b)
+  Real Real::min(Real a, Real b)
   {
     return (a<b)?a:b;
   }
-  static Real Real::min(Real a,Real b,Real c)
+  Real Real::min(Real a,Real b,Real c)
   {
     return min(a,min(b,c));
   }
-  static Real Real::max(Real a,Real b)
+  Real Real::max(Real a,Real b)
   {
     return (a>b)?a:b;
   }
-  static Real Real::max(Real a,Real b,Real c)
+  Real Real::max(Real a,Real b,Real c)
   {
     return max(a,max(b,c));
   }
-  static Real Real::abs(Real a)
+  Real Real::abs(Real a)
   {
-
+    return (a < R(0))?-a:a;
   }
 
 }

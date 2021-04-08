@@ -43,7 +43,7 @@
  *
  * true or false
  */
-#define UE_CONFIG_ENABLE_NORMAL false
+#define UE_CONFIG_ENABLE_NORMAL true
 
 /*
  * Define the colour mode of the buffer.
@@ -60,7 +60,21 @@
  *
  * Enabling this make the renderer render frame all at once. This consumes a lot
  * of RAM but makes the render somewhat faster.
+ *
+ * true or false
  */
+#define UE_CONFIG_FULL_FRAME_RENDER true
 
+/*
+ * Enable fast clipping
+ *
+ * Enabling this improve the speed but triangle are not clipped, they are
+ * simply not rendered if at least one of its corner is outside the frame.
+ * Enable this only if you can guarantee that the object will stay inside
+ * the frame at all time.
+ *
+ * true or false
+ */
+#define UE_CONFIG_FAST_CLIPPING true
 
 #endif /* UE_CONFIG_H_ */
