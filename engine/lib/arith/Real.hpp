@@ -87,6 +87,13 @@ namespace ue {
     operator int32_t();
     operator float();
 
+    //****basic arithmetics****
+    static Real min(Real,Real);
+    static Real min(Real,Real,Real);
+    static Real max(Real,Real);
+    static Real max(Real,Real,Real);
+    static Real abs(Real);
+
   };
 }
 

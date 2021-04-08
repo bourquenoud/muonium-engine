@@ -40,11 +40,12 @@ namespace ue
         if(projTriangle.va->z > camera.far && projTriangle.vb->z > camera.far && projTriangle.vc->z > camera.far)
           continue;
 
+#if UE_CONFIG_ENABLE_TEXTURE == true
         //Copy the texture vectors xxx Probably useless xxx
-        *(projTriangle.vta) = *(triangle.vta);
-        *(projTriangle.vtb) = *(triangle.vtb);
-        *(projTriangle.vtc) = *(triangle.vtc);
-
+        *(projTriangle.vta) = *(o.faces[i].vta);
+        *(projTriangle.vtb) = *(o.faces[i].vtb);
+        *(projTriangle.vtc) = *(o.faces[i].vtc);
+#endif
 
 
       }

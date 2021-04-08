@@ -21,14 +21,14 @@ namespace ue {
     Vector3* vb;
     Vector3* vc;
 
-#ifdef UE_CONFIG_TEXTURE
+#ifdef UE_CONFIG_ENABLE_TEXTURE == true
     //Texture vertex
     Vector2* vta;
     Vector2* vtb;
     Vector2* vtc;
 #endif
 
-#ifdef UE_CONFIG_NORMAL
+#ifdef UE_CONFIG_ENABLE_NORMAL == true
     //Normal vector
     Vector3* vna;
     Vector3* vnb;

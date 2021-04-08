@@ -33,7 +33,7 @@ namespace ue
   private:
     void renderObject(Poly);
     void renderTriangle(Triangle);
-    Real edgeFunction(Vector3,Vector3,Vector3)
+    Real edgeFunction(Vector3,Vector3,Vector3);
   };
 
 }
