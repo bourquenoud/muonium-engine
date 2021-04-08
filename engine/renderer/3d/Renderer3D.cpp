@@ -130,11 +130,19 @@ namespace ue
             if(w0 > R(0) && w1 > R(0) && w2 > R(0))
               {
                 Real z = w0 * t.vc->z + w1 * t.va->z + w2 * t.vb->z;
-
+                uint32_t i = x+y*camera.width;
                 //Check the depth and draw if closer
-                if(z < depthBuffer[x+y*depthBuffer.width])
+                if(z < depthBuffer[i])
                   {
-
+                    depthBuffer[i] = z;
+                    //XXX THIS IS A TEMPORARY TEST XXX
+                    Colour col;
+                    col.colour.r = 0x00;
+                    col.colour.g = 0x00;
+                    col.colour.b = 0x00;
+                    col.colour.a = 0xFF;
+                    frameBuffer[i] = col;
+                    //XXX ************************ XXX
                   }
               }
 

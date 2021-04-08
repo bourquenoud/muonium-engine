@@ -2,9 +2,7 @@
  *
  */
 
-
-//#define LINUX_EMULATOR_MAIN
-#ifdef LINUX_EMULATOR_MAIN
+#ifdef UNDEF
 
 using namespace std;
 
@@ -24,9 +22,7 @@ using namespace std;
 #include "stb_image/stb_image.h"
 #include "stb_image/stb_image_write.h"
 
-#include "vector.hpp"
-#include "matrix.hpp"
-#include "obj_loader.hpp"
+#include "engine/ue_engine.hpp"
 
 #define lengthof(x) sizeof(x)/sizeof((x)[0])
 
@@ -795,6 +791,6 @@ void drawText(SDL_Surface* screen, const char* string, uint8_t size, int x, int 
 
 	TTF_CloseFont(font);
 }
+//*/
 
 #endif //UNDEF
-//*/
