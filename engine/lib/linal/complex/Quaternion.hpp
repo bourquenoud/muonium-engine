@@ -8,7 +8,10 @@
 #ifndef QUATERNION_H_
 #define QUATERNION_H_
 
+#include <cmath>
+
 #include "../../arith.hpp"
+#include "../vector/Vector3.hpp"
 
 namespace ue {
 
@@ -18,6 +21,46 @@ namespace ue {
     Real x;
     Real y;
     Real z;
+
+    /**
+     * Default constructor
+     */
+    Quaternion(void);
+
+    /**
+     * Constructor from a vector and an angle
+     *
+     * Construct the quaternion from a NORMALISED vector
+     * indicating the axis and the angle of the rotation.
+     *
+     * Will break if the vector is not normalised
+     *
+     * @param axis NORMALISED vector of this rotation axis.
+     * @param angle rotation angle in radian
+     */
+    Quaternion(Vector3 axis,Real angle);
+
+    /**
+     * Constructor with the values
+     *
+     * Construct a quaternion from the w x y z values
+     *
+     * @param w_ quaternion real part
+     * @param x_ quaternion i imaginary part
+     * @param y_ quaternion j imaginary part
+     * @param z_ quaternion k imaginary part
+     */
+    Quaternion(Real w_,Real x_,Real y_,Real z_);
+
+    /**
+     * Constructor from quaternion
+     *
+     * Clone a quaternion.
+     *
+     * @param q Quaternion to clone
+     */
+    Quaternion(const Quaternion& q);
+
 
     Quaternion operator-();
     Quaternion operator~(); //Calculate the inverse

@@ -9,6 +9,35 @@
 
 namespace ue
 {
+  Quaternion::Quaternion(void)
+  {
+
+  }
+
+  Quaternion::Quaternion(Vector3 axis,Real angle)
+  {
+    Real angleSin = sinf(angle/R(2));
+    x = axis.x * angleSin;
+    y = axis.y * angleSin;
+    z = axis.z * angleSin;
+    w = cosf(angle);
+  }
+
+  Quaternion::Quaternion(Real w_,Real x_,Real y_,Real z_)
+  {
+    w = w_;
+    x = x_;
+    y = y_;
+    z = z_;
+  }
+
+  Quaternion::Quaternion(const Quaternion& q)
+  {
+    w = q.w;
+    x = q.x;
+    y = q.y;
+    z = q.z;
+  }
 
   Quaternion Quaternion::operator-()
   {
@@ -21,7 +50,7 @@ namespace ue
   }
 
   Quaternion Quaternion::operator~()
-  {
+          {
     Real s = R(1.0) / (w*w + x*x + y*y + z*z);
     Quaternion tmp;
     tmp.w = w * s;
@@ -29,7 +58,7 @@ namespace ue
     tmp.y = -y * s;
     tmp.z = -z * s;
     return tmp;
-  }
+          }
 
   Quaternion Quaternion::operator+(Quaternion q)
   {
