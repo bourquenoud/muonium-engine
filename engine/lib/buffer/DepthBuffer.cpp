@@ -5,7 +5,7 @@
  *      Author: mathieu
  */
 
-#include "DepthBuffer.h"
+#include "DepthBuffer.hpp"
 
 namespace ue
 {

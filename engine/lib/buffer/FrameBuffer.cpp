@@ -5,7 +5,7 @@
  *      Author: mathieu
  */
 
-#include "FrameBuffer.h"
+#include "FrameBuffer.hpp"
 
 namespace ue
 {

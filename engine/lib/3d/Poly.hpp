@@ -14,14 +14,13 @@
 #include "../texture/Texture.hpp"
 
 #include "Triangle.hpp"
+#include "Object3D.hpp"
 
 namespace ue {
 
-  class Poly
+  class Poly : public Object3D
   {
   public:
-    Quaternion rotation;
-    Vector3 position;
     Triangle* faces;
     uint32_t faceCount;
 

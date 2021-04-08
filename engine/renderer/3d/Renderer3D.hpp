@@ -8,11 +8,11 @@
 #ifndef RENDERER3D_H_
 #define RENDERER3D_H_
 
-#include "../lib/arith.hpp"
-#include "../lib/buffer.hpp"
-#include "../lib/linal.hpp"
-#include "../lib/poly.hpp"
-#include "../lib/texture.hpp"
+#include "../../lib/arith.hpp"
+#include "../../lib/buffer.hpp"
+#include "../../lib/linal.hpp"
+#include "../../lib/poly.hpp"
+#include "../../lib/texture.hpp"
 
 namespace ue
 {
