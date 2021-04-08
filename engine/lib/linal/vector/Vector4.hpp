@@ -21,6 +21,9 @@ namespace ue {
     Real z;
     Real w;
 
+    Vector4();
+    Vector4(Real,Real,Real,Real);
+
     Vector4 operator+(Vector4 b);
     Vector4 operator-(Vector4 b);
     Vector4 operator-();

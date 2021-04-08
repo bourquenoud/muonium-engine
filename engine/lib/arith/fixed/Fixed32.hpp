@@ -29,6 +29,7 @@ namespace ue
     //****Constructor****
     Fixed32();
     Fixed32(int32_t);
+    Fixed32(uint32_t);
     Fixed32(float);
     constexpr Fixed32(long double a) : val(a)
     {

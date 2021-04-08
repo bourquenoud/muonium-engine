@@ -17,7 +17,7 @@ namespace ue
   {
   public:
     Quaternion rotation;
-    Vector3 position
+    Vector3 position;
   };
 
 }

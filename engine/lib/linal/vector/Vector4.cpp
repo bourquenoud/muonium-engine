@@ -9,6 +9,19 @@
 
 namespace ue
 {
+  Vector4::Vector4()
+  {
+
+  }
+
+  Vector4::Vector4(Real x_, Real y_, Real z_, Real w_)
+  {
+    x = x_;
+    y = y_;
+    z = z_;
+    w = w_;
+  }
+
   Vector4 Vector4::operator+(Vector4 b)
   {
     Vector4 c;

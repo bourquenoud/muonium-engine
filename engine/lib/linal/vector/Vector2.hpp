@@ -19,6 +19,9 @@ namespace ue {
     Real x;
     Real y;
 
+    Vector2();
+    Vector2(Real,Real);
+
     Vector2 operator+(Vector2 b);
     Vector2 operator-(Vector2 b);
     Vector2 operator-();

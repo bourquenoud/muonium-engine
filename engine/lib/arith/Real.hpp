@@ -36,6 +36,7 @@ namespace ue {
     //****Constructor****
     Real();
     Real(int);
+    Real(unsigned int);
     Real(float);
 #if __cplusplus >= 201703L
     constexpr Real(long double a) : val(a)

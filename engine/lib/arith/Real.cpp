@@ -19,6 +19,10 @@ namespace ue
   {
     val = (float)a;
   }
+  Real::Real(unsigned int a)
+  {
+    val = (float)a;
+  }
   Real::Real(float a)
   {
     val = a;
@@ -30,6 +34,10 @@ namespace ue
 
   }
   Real::Real(int a)
+  {
+    val = (Fixed32)a;
+  }
+  Real::Real(unsigned int a)
   {
     val = (Fixed32)a;
   }

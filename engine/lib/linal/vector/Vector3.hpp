@@ -20,6 +20,9 @@ namespace ue {
     Real y;
     Real z;
 
+    Vector3();
+    Vector3(Real,Real,Real);
+
     Vector3 operator+(Vector3 b);
     Vector3 operator-(Vector3 b);
     Vector3 operator-();

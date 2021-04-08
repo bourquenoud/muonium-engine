@@ -9,6 +9,16 @@
 
 namespace ue
 {
+  Vector2::Vector2()
+  {
+
+  }
+
+  Vector2::Vector2(Real x_, Real y_)
+  {
+    x = x_;
+    y = y_;
+  }
 
   Vector2 Vector2::operator+(Vector2 b)
   {

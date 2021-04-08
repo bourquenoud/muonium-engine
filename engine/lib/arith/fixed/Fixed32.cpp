@@ -14,6 +14,10 @@ namespace ue
   {
 
   }
+  Fixed32::Fixed32(const uint32_t a)
+  {
+    val = (a<<16);
+  }
   Fixed32::Fixed32(const int32_t a)
   {
     val = (a<<16);
