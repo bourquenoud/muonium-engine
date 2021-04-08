@@ -15,7 +15,6 @@
 namespace ue {
 
 #if UE_CONFIG_COLOUR == RGBA8888
-#pragma message("Colour mode : RGBA8888")
   struct CoulourRGB
   {
     uint32_t r : 8;
@@ -29,7 +28,6 @@ namespace ue {
     CoulourRGB colour;
   };
 #elif UE_CONFIG_COLOUR == ARGB8888
-#pragma message("Colour mode : ARGB8888")
   struct CoulourRGB
   {
     uint32_t a : 8;
@@ -43,7 +41,6 @@ namespace ue {
     CoulourRGB colour;
   };
 #elif UE_CONFIG_COLOUR == ARGB1555
-#pragma message("Colour mode : ARGB1555")
   struct CoulourRGB
   {
     uint16_t a : 1;
@@ -57,7 +54,6 @@ namespace ue {
     CoulourRGB colour;
   };
 #elif UE_CONFIG_COLOUR == RGBA5551
-#pragma message("Colour mode : RGBA5551")
   struct CoulourRGB
   {
     uint16_t r : 5;
@@ -71,7 +67,6 @@ namespace ue {
     CoulourRGB colour;
   };
 #elif UE_CONFIG_COLOUR == RGB565
-#pragma message("Colour mode : RGB565")
   struct CoulourRGB
   {
     uint16_t r : 5;
@@ -84,7 +79,6 @@ namespace ue {
     CoulourRGB colour;
   };
 #elif UE_CONFIG_COLOUR == RGB332
-#pragma message("Colour mode : RGB332")
   struct CoulourRGB
   {
     uint8_t r : 3;
@@ -97,7 +91,6 @@ namespace ue {
     CoulourRGB colour;
   };
 #elif UE_CONFIG_COLOUR == MONO8
-#pragma message("Colour mode : MONO8")
   struct CoulourRGB
   {
     uint8_t l;

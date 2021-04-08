@@ -8,6 +8,8 @@
 #ifndef RENDERER3D_H_
 #define RENDERER3D_H_
 
+#include <cstdint>
+
 #include "../../lib/arith.hpp"
 #include "../../lib/buffer.hpp"
 #include "../../lib/linal.hpp"
@@ -21,8 +23,17 @@ namespace ue
   public:
     FrameBuffer frameBuffer;
     DepthBuffer depthBuffer;
-    Camera worldCamera;
+    Camera camera;
+    LightSun sun;
     Poly* objectList;
+    uint32_t objectNumber;
+
+    void RenderFullFrame(void);
+
+  private:
+    void renderObject(Poly);
+    void renderTriangle(Triangle);
+    Real edgeFunction(Vector3,Vector3,Vector3)
   };
 
 }
