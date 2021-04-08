@@ -7,3 +7,8 @@
 
 #include "Renderer3D.hpp"
 
+namespace ue
+{
+
+
+}

@@ -10,8 +10,15 @@
 
 //Set the configuration for the engine
 
+
 #include "lib/arith.hpp"
+#include "lib/buffer.hpp"
 #include "lib/linal.hpp"
 #include "lib/poly.hpp"
+#include "lib/sprite.hpp"
+#include "lib/texture.hpp"
+
+#include "renderer/3d/Renderer3D.hpp"
+#include "renderer/2d/Renderer2D.hpp"
 
 #endif /* UE_ENGINE_H_ */

@@ -8,12 +8,21 @@
 #ifndef RENDERER3D_H_
 #define RENDERER3D_H_
 
-namespace ue {
+#include "../lib/arith.hpp"
+#include "../lib/buffer.hpp"
+#include "../lib/linal.hpp"
+#include "../lib/poly.hpp"
+#include "../lib/texture.hpp"
 
-class Renderer3D {
-public:
+namespace ue
+{
 
-};
+  class Renderer3D {
+  public:
+    Poly* objList;
+    FrameBuffer frameBuffer;
+    DepthBuffer depthBuffer;
+  };
 
 }
 

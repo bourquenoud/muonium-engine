@@ -5,10 +5,10 @@
  *      Author: mathieu
  */
 
-#ifndef POLY_H_
-#define POLY_H_
+#ifndef _3D_H_
+#define _3D_H_
 
-#include "poly/Triangle.hpp"
-#include "poly/Poly.hpp"
+#include "3d/Triangle.hpp"
+#include "3d/Poly.hpp"
 
-#endif /* POLY_H_ */
+#endif /* _3D_H_ */
