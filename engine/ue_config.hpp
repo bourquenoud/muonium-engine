@@ -55,5 +55,12 @@
  */
 #define UE_CONFIG_COLOUR ARGB8888
 
+/*
+ * Enable full frame render
+ *
+ * Enabling this make the renderer render frame all at once. This consumes a lot
+ * of RAM but makes the render somewhat faster.
+ */
+
 
 #endif /* UE_CONFIG_H_ */

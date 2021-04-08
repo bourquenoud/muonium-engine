@@ -12,13 +12,7 @@ namespace ue {
 
 class Renderer3D {
 public:
-	Renderer3D() {
-		// TODO Auto-generated constructor stub
 
-	}
-	virtual ~Renderer3D() {
-		// TODO Auto-generated destructor stub
-	}
 };
 
 }
