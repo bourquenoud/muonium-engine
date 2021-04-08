@@ -16,11 +16,30 @@ namespace ue
 
   Quaternion::Quaternion(Vector3 axis,Real angle)
   {
-    Real angleSin = sinf(angle/R(2));
+    Real angleSin = sinf(angle*R(0.5));
     x = axis.x * angleSin;
     y = axis.y * angleSin;
     z = axis.z * angleSin;
     w = cosf(angle);
+  }
+
+  Quaternion::Quaternion(Vector3 angles)
+  {
+    angles = angles * R(0.5);
+
+    // Assuming the angles are in radians.
+    Real c1 = cosf(angles.y);
+    Real s1 = sinf(angles.y);
+    Real c2 = cosf(angles.z);
+    Real s2 = sinf(angles.z);
+    Real c3 = cosf(angles.x);
+    Real s3 = sinf(angles.x);
+    Real c1c2 = c1*c2;
+    Real s1s2 = s1*s2;
+    w =c1c2*c3 - s1s2*s3;
+    x =c1c2*s3 + s1s2*c3;
+    y =s1*c2*c3 + c1*s2*s3;
+    z =c1*s2*c3 - s1*c2*s3;
   }
 
   Quaternion::Quaternion(Real w_,Real x_,Real y_,Real z_)
@@ -50,7 +69,7 @@ namespace ue
   }
 
   Quaternion Quaternion::operator~()
-          {
+              {
     Real s = R(1.0) / (w*w + x*x + y*y + z*z);
     Quaternion tmp;
     tmp.w = w * s;
@@ -58,7 +77,7 @@ namespace ue
     tmp.y = -y * s;
     tmp.z = -z * s;
     return tmp;
-          }
+              }
 
   Quaternion Quaternion::operator+(Quaternion q)
   {

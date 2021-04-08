@@ -41,6 +41,16 @@ namespace ue {
     Quaternion(Vector3 axis,Real angle);
 
     /**
+     * Constructor from euler angles
+     *
+     * Construct a quaternion from the euleur angles.
+     * Applied in the order of y, z, x
+     *
+     * @param angles Euler angles in radians
+     */
+    Quaternion(Vector3 angles);
+
+    /**
      * Constructor with the values
      *
      * Construct a quaternion from the w x y z values
