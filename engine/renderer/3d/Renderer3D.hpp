@@ -32,6 +32,7 @@ namespace ue
     void RenderFullFrame(void);
 
   private:
+    //XXX this is getting messy...
     void renderObject(Poly);
     void renderTriangle(Triangle);
     Real edgeFunction(Vector3,Vector3,Vector3);
@@ -40,6 +41,7 @@ namespace ue
     void clearFrameBuffer(Colour);
     void clearFrameBufferGrid(Colour,Colour,uint32_t);
     Matrix3 computeRotationMatrix(Vector3 angles);
+    Real computeLight(Triangle triangle);
   };
 
 }

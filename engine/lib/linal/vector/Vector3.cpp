@@ -25,9 +25,9 @@ namespace ue
   {
     Vector3 c;
 
-    c.x = this->x + b.x;
-    c.y = this->y + b.y;
-    c.z = this->z + b.z;
+    c.x = x + b.x;
+    c.y = y + b.y;
+    c.z = z + b.z;
 
     return c;
   }
@@ -36,9 +36,9 @@ namespace ue
   {
     Vector3 c;
 
-    c.x = this->x - b.x;
-    c.y = this->y - b.y;
-    c.z = this->z - b.z;
+    c.x = x - b.x;
+    c.y = y - b.y;
+    c.z = z - b.z;
 
     return c;
   }
@@ -47,9 +47,9 @@ namespace ue
   {
     Vector3 c;
 
-    c.x = -this->x;
-    c.y = -this->y;
-    c.z = -this->z;
+    c.x = -x;
+    c.y = -y;
+    c.z = -z;
 
     return c;
   }
@@ -61,11 +61,22 @@ namespace ue
   {
     Vector3 c;
 
-    c.x = this->x * scal;
-    c.y = this->y * scal;
-    c.z = this->z * scal;
+    c.x = x * scal;
+    c.y = y * scal;
+    c.z = z * scal;
 
     return c;
+  }
+
+  Vector3 Vector3::cross(Vector3 b)
+  {
+    Vector3 s1;
+
+    s1.x = y*b.z - z*b.y;
+    s1.y = z*b.x - x*b.z;
+    s1.z = x*b.y - y*b.x;
+
+    return s1;
   }
 
   /*
@@ -73,7 +84,7 @@ namespace ue
    */
   Real Vector3::norm()
   {
-    return sqrtf(this->x*this->x + this->y*this->y + this->z*this->z);
+    return sqrtf(x*x + y*y + z*z);
   }
 
   /*
@@ -81,7 +92,7 @@ namespace ue
    */
   Vector3 Vector3::normalise()
   {
-    Real norm = this->norm();
+    Real norm = norm();
 
     if(norm == R(0.0))
       return *this;
@@ -90,9 +101,9 @@ namespace ue
   }
 
   bool Vector3::operator==(Vector3 b)
-       {
+           {
     return(x==b.x && y==b.y && z==b.z);
-       }
+           }
 
   //****Constants****
   const Vector3 Vector3::ZERO = {0,0,0};

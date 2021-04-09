@@ -171,6 +171,32 @@ namespace ue
 
   }
 
+  Real Renderer3D::computeLight(Triangle triangle)
+  {
+    Real light;
+    Vector3 a,b,s1;
+
+    //Get the direction vector
+    a = *triangle.vb - *triangle.va;
+    b = *triangle.vc - *triangle.va;
+
+    //Calculate the normal
+    s1 = a.cross(b);
+
+    //Normalise the vectors
+    s1 = s1.normalise();
+
+    //Calculate the dot product
+    light = Real::max(R(0.0),sun.direction*s1); //Prevent negative light
+
+    light *= sun.intensity;
+
+    //TODO put a parameter for the ambiant light
+    light += R(0.2);
+
+    return light;
+  }
+
   void Renderer3D::clearDepthBuffer()
   {
     for(uint32_t i = 0; i < depthBuffer.width * depthBuffer.height; i++)
