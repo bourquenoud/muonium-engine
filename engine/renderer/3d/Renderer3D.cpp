@@ -109,7 +109,12 @@ namespace ue
     if (area <= R(0))
       return;
 
-    Real light = computeLight(t);
+    Real light = Real::min(computeLight(t), R(1.0));
+    Colour col;
+    col.colour.r = (uint8_t)(light);
+    col.colour.g = (uint8_t)(light);
+    col.colour.b = (uint8_t)(light);
+    col.colour.a = (uint8_t)((Real)0xFF);
 
     //Divide everything by the area (Precision loss with Fixed32 and big screen)
     area = R(1)/area;
@@ -149,11 +154,6 @@ namespace ue
                   {
                     depthBuffer[i] = z;
                     //XXX THIS IS A TEMPORARY TEST XXX
-                    Colour col;
-                    col.colour.r = (uint8_t)((Real)0xA0 * light);
-                    col.colour.g = (uint8_t)((Real)0x90 * light);
-                    col.colour.b = (uint8_t)((Real)0x1F * light);
-                    col.colour.a = (uint8_t)((Real)0xFF);
                     frameBuffer[i] = col;
                     //XXX ************************ XXX
                   }

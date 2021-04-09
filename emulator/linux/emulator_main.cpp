@@ -61,7 +61,7 @@ int emulator_main(void)
   //Create the light
   ue::Vector3 lightVector = ue::Vector3(R(0.2),R(1.0),R(1.0));
   lightVector.normalise();
-  ue::LightSun sun = ue::LightSun(lightVector, R(0.8));
+  ue::LightSun sun = ue::LightSun(lightVector, R(0.7));
 
   //Create the poly loader
   PolyLoader polyLoader;
