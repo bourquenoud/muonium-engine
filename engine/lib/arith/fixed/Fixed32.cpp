@@ -193,6 +193,6 @@ namespace ue
   }
   Fixed32::operator float()
   {
-    return (float)(this->val) / (1<<16);
+    return (float)(val) / (1<<16);
   }
 }

@@ -39,6 +39,7 @@ namespace ue
     void clearDepthBuffer();
     void clearFrameBuffer(Colour);
     void clearFrameBufferGrid(Colour,Colour,uint32_t);
+    Matrix3 computeRotationMatrix(Vector3 angles);
   };
 
 }

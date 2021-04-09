@@ -205,7 +205,7 @@ namespace ue
   }
   Real::operator float()
   {
-    return (float)(this->val);
+    return (float)(val);
   }
 
   //****Basic arithmetic****

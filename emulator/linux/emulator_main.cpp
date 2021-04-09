@@ -33,6 +33,7 @@ bool drawBuffer = false;
 //Prototypes
 void drawToScreen();
 void set_pixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
+ue::Matrix3 computeRotationMatrix(ue::Vector3 angles);
 
 int emulator_main(void)
 {
@@ -148,6 +149,14 @@ int emulator_main(void)
       renderer.RenderFullFrame();
       drawToScreen();
       SDL_UpdateWindowSurface(window);
+
+      //Rotate the object
+      ue::Matrix3 rotMat = computeRotationMatrix(ue::Vector3(R(0.0),R(0.01),R(0.0)));
+      for(uint32_t i = 0; i < objectList[0].vertexCount; i++)
+        {
+          objectList[0].vertices[i] = rotMat * objectList[0].vertices[i];
+        }
+
     }
 
 
@@ -213,4 +222,20 @@ void set_pixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
       + y * surface->pitch
       + x * surface->format->BytesPerPixel);
   *target_pixel = pixel;
+}
+
+ue::Matrix3 computeRotationMatrix(ue::Vector3 angles)
+{
+  ue::Real cosAlpha = cosf(angles.x);
+  ue::Real sinAlpha = sinf(angles.x);
+  ue::Real cosBeta = cosf(angles.y);
+  ue::Real sinBeta = sinf(angles.y);
+  ue::Real cosGamma = cosf(angles.z);
+  ue::Real sinGamma = sinf(angles.z);
+
+  ue::Matrix3 A = {{{R(1.0), R(0.0) , R(0.0) },{R(0.0), cosAlpha, -sinAlpha},{R(0.0), sinAlpha, cosAlpha }}}; //X
+  ue::Matrix3 B = {{{cosBeta , R(0.0), sinBeta},{R(0.0) ,R(1.0), R(0.0)},{-sinBeta, R(0.0), cosBeta}}}; //Y
+  ue::Matrix3 C = {{{cosGamma, -sinGamma, R(0.0)},{sinGamma, cosGamma , R(0.0)},{R(0.0), R(0.0), R(1.0)}}}; //Z
+
+  return A*B*C;
 }

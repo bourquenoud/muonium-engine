@@ -17,18 +17,35 @@
 #define REAL_H_
 
 #include <cstdint>
+#include <cfloat>
 #include "engine/ue_config.hpp"
 #include "fixed/Fixed32.hpp"
+
+/* FIXME
+#if UE_CONFIG_ARITHMETIC == FLOAT
+#define UE_REAL_MAX (R(FLT_MAX))
+#define UE_REAL_MIN (R(FLT_MAX))
+#elif UE_CONFIG_ARITHMETIC == FIXED32
+#define UE_REAL_MAX ((Real){(Fixed32){0x7FFFFFFF}})
+#define UE_REAL_MIN ((Real){(Fixed32){0x80000000}})
+#endif //UE_CONFIG_ARITHMETIC
+*/
+//XXX BAD XXX
+#if UE_CONFIG_ARITHMETIC == FLOAT
+#define UE_REAL_MAX (R(1000))
+#define UE_REAL_MIN (R(-1000))
+#elif UE_CONFIG_ARITHMETIC == FIXED32
+#define UE_REAL_MAX (R(1000))
+#define UE_REAL_MIN (R(-1000))
+#endif //UE_CONFIG_ARITHMETIC
 
 namespace ue {
 
   class Real
   {
   public:
-    //USING FLOATING POINT OPERATIONS
 #if UE_CONFIG_ARITHMETIC == FLOAT
     float val;
-    //USING 32bits FIXED POINT OPERATIONS
 #elif UE_CONFIG_ARITHMETIC == FIXED32
     Fixed32 val;
 #endif //UE_CONFIG_ARITHMETIC
@@ -43,10 +60,15 @@ namespace ue {
     {
       val = (float)a;
     }
-#else
+#elif UE_CONFIG_ARITHMETIC == FLOAT
     Real(double a)
     {
       val = (float)a;
+    }
+#elif UE_CONFIG_ARITHMETIC == FIXED32
+    Real(double a)
+    {
+      val = (Fixed32)(float)a;
     }
 #endif //UE_CONFIG_CPP17_SYNTAX
 

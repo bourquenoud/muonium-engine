@@ -91,11 +91,14 @@ ue::Poly PolyLoader::loadFromObj(const char* objectPath, const char* texturePath
   textureCount = 0;
   faceCount = 0;
 
-  ue::Vector3 max = {-1e38, -1e38, -1e38};
-  ue::Vector3 min = {1e38, 1e38, 1e38};
+  ue::Vector3 max = {UE_REAL_MIN, UE_REAL_MIN, UE_REAL_MIN};
+  ue::Vector3 min = {UE_REAL_MAX, UE_REAL_MAX, UE_REAL_MAX};
 
   for(uint32_t i = 0; i < lineCount; i++)
     {
+      if(strstr(lines[i], COMMENT)) //Skip if the line contains a #
+        continue;
+
       //Get vertices
       if(strstr(lines[i], VERTEX))
         {
@@ -104,21 +107,21 @@ ue::Poly PolyLoader::loadFromObj(const char* objectPath, const char* texturePath
           // Extract the first token
           char * token = strtok(lines[i], " "); //First token is discarded
           token = strtok(NULL, " ");
-          vertex.x = atof(token);
+          vertex.x = (ue::Real)atof(token);
           if(vertex.x > max.x)
             max.x = vertex.x;
           if(vertex.x < min.x)
             min.x = vertex.x;
 
           token = strtok(NULL, " ");
-          vertex.y = atof(token);
+          vertex.y = (ue::Real)atof(token);
           if(vertex.y > max.y)
             max.y = vertex.y;
           if(vertex.y < min.y)
             min.y = vertex.y;
 
           token = strtok(NULL, " ");
-          vertex.z = atof(token);
+          vertex.z = (ue::Real)atof(token);
           if(vertex.z > max.z)
             max.z = vertex.z;
           if(vertex.z < min.z)
@@ -135,18 +138,10 @@ ue::Poly PolyLoader::loadFromObj(const char* objectPath, const char* texturePath
           // Extract the first token
           char * token = strtok(lines[i], " "); //First token is discarded
           token = strtok(NULL, " ");
-          texture.x = atof(token);
-          if(texture.x > max.x)
-            max.x = texture.x;
-          if(texture.x < min.x)
-            min.x = texture.x;
+          texture.x = (ue::Real)atof(token);
 
           token = strtok(NULL, " ");
-          texture.y = atof(token);
-          if(texture.y > max.y)
-            max.y = texture.y;
-          if(texture.y < min.y)
-            min.y = texture.y;
+          texture.y = (ue::Real)atof(token);
 
           textures[textureCount++] = texture;
         }
@@ -283,9 +278,9 @@ void PolyLoader::printObject(ue::Poly obj)
   for(uint32_t i = 0; i < obj.vertexCount; i++)
     {
       printf("\tv (%f;%f;%f)\n",
-          (float)obj.vertices[i].x,
-          (float)obj.vertices[i].y,
-          (float)obj.vertices[i].z);
+          (float)(obj.vertices[i].x),
+          (float)(obj.vertices[i].y),
+          (float)(obj.vertices[i].z));
     }
 
 #if UE_CONFIG_ENABLE_TEXTURE == true
@@ -293,8 +288,8 @@ void PolyLoader::printObject(ue::Poly obj)
   for(uint32_t i = 0; i < obj.textureCount; i++)
     {
       printf("\tvt (%f;%f)\n",
-          (float)obj.textureVerts[i].x,
-          (float)obj.textureVerts[i].y);
+          (float)(obj.textureVerts[i].x),
+          (float)(obj.textureVerts[i].y));
     }
 #endif
 

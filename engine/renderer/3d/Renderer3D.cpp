@@ -102,7 +102,7 @@ namespace ue
 
     //Compute signed the area
     //Real area = k[0][0]*t.vc->x + k[0][1]*t.vc->y + k[0][2];
-    Real area = edgeFunction(*(t.va), *(t.vb), *(t.vc));
+    Real area = edgeFunction(*(t.vc), *(t.vb), *(t.va));
 
     //If the area if negative the triangle is seen for the back
     // TODO: add the option to disable back culling
@@ -126,17 +126,17 @@ namespace ue
     Real w1 = k[1][0]*minCorner.x + k[1][1]*minCorner.y + k[1][2];
     Real w2 = k[2][0]*minCorner.x + k[2][1]*minCorner.y + k[2][2];*/
 
-    //Scan in the x direction
+    //Scan in the x direction TODO: scan in the y direction
     for(uint16_t y = (uint32_t)minCorner.y; y < (uint32_t)maxCorner.y; y++)
       {
         for(uint16_t x = (uint32_t)minCorner.x; x < (uint32_t)maxCorner.x; x++)
           {
-            Real w0 = edgeFunction(*(t.va), *(t.vb), Vector3(x,y,0));
-            Real w1 = edgeFunction(*(t.vb), *(t.vc), Vector3(x,y,0));
-            Real w2 = edgeFunction(*(t.vc), *(t.va), Vector3(x,y,0));
+            Real w0 = edgeFunction(*(t.vb), *(t.va), Vector3(x,y,0));
+            Real w1 = edgeFunction(*(t.vc), *(t.vb), Vector3(x,y,0));
+            Real w2 = edgeFunction(*(t.va), *(t.vc), Vector3(x,y,0));
 
             //TODO: use a | sign bit computation instead
-            if(w0 > R(0) && w1 > R(0) && w2 > R(0))
+            if(w0 >= R(0) && w1 >= R(0) && w2 >= R(0))
               {
                 Real z = w0 * t.vc->z + w1 * t.va->z + w2 * t.vb->z;
                 z *= area;
@@ -160,13 +160,13 @@ namespace ue
             w0 += k[0][0];
             w1 += k[1][0];
             w2 += k[2][0];
-            */
+             */
           }
         /*
         w0 += k[0][1];
         w1 += k[1][1];
         w2 += k[2][1];
-        */
+         */
       }
 
   }
@@ -175,7 +175,7 @@ namespace ue
   {
     for(uint32_t i = 0; i < depthBuffer.width * depthBuffer.height; i++)
       {
-        depthBuffer[i] = R(32767.99998);
+        depthBuffer[i] = UE_REAL_MAX;
       }
   }
 
@@ -202,6 +202,24 @@ namespace ue
   {
     Real val = (p.x - v0.x) * (v1.y - v0.y) - (p.y - v0.y) * (v1.x - v0.x);
     return val;
+  }
+
+
+  //TODO remove and make a proper quaternion system
+  Matrix3 Renderer3D::computeRotationMatrix(Vector3 angles)
+  {
+    Real cosAlpha = cosf(angles.x);
+    Real sinAlpha = sinf(angles.x);
+    Real cosBeta = cosf(angles.y);
+    Real sinBeta = sinf(angles.y);
+    Real cosGamma = cosf(angles.z);
+    Real sinGamma = sinf(angles.z);
+
+    Matrix3 A = {{{R(1.0), R(0.0) , R(0.0) },{R(0.0), cosAlpha, -sinAlpha},{R(0.0), sinAlpha, cosAlpha }}}; //X
+    Matrix3 B = {{{cosBeta , R(0.0), sinBeta},{R(0.0) ,R(1.0), R(0.0)},{-sinBeta, R(0.0), cosBeta}}}; //Y
+    Matrix3 C = {{{cosGamma, -sinGamma, R(0.0)},{sinGamma, cosGamma , R(0.0)},{R(0.0), R(0.0), R(1.0)}}}; //Z
+
+    return A*B*C;
   }
 
 }
