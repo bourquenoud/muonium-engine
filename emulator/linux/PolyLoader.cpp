@@ -79,11 +79,13 @@ ue::Poly PolyLoader::loadFromObj(const char* objectPath, const char* texturePath
 
   //avoid using new with microcontrollers
   vertices = new ue::Vector3[vertexCount];
-  textures = new ue::Vector2[vertexCount];
+  textures = new ue::Vector2[textureCount];
   faces = new ue::Triangle[faceCount];
 
   if(vertices == NULL || textures == NULL || faces == NULL)
     puts("Malloc error\n");
+
+  printf("Vertices : %i\n Faces : %i\n", vertexCount, faceCount);
 
   vertexCount = 0;
   textureCount = 0;
@@ -229,6 +231,8 @@ ue::Poly PolyLoader::loadFromObj(const char* objectPath, const char* texturePath
     }
   delete lines;
 
+  printf("Vertices : %i\n Faces : %i\n", poly.vertexCount, poly.faceCount);
+
   return poly;
 }
 
@@ -273,7 +277,7 @@ ue::Texture loadTexture(const char* path)
   return tex;
 }
 
-void printObject(ue::Poly obj)
+void PolyLoader::printObject(ue::Poly obj)
 {
   printf("********Vertices (%i)********\n", obj.vertexCount);
   for(uint32_t i = 0; i < obj.vertexCount; i++)
@@ -284,6 +288,7 @@ void printObject(ue::Poly obj)
           (float)obj.vertices[i].z);
     }
 
+#if UE_CONFIG_ENABLE_TEXTURE == true
   printf("********Texture vertices (%i)********\n", obj.textureCount);
   for(uint32_t i = 0; i < obj.textureCount; i++)
     {
@@ -291,7 +296,17 @@ void printObject(ue::Poly obj)
           (float)obj.textureVerts[i].x,
           (float)obj.textureVerts[i].y);
     }
+#endif
 
-  printf("********Faces (%i)********\n", obj.vertexCount);
+  //TODO this
+#if UE_CONFIG_ENABLE_NORMAL == true
+  printf("********Normals (%i)********\n", obj.textureCount);
+  for(uint32_t i = 0; i < obj.textureCount; i++)
+    {
+      printf("\tvn (%f;%f)\n",
+          (float)obj.textureVerts[i].x,
+          (float)obj.textureVerts[i].y);
+    }
+#endif
 }
 

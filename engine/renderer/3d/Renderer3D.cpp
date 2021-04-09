@@ -12,20 +12,14 @@ namespace ue
 
   void Renderer3D::RenderFullFrame()
   {
-    Colour col;
-    col.colour.a = 0xFF;
-    col.colour.r = 0x7F;
-    col.colour.g = 0x52;
-    col.colour.b = 0x65;
-
     //Clear the depth buffer, clearing the frame buffer is not necessary
     clearDepthBuffer();
-    clearFrameBuffer(col);
+    clearFrameBufferGrid((Colour){0xFFFFFFFF}, (Colour){0xFFCCCCCC}, 12);
 
     //Works object by object
     for(uint32_t i = 0; i < objectNumber; i++)
       {
-        //renderObject(objectList[i]);
+        renderObject(objectList[i]);
       }
   }
 
@@ -45,12 +39,12 @@ namespace ue
         *(projTriangle.vc) = camera.toRaster(*(o.faces[i].vc) + o.position);
 
         //Don't process triangles behind the camera clipping plane (z is reversed)
-        if(projTriangle.va->z < R(0.0) && projTriangle.vb->z < R(0.0) && projTriangle.vc->z < R(0.0))
+        if(projTriangle.va->z > R(0.0) && projTriangle.vb->z > R(0.0) && projTriangle.vc->z > R(0.0))
           continue;
 
         //Don't process triangles that are too far
-        if(projTriangle.va->z > camera.far && projTriangle.vb->z > camera.far && projTriangle.vc->z > camera.far)
-          continue;
+        //        if(projTriangle.va->z > camera.far && projTriangle.vb->z > camera.far && projTriangle.vc->z > camera.far)
+        //          continue;
 
         //Process the bounding rectangle
         Vector2 maxCorner = Vector2(
@@ -107,7 +101,8 @@ namespace ue
     k[2][2] = t.vc->y*t.va->x + t.va->y*t.vc->x;
 
     //Compute signed the area
-    Real area = k[0][0]*t.vc->x + k[0][1]*t.vc->y + k[0][2];
+    //Real area = k[0][0]*t.vc->x + k[0][1]*t.vc->y + k[0][2];
+    Real area = edgeFunction(*(t.va), *(t.vb), *(t.vc));
 
     //If the area if negative the triangle is seen for the back
     // TODO: add the option to disable back culling
@@ -126,20 +121,25 @@ namespace ue
     k[2][1] *= area;
     k[2][2] *= area;
 
-    //Starting point barycentric coordinates
+    /*//Starting point barycentric coordinates
     Real w0 = k[0][0]*minCorner.x + k[0][1]*minCorner.y + k[0][2];
     Real w1 = k[1][0]*minCorner.x + k[1][1]*minCorner.y + k[1][2];
-    Real w2 = k[2][0]*minCorner.x + k[2][1]*minCorner.y + k[2][2];
+    Real w2 = k[2][0]*minCorner.x + k[2][1]*minCorner.y + k[2][2];*/
 
     //Scan in the x direction
     for(uint16_t y = (uint32_t)minCorner.y; y < (uint32_t)maxCorner.y; y++)
       {
         for(uint16_t x = (uint32_t)minCorner.x; x < (uint32_t)maxCorner.x; x++)
           {
+            Real w0 = edgeFunction(*(t.va), *(t.vb), Vector3(x,y,0));
+            Real w1 = edgeFunction(*(t.vb), *(t.vc), Vector3(x,y,0));
+            Real w2 = edgeFunction(*(t.vc), *(t.va), Vector3(x,y,0));
+
             //TODO: use a | sign bit computation instead
             if(w0 > R(0) && w1 > R(0) && w2 > R(0))
               {
                 Real z = w0 * t.vc->z + w1 * t.va->z + w2 * t.vb->z;
+                z *= area;
                 uint32_t i = x+y*camera.width;
                 //Check the depth and draw if closer
                 if(z < depthBuffer[i])
@@ -156,13 +156,17 @@ namespace ue
                   }
               }
 
+            /*
             w0 += k[0][0];
             w1 += k[1][0];
             w2 += k[2][0];
+            */
           }
+        /*
         w0 += k[0][1];
         w1 += k[1][1];
         w2 += k[2][1];
+        */
       }
 
   }
@@ -181,6 +185,23 @@ namespace ue
       {
         frameBuffer[i] = col;
       }
+  }
+
+  void Renderer3D::clearFrameBufferGrid(Colour col1, Colour col2, uint32_t size)
+  {
+    for(uint32_t i = 0; i < frameBuffer.width * frameBuffer.height; i++)
+      {
+        uint32_t x = i%frameBuffer.width;
+        uint32_t y = i/frameBuffer.width;
+
+        frameBuffer[i] = (((x/size) & 1)^((y/size) & 1))?col1:col2;
+      }
+  }
+
+  Real Renderer3D::edgeFunction(Vector3 v0, Vector3 v1, Vector3 p)
+  {
+    Real val = (p.x - v0.x) * (v1.y - v0.y) - (p.y - v0.y) * (v1.x - v0.x);
+    return val;
   }
 
 }

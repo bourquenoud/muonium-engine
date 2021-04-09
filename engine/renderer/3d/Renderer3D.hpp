@@ -9,6 +9,7 @@
 #define RENDERER3D_H_
 
 #include <cstdint>
+#include <cstdio>
 
 #include "../../lib/arith.hpp"
 #include "../../lib/buffer.hpp"
@@ -37,6 +38,7 @@ namespace ue
     void renderTriangle(Triangle,Vector2,Vector2);
     void clearDepthBuffer();
     void clearFrameBuffer(Colour);
+    void clearFrameBufferGrid(Colour,Colour,uint32_t);
   };
 
 }

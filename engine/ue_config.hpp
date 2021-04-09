@@ -53,7 +53,7 @@
    * 16bits : ARGB1555, RGBA5551, RGB565
    * 8bits : RGB332, MONO8
    */
-  #define UE_CONFIG_COLOUR ARGB8888
+  #define UE_CONFIG_COLOUR RGBA8888
 
   /*
    * Enable full frame render
