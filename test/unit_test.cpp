@@ -131,7 +131,7 @@ namespace unittest
   }
 }
 
-int TEST_MAIN(void)
+int test_main(void)
 {
   cout << endl << "**********Arithmetic*******************" << endl;
   unit_test(addition);
