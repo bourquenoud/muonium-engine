@@ -127,9 +127,9 @@ namespace ue
     Real w2 = k[2][0]*minCorner.x + k[2][1]*minCorner.y + k[2][2];*/
 
     //Scan in the x direction TODO: scan in the y direction
-    for(uint16_t y = (uint32_t)minCorner.y; y < (uint32_t)maxCorner.y; y++)
+    for(uint16_t y = (uint32_t)minCorner.y; y <= (uint32_t)maxCorner.y; y++)
       {
-        for(uint16_t x = (uint32_t)minCorner.x; x < (uint32_t)maxCorner.x; x++)
+        for(uint16_t x = (uint32_t)minCorner.x; x <= (uint32_t)maxCorner.x; x++)
           {
             Real w0 = edgeFunction(*(t.vb), *(t.va), Vector3(x,y,0));
             Real w1 = edgeFunction(*(t.vc), *(t.vb), Vector3(x,y,0));
