@@ -59,7 +59,9 @@ int emulator_main(void)
   );
 
   //Create the light
-  ue::LightSun sun = ue::LightSun(ue::Vector3(R(1.0),R(1.0),R(0.0)), R(0.5));
+  ue::Vector3 lightVector = ue::Vector3(R(0.2),R(1.0),R(1.0));
+  lightVector.normalise();
+  ue::LightSun sun = ue::LightSun(lightVector, R(0.8));
 
   //Create the poly loader
   PolyLoader polyLoader;
@@ -73,7 +75,7 @@ int emulator_main(void)
 
   //Move the poly to the front of the camera
   objectList[0].position = objectList[0].position
-      + ue::Vector3(R(0.0), R(0.0), R(40.0));
+      + ue::Vector3(R(0.0), R(0.0), R(30.0));
 
   polyLoader.printObject(objectList[0]);
 

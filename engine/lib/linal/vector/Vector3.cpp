@@ -68,6 +68,17 @@ namespace ue
     return c;
   }
 
+  /*
+   * Return the dot product
+   */
+  Real Vector3::operator*(Vector3 b)
+  {
+    return x*b.x + y*b.y + z*b.z;
+  }
+
+  /*
+   * Return the cross product
+   */
   Vector3 Vector3::cross(Vector3 b)
   {
     Vector3 s1;
@@ -92,7 +103,7 @@ namespace ue
    */
   Vector3 Vector3::normalise()
   {
-    Real norm = norm();
+    Real norm = this->norm();
 
     if(norm == R(0.0))
       return *this;
@@ -101,9 +112,9 @@ namespace ue
   }
 
   bool Vector3::operator==(Vector3 b)
-           {
+               {
     return(x==b.x && y==b.y && z==b.z);
-           }
+               }
 
   //****Constants****
   const Vector3 Vector3::ZERO = {0,0,0};

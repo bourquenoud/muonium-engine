@@ -102,12 +102,14 @@ namespace ue
 
     //Compute signed the area
     //Real area = k[0][0]*t.vc->x + k[0][1]*t.vc->y + k[0][2];
-    Real area = edgeFunction(*(t.vc), *(t.vb), *(t.va));
+    Real area = edgeFunction(*(t.va), *(t.vb), *(t.vc));
 
     //If the area if negative the triangle is seen for the back
     // TODO: add the option to disable back culling
     if (area <= R(0))
       return;
+
+    Real light = computeLight(t);
 
     //Divide everything by the area (Precision loss with Fixed32 and big screen)
     area = R(1)/area;
@@ -131,9 +133,9 @@ namespace ue
       {
         for(uint16_t x = (uint32_t)minCorner.x; x <= (uint32_t)maxCorner.x; x++)
           {
-            Real w0 = edgeFunction(*(t.vb), *(t.va), Vector3(x,y,0));
-            Real w1 = edgeFunction(*(t.vc), *(t.vb), Vector3(x,y,0));
-            Real w2 = edgeFunction(*(t.va), *(t.vc), Vector3(x,y,0));
+            Real w0 = edgeFunction(*(t.va), *(t.vb), Vector3(x,y,0));
+            Real w1 = edgeFunction(*(t.vb), *(t.vc), Vector3(x,y,0));
+            Real w2 = edgeFunction(*(t.vc), *(t.va), Vector3(x,y,0));
 
             //TODO: use a | sign bit computation instead
             if(w0 >= R(0) && w1 >= R(0) && w2 >= R(0))
@@ -142,15 +144,16 @@ namespace ue
                 z *= area;
                 uint32_t i = x+y*camera.width;
                 //Check the depth and draw if closer
-                if(z < depthBuffer[i])
+                //FIXME Remove the abs
+                if(Real::abs(z) < Real::abs(depthBuffer[i]))
                   {
                     depthBuffer[i] = z;
                     //XXX THIS IS A TEMPORARY TEST XXX
                     Colour col;
-                    col.colour.r = 0x7F;
-                    col.colour.g = 0x00;
-                    col.colour.b = 0x1F;
-                    col.colour.a = 0xFF;
+                    col.colour.r = (uint8_t)((Real)0xA0 * light);
+                    col.colour.g = (uint8_t)((Real)0x90 * light);
+                    col.colour.b = (uint8_t)((Real)0x1F * light);
+                    col.colour.a = (uint8_t)((Real)0xFF);
                     frameBuffer[i] = col;
                     //XXX ************************ XXX
                   }
@@ -187,7 +190,7 @@ namespace ue
     s1 = s1.normalise();
 
     //Calculate the dot product
-    light = Real::max(R(0.0),sun.direction*s1); //Prevent negative light
+    light = Real::max(R(0.0),(-sun.direction)*s1); //Prevent negative light
 
     light *= sun.intensity;
 
