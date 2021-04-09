@@ -108,7 +108,7 @@ constexpr ue::Real operator"" _r(long double a)
   return ue::Real(a);
 }
 #else
-#define R(X) ((Real)X)
+#define R(X) ((ue::Real)X)
 #endif //UE_CONFIG_CPP17_SYNTAX
 
 #endif /* REAL_H_ */

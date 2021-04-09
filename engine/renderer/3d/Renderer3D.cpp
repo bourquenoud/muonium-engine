@@ -12,10 +12,20 @@ namespace ue
 
   void Renderer3D::RenderFullFrame()
   {
+    Colour col;
+    col.colour.a = 0xFF;
+    col.colour.r = 0x7F;
+    col.colour.g = 0x52;
+    col.colour.b = 0x65;
+
+    //Clear the depth buffer, clearing the frame buffer is not necessary
+    clearDepthBuffer();
+    clearFrameBuffer(col);
+
     //Works object by object
     for(uint32_t i = 0; i < objectNumber; i++)
       {
-        renderObject(objectList[i]);
+        //renderObject(objectList[i]);
       }
   }
 
@@ -30,9 +40,9 @@ namespace ue
         Vector3 projVertexA, projVertexB, projVertexC;
         Triangle projTriangle = { &projVertexA, &projVertexB, &projVertexC };
 
-        *(projTriangle.va) = camera.toRaster(*(o.faces[i].va));
-        *(projTriangle.vb) = camera.toRaster(*(o.faces[i].vb));
-        *(projTriangle.vc) = camera.toRaster(*(o.faces[i].vc));
+        *(projTriangle.va) = camera.toRaster(*(o.faces[i].va) + o.position);
+        *(projTriangle.vb) = camera.toRaster(*(o.faces[i].vb) + o.position);
+        *(projTriangle.vc) = camera.toRaster(*(o.faces[i].vc) + o.position);
 
         //Don't process triangles behind the camera clipping plane (z is reversed)
         if(projTriangle.va->z < R(0.0) && projTriangle.vb->z < R(0.0) && projTriangle.vc->z < R(0.0))
@@ -137,9 +147,9 @@ namespace ue
                     depthBuffer[i] = z;
                     //XXX THIS IS A TEMPORARY TEST XXX
                     Colour col;
-                    col.colour.r = 0x00;
+                    col.colour.r = 0x7F;
                     col.colour.g = 0x00;
-                    col.colour.b = 0x00;
+                    col.colour.b = 0x1F;
                     col.colour.a = 0xFF;
                     frameBuffer[i] = col;
                     //XXX ************************ XXX
@@ -155,8 +165,22 @@ namespace ue
         w2 += k[2][1];
       }
 
+  }
 
+  void Renderer3D::clearDepthBuffer()
+  {
+    for(uint32_t i = 0; i < depthBuffer.width * depthBuffer.height; i++)
+      {
+        depthBuffer[i] = R(32767.99998);
+      }
+  }
 
+  void Renderer3D::clearFrameBuffer(Colour col)
+  {
+    for(uint32_t i = 0; i < frameBuffer.width * frameBuffer.height; i++)
+      {
+        frameBuffer[i] = col;
+      }
   }
 
 }

@@ -20,7 +20,7 @@ namespace ue
      buffer = buffer_;
    }
 
-  Real DepthBuffer::operator[](int i)
+  Real& DepthBuffer::operator[](int i)
    {
      return buffer[i];
    }

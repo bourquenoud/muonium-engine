@@ -25,7 +25,7 @@ namespace ue
     FrameBuffer();
     FrameBuffer(uint16_t width_, uint16_t height_, Colour* buffer_);
 
-    Colour operator[](int);
+    Colour& operator[](int);
   };
 
 }

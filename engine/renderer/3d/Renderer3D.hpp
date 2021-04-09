@@ -35,6 +35,8 @@ namespace ue
     void renderTriangle(Triangle);
     Real edgeFunction(Vector3,Vector3,Vector3);
     void renderTriangle(Triangle,Vector2,Vector2);
+    void clearDepthBuffer();
+    void clearFrameBuffer(Colour);
   };
 
 }

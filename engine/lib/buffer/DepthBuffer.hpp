@@ -26,7 +26,7 @@ namespace ue
     DepthBuffer();
     DepthBuffer(uint16_t width_, uint16_t height_, Real* buffer_);
 
-    Real operator[](int);
+    Real& operator[](int);
   };
 
 }

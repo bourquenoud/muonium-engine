@@ -9,6 +9,10 @@
 
 namespace ue
 {
+  Camera::Camera()
+  {
+
+  }
 
   Camera::Camera(
       const float &filmApertureWidth,
@@ -90,7 +94,7 @@ namespace ue
     /*
     //Rotate
     vert = worldToCamera * vert;
-    */
+     */
 
     //Project to screen
     vert = Vector3(

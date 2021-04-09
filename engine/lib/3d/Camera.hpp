@@ -36,6 +36,8 @@ namespace ue
     uint32_t width;
     uint32_t height;
 
+    Camera();
+
     /** TODO: Finish description
      *
      */

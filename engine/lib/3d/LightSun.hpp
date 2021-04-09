@@ -18,6 +18,9 @@ namespace ue
   class LightSun
   {
   public:
+    LightSun();
+    LightSun(Vector3,Real);
+
     Vector3 direction;
     Real intensity;
 #if UE_CONFIG_ENABLE_COLORED_LIGHT == true

@@ -20,7 +20,7 @@ namespace ue
     buffer = buffer_;
   }
 
-  Colour FrameBuffer::operator[](int i)
+  Colour& FrameBuffer::operator[](int i)
   {
     return buffer[i];
   }
