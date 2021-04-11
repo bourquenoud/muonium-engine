@@ -5,6 +5,9 @@
  *      Author: mathieu
  */
 
+#include <ctime>
+#include <sys/time.h>
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
@@ -34,9 +37,16 @@ bool drawBuffer = false;
 void drawToScreen();
 void set_pixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
 ue::Matrix3 computeRotationMatrix(ue::Vector3 angles);
+void drawText(SDL_Surface* screen, const char* string, uint8_t size, int x, int y);
 
 int emulator_main(void)
 {
+  //Declare the time struct
+  timeval tv;
+  int64_t lastTime = -1;
+  int32_t frames = 0;
+  double fps = 0;
+
   //********configure the renderer********
 
   //Allocate memory for the buffers
@@ -108,7 +118,6 @@ int emulator_main(void)
   surface = SDL_GetWindowSurface(window);
   SDL_UpdateWindowSurface(window);
 
-
   //********main loop********
   while(!quit)
     {
@@ -150,8 +159,37 @@ int emulator_main(void)
           }
         }
 
+      //Get the before rendering
+      if(lastTime < 0)
+        {
+          gettimeofday(&tv, NULL);
+          lastTime = tv.tv_usec + tv.tv_sec * 1000000;
+        }
+
+      //Render
       renderer.RenderFullFrame();
+
+      //Compute the FPS
+      frames++;
+      gettimeofday(&tv, NULL);
+      int64_t elapsedTime = (tv.tv_usec + tv.tv_sec * 1000000) - lastTime;
+      if(elapsedTime >= 1000000)
+        {
+          fps = 1000000.0 * frames / elapsedTime;
+          lastTime = -1;
+          frames = 0;
+        }
+
+      //Display the image
       drawToScreen();
+
+      //Display the fps
+      TTF_Init();
+      char charBuffer[64];
+      snprintf(charBuffer, sizeof(charBuffer), "FPS : %.2f", fps);
+      drawText(surface, charBuffer, 12, 10, 10);
+      TTF_Quit();
+
       SDL_UpdateWindowSurface(window);
 
       //Rotate the object
@@ -242,4 +280,24 @@ ue::Matrix3 computeRotationMatrix(ue::Vector3 angles)
   ue::Matrix3 C = {{{cosGamma, -sinGamma, R(0.0)},{sinGamma, cosGamma , R(0.0)},{R(0.0), R(0.0), R(1.0)}}}; //Z
 
   return A*B*C;
+}
+
+void drawText(SDL_Surface* screen, const char* string, uint8_t size, int x, int y)
+{
+  TTF_Font* font = TTF_OpenFont("emulator/resource/arial.ttf", size);
+
+  SDL_Color foregroundColor = { 0xFF, 0xFF, 0xFF, 0xFF };
+  SDL_Color backgroundColor =  { 0,0,0,0 };
+
+  SDL_Surface* textSurface
+  = TTF_RenderText_Shaded
+  (font, string, foregroundColor, backgroundColor);
+
+  SDL_Rect textLocation = { x, y, 0, 0 };
+
+  SDL_BlitSurface(textSurface, NULL, screen, &textLocation);
+
+  SDL_FreeSurface(textSurface);
+
+  TTF_CloseFont(font);
 }
