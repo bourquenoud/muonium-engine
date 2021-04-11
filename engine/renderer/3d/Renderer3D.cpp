@@ -85,6 +85,7 @@ namespace ue
 
   void Renderer3D::renderTriangle(Triangle t,Vector2 minCorner,Vector2 maxCorner)
   {
+    //Compute signed the area
     Real area = edgeFunction(*(t.va), *(t.vb), *(t.vc));
 
     //If the area if negative the triangle is seen for the back
@@ -108,27 +109,12 @@ namespace ue
     k[2][1] = t.vc->x - t.va->x;
     k[2][2] = (t.vc->y * t.va->x) - (t.vc->x * t.va->y);
 
-    //Compute signed the area
-    //Real area = k[0][0]*t.vc->x + k[0][1]*t.vc->y + k[0][2];
-    //Real area = edgeFunction(*(t.va), *(t.vb), *(t.vc));
-
     Real light = Real::min(computeLight(t), R(1.0));
     Colour col;
     col.colour.r = (uint8_t)((Real)0x7F * light);
     col.colour.g = (uint8_t)((Real)0x1F * light);
     col.colour.b = (uint8_t)((Real)0x80 * light);
     col.colour.a = 0xFF;
-
-    //Divide everything by the area (Precision loss with Fixed32 and big screen)
-    /*k[0][0] *= area;
-    k[0][1] *= area;
-    k[0][2] *= area;
-    k[1][0] *= area;
-    k[1][1] *= area;
-    k[1][2] *= area;
-    k[2][0] *= area;
-    k[2][1] *= area;
-    k[2][2] *= area;*/
 
     //Starting point barycentric coordinates
     Real startW0 = k[0][0]*minCorner.x + k[0][1]*minCorner.y + k[0][2];
@@ -144,9 +130,6 @@ namespace ue
 
         for(uint16_t x = (uint32_t)minCorner.x; x <= (uint16_t)maxCorner.x; x++)
           {
-            /*Real w0 = edgeFunction(*(t.va), *(t.vb), Vector3(x,y,0));
-            Real w1 = edgeFunction(*(t.vb), *(t.vc), Vector3(x,y,0));
-            Real w2 = edgeFunction(*(t.vc), *(t.va), Vector3(x,y,0));*/
 
             //TODO: use a | sign bit computation instead
             if(w0 >= R(0) && w1 >= R(0) && w2 >= R(0))
@@ -156,7 +139,7 @@ namespace ue
                 uint32_t i = x+y*camera.width;
                 //Check the depth and draw if closer
                 //FIXME Remove the abs
-                if(Real::abs(z) < Real::abs(depthBuffer[i]))
+                if(z > depthBuffer[i])
                   {
                     depthBuffer[i] = z;
                     //XXX THIS IS A TEMPORARY TEST XXX
@@ -211,7 +194,7 @@ namespace ue
   {
     for(uint32_t i = 0; i < depthBuffer.width * depthBuffer.height; i++)
       {
-        depthBuffer[i] = UE_REAL_MAX;
+        depthBuffer[i] = UE_REAL_MIN;
       }
   }
 

@@ -71,18 +71,11 @@ int emulator_main(void)
 
   //Load an obj file without texture
   ue::Vector3 cube = ue::Vector3(R(30.0), R(30.0), R(30.0));
-  objectList[0] = polyLoader.loadFromObj("/home/mathieu/Desktop/teapot.obj", NULL, cube);
+  objectList[0] = polyLoader.loadFromObj("emulator/resource/teapot.obj", NULL, cube);
 
   //Move the poly to the front of the camera
   objectList[0].position = objectList[0].position
       + ue::Vector3(R(0.0), R(-7.5), R(30.0));
-
-  //Rotate the object
-  ue::Matrix3 rotMat = computeRotationMatrix(ue::Vector3(R(0.0),R(0.4),R(0.0)));
-  for(uint32_t i = 0; i < objectList[0].vertexCount; i++)
-    {
-      objectList[0].vertices[i] = rotMat * objectList[0].vertices[i];
-    }
 
   polyLoader.printObject(objectList[0]);
 
@@ -160,13 +153,13 @@ int emulator_main(void)
       renderer.RenderFullFrame();
       drawToScreen();
       SDL_UpdateWindowSurface(window);
-      /*
+
       //Rotate the object
       ue::Matrix3 rotMat = computeRotationMatrix(ue::Vector3(R(0.0),R(0.01),R(0.0)));
       for(uint32_t i = 0; i < objectList[0].vertexCount; i++)
         {
           objectList[0].vertices[i] = rotMat * objectList[0].vertices[i];
-        }*/
+        }
 
     }
 
