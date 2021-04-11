@@ -3,7 +3,15 @@ Muonium is a highly customisable 3D/2D rendering engine for microcontrollers
 incorporating multiple kind of optimisations.
 
 # 3D rendering
+## Configurable to work in floating or fixed point
+It is possible to configure Muonium work exclusively with fixed point arithmetic.
+The difference is not noticeable, and computation is significantly speed up on MCU
+without FPU.
+
+Fixed point render
 ![Fixed point render of a teapot](https://raw.githubusercontent.com/elzaidir/muonium-engine/main/image/muonium-teapot-fixed.png)
+
+FLoating point render
 ![Floating point render of a teapot](https://raw.githubusercontent.com/elzaidir/muonium-engine/main/image/muonium-teapot-fixed.png)
 
 # 2D rendering
