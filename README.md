@@ -3,7 +3,8 @@ Muonium is a highly customisable 3D/2D rendering engine for microcontrollers
 incorporating multiple kind of optimisations.
 
 # 3D rendering
-[In progess]
+![alt text](https://github.com/elzaidir/muonium-engine/blob/main/image/muonium-teapot-float.jpg?raw=true)
+![alt text](https://github.com/elzaidir/muonium-engine/blob/main/image/muonium-teapot-fixed.jpg?raw=true)
 
 # 2D rendering
 [In progess]
