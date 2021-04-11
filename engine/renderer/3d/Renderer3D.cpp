@@ -48,12 +48,12 @@ namespace ue
 
         //Process the bounding rectangle
         Vector2 maxCorner = Vector2(
-            Real::max(projTriangle.va->x, projTriangle.vb->x, projTriangle.vc->x),
-            Real::max(projTriangle.va->y, projTriangle.vb->y, projTriangle.vc->y));
+            Real::round(Real::max(projTriangle.va->x, projTriangle.vb->x, projTriangle.vc->x)),
+            Real::round(Real::max(projTriangle.va->y, projTriangle.vb->y, projTriangle.vc->y)));
 
         Vector2 minCorner = Vector2(
-            Real::min(projTriangle.va->x, projTriangle.vb->x, projTriangle.vc->x),
-            Real::min(projTriangle.va->y, projTriangle.vb->y, projTriangle.vc->y));
+            Real::round(Real::min(projTriangle.va->x, projTriangle.vb->x, projTriangle.vc->x)),
+            Real::round(Real::min(projTriangle.va->y, projTriangle.vb->y, projTriangle.vc->y)));
 
 #if UE_CONFIG_ENABLE_TEXTURE == true
         //Copy the texture vectors pointers
@@ -85,29 +85,32 @@ namespace ue
 
   void Renderer3D::renderTriangle(Triangle t,Vector2 minCorner,Vector2 maxCorner)
   {
-
-    //Pre-compute factors for the triangle drawing
-    Real k[3][3];
-    k[0][0] = t.vb->y - t.va->y; // <---XXX this one is correct XXX
-    k[0][1] = t.va->x - t.vb->x;
-    k[0][2] = (t.va->y * t.vb->x) - (t.va->x * t.vb->y);
-
-    k[1][0] = t.vb->y - t.vc->y;
-    k[1][1] = t.vc->x - t.vb->x;
-    k[1][2] = t.vb->y*t.vc->x + t.vc->y*t.vb->x;
-
-    k[2][0] = t.vc->y - t.va->y;
-    k[2][1] = t.va->x - t.vc->x;
-    k[2][2] = t.vc->y*t.va->x + t.va->y*t.vc->x;
-
-    //Compute signed the area
-    Real area = k[0][0]*t.vc->x + k[0][1]*t.vc->y + k[0][2];
-    //Real area = edgeFunction(*(t.va), *(t.vb), *(t.vc));
+    Real area = edgeFunction(*(t.va), *(t.vb), *(t.vc));
 
     //If the area if negative the triangle is seen for the back
     // TODO: add the option to disable back culling
     if (area <= R(0))
       return;
+
+    area = R(1)/area;
+
+    //Pre-compute factors for the triangle drawing
+    Real k[3][3];
+    k[0][0] = t.vb->y - t.va->y;
+    k[0][1] = t.va->x - t.vb->x;
+    k[0][2] = (t.va->y * t.vb->x) - (t.va->x * t.vb->y);
+
+    k[1][0] = t.vc->y - t.vb->y;
+    k[1][1] = t.vb->x - t.vc->x;
+    k[1][2] = (t.vb->y * t.vc->x) - (t.vb->x * t.vc->y);
+
+    k[2][0] = t.va->y - t.vc->y;
+    k[2][1] = t.vc->x - t.va->x;
+    k[2][2] = (t.vc->y * t.va->x) - (t.vc->x * t.va->y);
+
+    //Compute signed the area
+    //Real area = k[0][0]*t.vc->x + k[0][1]*t.vc->y + k[0][2];
+    //Real area = edgeFunction(*(t.va), *(t.vb), *(t.vc));
 
     Real light = Real::min(computeLight(t), R(1.0));
     Colour col;
@@ -117,8 +120,7 @@ namespace ue
     col.colour.a = 0xFF;
 
     //Divide everything by the area (Precision loss with Fixed32 and big screen)
-    area = R(1)/area;
-    k[0][0] *= area;
+    /*k[0][0] *= area;
     k[0][1] *= area;
     k[0][2] *= area;
     k[1][0] *= area;
@@ -126,21 +128,25 @@ namespace ue
     k[1][2] *= area;
     k[2][0] *= area;
     k[2][1] *= area;
-    k[2][2] *= area;
+    k[2][2] *= area;*/
 
-    /*//Starting point barycentric coordinates
-    Real w0 = k[0][0]*minCorner.x + k[0][1]*minCorner.y + k[0][2];
-    Real w1 = k[1][0]*minCorner.x + k[1][1]*minCorner.y + k[1][2];
-    Real w2 = k[2][0]*minCorner.x + k[2][1]*minCorner.y + k[2][2];*/
+    //Starting point barycentric coordinates
+    Real startW0 = k[0][0]*minCorner.x + k[0][1]*minCorner.y + k[0][2];
+    Real startW1 = k[1][0]*minCorner.x + k[1][1]*minCorner.y + k[1][2];
+    Real startW2 = k[2][0]*minCorner.x + k[2][1]*minCorner.y + k[2][2];
 
     //Scan in the x direction TODO: scan in the y direction
-    for(uint16_t y = (uint32_t)minCorner.y; y <= (uint32_t)maxCorner.y; y++)
+    for(uint16_t y = (uint32_t)minCorner.y; y <= (uint16_t)maxCorner.y; y++)
       {
-        for(uint16_t x = (uint32_t)minCorner.x; x <= (uint32_t)maxCorner.x; x++)
+        Real w0 = startW0;
+        Real w1 = startW1;
+        Real w2 = startW2;
+
+        for(uint16_t x = (uint32_t)minCorner.x; x <= (uint16_t)maxCorner.x; x++)
           {
-            Real w0 = edgeFunction(*(t.va), *(t.vb), Vector3(x,y,0));
+            /*Real w0 = edgeFunction(*(t.va), *(t.vb), Vector3(x,y,0));
             Real w1 = edgeFunction(*(t.vb), *(t.vc), Vector3(x,y,0));
-            Real w2 = edgeFunction(*(t.vc), *(t.va), Vector3(x,y,0));
+            Real w2 = edgeFunction(*(t.vc), *(t.va), Vector3(x,y,0));*/
 
             //TODO: use a | sign bit computation instead
             if(w0 >= R(0) && w1 >= R(0) && w2 >= R(0))
@@ -158,18 +164,16 @@ namespace ue
                     //XXX ************************ XXX
                   }
               }
-
-            /*
             w0 += k[0][0];
             w1 += k[1][0];
             w2 += k[2][0];
-             */
           }
-        /*
-        w0 += k[0][1];
-        w1 += k[1][1];
-        w2 += k[2][1];
-         */
+
+        //Move on y
+        startW0 += k[0][1];
+        startW1 += k[1][1];
+        startW2 += k[2][1];
+
       }
 
   }

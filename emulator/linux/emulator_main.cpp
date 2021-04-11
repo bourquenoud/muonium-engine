@@ -70,12 +70,12 @@ int emulator_main(void)
   ue::Poly* objectList = new ue::Poly[1];
 
   //Load an obj file without texture
-  ue::Vector3 cube = ue::Vector3(R(20.0), R(20.0), R(20.0));
-  objectList[0] = polyLoader.loadFromObj("/home/mathieu/Desktop/monkey.obj", NULL, cube);
+  ue::Vector3 cube = ue::Vector3(R(30.0), R(30.0), R(30.0));
+  objectList[0] = polyLoader.loadFromObj("/home/mathieu/Desktop/teapot.obj", NULL, cube);
 
   //Move the poly to the front of the camera
   objectList[0].position = objectList[0].position
-      + ue::Vector3(R(0.0), R(0.0), R(30.0));
+      + ue::Vector3(R(0.0), R(-7.5), R(30.0));
 
   polyLoader.printObject(objectList[0]);
 

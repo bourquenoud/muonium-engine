@@ -23,7 +23,7 @@
    * FLOAT
    * FIXED32
    */
-  #define UE_CONFIG_ARITHMETIC FLOAT
+  #define UE_CONFIG_ARITHMETIC FIXED32
 
   /*
    * Enable render texture

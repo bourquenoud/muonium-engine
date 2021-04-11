@@ -18,6 +18,7 @@
 
 #include <cstdint>
 #include <cfloat>
+#include <cmath>
 #include "engine/ue_config.hpp"
 #include "fixed/Fixed32.hpp"
 
@@ -118,6 +119,10 @@ namespace ue {
     static Real max(Real,Real);
     static Real max(Real,Real,Real);
     static Real abs(Real);
+    //TODO: Check if it works for Fixed32 with negatives
+    static Real floor(Real);
+    static Real ceil(Real);
+    static Real round(Real);
 
   };
 }
