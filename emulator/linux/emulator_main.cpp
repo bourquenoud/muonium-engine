@@ -59,7 +59,7 @@ int emulator_main(void)
   );
 
   //Create the light
-  ue::Vector3 lightVector = ue::Vector3(R(0.2),R(1.0),R(1.0));
+  ue::Vector3 lightVector = ue::Vector3(R(0.2),R(-8.0),R(1.0));
   lightVector.normalise();
   ue::LightSun sun = ue::LightSun(lightVector, R(0.7));
 
@@ -83,6 +83,7 @@ int emulator_main(void)
   renderer = ue::Renderer3D();
   renderer.camera = camera;
   renderer.sun = sun;
+  renderer.ambientLight = R(0.0);
   renderer.depthBuffer = depthBuffer;
   renderer.frameBuffer = frameBuffer;
   renderer.objectList = objectList;

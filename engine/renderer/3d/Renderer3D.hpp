@@ -26,6 +26,7 @@ namespace ue
     DepthBuffer depthBuffer;
     Camera camera;
     LightSun sun;
+    Real ambientLight;
     Poly* objectList;
     uint32_t objectNumber;
 

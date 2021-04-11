@@ -88,9 +88,9 @@ namespace ue
 
     //Pre-compute factors for the triangle drawing
     Real k[3][3];
-    k[0][0] = t.va->y - t.vb->y;
-    k[0][1] = t.vb->x - t.va->x;
-    k[0][2] = t.va->y*t.vb->x + t.vb->y*t.va->x;
+    k[0][0] = t.vb->y - t.va->y; // <---XXX this one is correct XXX
+    k[0][1] = t.va->x - t.vb->x;
+    k[0][2] = (t.va->y * t.vb->x) - (t.va->x * t.vb->y);
 
     k[1][0] = t.vb->y - t.vc->y;
     k[1][1] = t.vc->x - t.vb->x;
@@ -101,8 +101,8 @@ namespace ue
     k[2][2] = t.vc->y*t.va->x + t.va->y*t.vc->x;
 
     //Compute signed the area
-    //Real area = k[0][0]*t.vc->x + k[0][1]*t.vc->y + k[0][2];
-    Real area = edgeFunction(*(t.va), *(t.vb), *(t.vc));
+    Real area = k[0][0]*t.vc->x + k[0][1]*t.vc->y + k[0][2];
+    //Real area = edgeFunction(*(t.va), *(t.vb), *(t.vc));
 
     //If the area if negative the triangle is seen for the back
     // TODO: add the option to disable back culling
@@ -194,10 +194,11 @@ namespace ue
     //Calculate the dot product
     light = Real::max(R(0.0),(-sun.direction)*s1); //Prevent negative light
 
+    //Compute the directional light
     light *= sun.intensity;
 
-    //TODO put a parameter for the ambiant light
-    light += R(0.2);
+    //Add ambient light
+    light += ambientLight;
 
     return light;
   }
