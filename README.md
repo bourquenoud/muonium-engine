@@ -4,7 +4,7 @@ incorporating multiple kind of optimisations.
 
 # 3D rendering
 ## Configurable to work in floating or fixed point
-It is possible to configure Muonium work exclusively with fixed point arithmetic.
+It is possible to configure Muonium work to exclusively with fixed point arithmetic.
 The difference is not noticeable, and computation is significantly speed up on MCU
 without FPU.
 
