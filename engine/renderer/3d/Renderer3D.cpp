@@ -111,10 +111,10 @@ namespace ue
 
     Real light = Real::min(computeLight(t), R(1.0));
     Colour col;
-    col.colour.r = (uint8_t)(light);
-    col.colour.g = (uint8_t)(light);
-    col.colour.b = (uint8_t)(light);
-    col.colour.a = (uint8_t)((Real)0xFF);
+    col.colour.r = (uint8_t)((Real)0x7F * light);
+    col.colour.g = (uint8_t)((Real)0x1F * light);
+    col.colour.b = (uint8_t)((Real)0x80 * light);
+    col.colour.a = 0xFF;
 
     //Divide everything by the area (Precision loss with Fixed32 and big screen)
     area = R(1)/area;
@@ -183,8 +183,10 @@ namespace ue
     a = *triangle.vb - *triangle.va;
     b = *triangle.vc - *triangle.va;
 
+    //XXX optimisation in progress
+    //Normalise the vectors before (Will overflow in Fixed32 otherwise)
     //Calculate the normal
-    s1 = a.cross(b);
+    s1 = a.normalise().cross(b.normalise());
 
     //Normalise the vectors
     s1 = s1.normalise();

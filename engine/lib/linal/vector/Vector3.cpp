@@ -95,7 +95,7 @@ namespace ue
    */
   Real Vector3::norm()
   {
-    return sqrtf(x*x + y*y + z*z);
+    return sqrtf((float)(x*x + y*y + z*z));
   }
 
   /*
