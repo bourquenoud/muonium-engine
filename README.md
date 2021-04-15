@@ -8,15 +8,17 @@ It is possible to configure Muonium work to exclusively with fixed point arithme
 The difference is not noticeable, and computation is significantly faster on MCU
 without FPU.
 
-On linux with a 4.5GHz 9750H with full frame render we get those FPS:
- - Float : 153fps
- - Fixed : 86fps
-
 #### Fixed point render
 ![Fixed point render of a teapot](https://raw.githubusercontent.com/elzaidir/muonium-engine/main/image/muonium-teapot-fixed.png)
 
 #### Floating point render
 ![Floating point render of a teapot](https://raw.githubusercontent.com/elzaidir/muonium-engine/main/image/muonium-teapot-fixed.png)
+
+However, computation with fixed point is slower than floating point if the system
+has a FPU. For example, on linux with a 4.5GHz 9750H with full frame render 
+we get about half the FPS:
+ - Float : 153fps
+ - Fixed : 86fps
 
 # 2D rendering
 In progess...
