@@ -34,6 +34,7 @@ namespace ue {
 
     Real norm(void);
     Vector4 normalise(void);
+    Vector4 approxNormalise(void);
 
     static const Vector4 ZERO;
     static const Vector4 ONE;

@@ -73,7 +73,7 @@ namespace ue
    */
   Real Vector2::norm()
   {
-    return sqrtf(this->x*this->x + this->y*this->y);
+    return sqrtf((float)(this->x*this->x + this->y*this->y));
   }
 
   /*
@@ -88,6 +88,19 @@ namespace ue
 
     return *this * (R(1.0)/norm);
   }
+
+  /*
+   * Fast very approximate normalisation
+   */
+  Vector2 Vector2::approxNormalise()
+   {
+     Real norm = Real::abs(x)+Real::abs(y);
+
+     if(norm == R(0.0))
+       return *this;
+
+     return *this* (R(1.0)/norm); //There are no divide function
+   }
 
   bool Vector2::operator==(Vector2 b)
   {

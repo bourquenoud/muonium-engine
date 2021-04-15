@@ -37,7 +37,7 @@ namespace ue
     //XXX this is getting messy...
     void renderObject(Poly);
     void renderTriangle(Triangle);
-    Real edgeFunction(Vector3,Vector3,Vector3);
+    Real edgeFunction(Vector3&,Vector3&,Vector3&);
     void renderTriangle(Triangle&,Vector2&,Vector2&,Poly&);
     void clearDepthBuffer();
     void clearFrameBuffer(Colour);

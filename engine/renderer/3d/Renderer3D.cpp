@@ -14,7 +14,7 @@ namespace ue
   {
     //Clear the depth buffer, clearing the frame buffer is not necessary
     clearDepthBuffer();
-    //clearFrameBufferGrid((Colour){0xFFFFFFFF}, (Colour){0xFFCCCCCC}, 12);
+    clearFrameBuffer((Colour){0xFFFFFFFF});
 
     //Works object by object
     for(uint32_t i = 0; i < objectNumber; i++)
@@ -23,7 +23,7 @@ namespace ue
       }
 
     //drawn the background
-    drawBackgroundGrid((Colour){0xFFFFFFFF}, (Colour){0xFFCCCCCC}, 12);
+    //drawBackgroundGrid((Colour){0xFFFFFFFF}, (Colour){0xFFCCCCCC}, 12);
   }
 
 
@@ -96,6 +96,20 @@ namespace ue
     if (area <= R(0))
       return;
 
+#if UE_CONFIG_ENABLE_NORMAL == false
+    //Light depend of the normal, which is the same everywhere on a flat triangle
+    Real light = Real::min(computeLight(t), R(1.0));
+#if UE_CONFIG_ENABLE_TEXTURE == false
+    //If textures and normals are disabled we can process the colour in advance
+    Colour col;
+    col.colour.r = (uint8_t)((Real)0x7F * light);
+    col.colour.g = (uint8_t)((Real)0x1F * light);
+    col.colour.b = (uint8_t)((Real)0x80 * light);
+    col.colour.a = 0xFF;
+#endif
+#endif
+
+    //Precompute the area inverse for faster division
     area = R(1)/area;
 
     //Pre-compute factors for the triangle drawing
@@ -112,20 +126,6 @@ namespace ue
     k[2][1] = t.vc->x - t.va->x;
     k[2][2] = (t.vc->y * t.va->x) - (t.vc->x * t.va->y);
 
-
-#if UE_CONFIG_ENABLE_NORMAL == false
-    //Light depend of the normal, which everywhere on a flat triangle
-    Real light = Real::min(computeLight(t), R(1.0));
-#if UE_CONFIG_ENABLE_TEXTURE == false
-    //If textures and normals are disabled we can process the colour in advance
-    Colour col;
-    col.colour.r = (uint8_t)((Real)0x7F * light);
-    col.colour.g = (uint8_t)((Real)0x1F * light);
-    col.colour.b = (uint8_t)((Real)0x80 * light);
-    col.colour.a = 0xFF;
-#endif
-#endif
-
     //Starting point barycentric coordinates
     Real startW0 = k[0][0]*minCorner.x + k[0][1]*minCorner.y + k[0][2];
     Real startW1 = k[1][0]*minCorner.x + k[1][1]*minCorner.y + k[1][2];
@@ -136,7 +136,7 @@ namespace ue
     Real zIncX = (k[0][0] * t.vc->z + k[1][0] * t.va->z + k[2][0] * t.vb->z) * area;
     Real zIncY = (k[0][1] * t.vc->z + k[1][1] * t.va->z + k[2][1] * t.vb->z) * area;
 
-    /* NOTE: Doesn't work
+    /* TODO: Make this work
     //Precompute texture position for interpolation
     Vector2 startTexPos;
     startTexPos.x = Real::clamp((startW0 * t.vtc->x + startW1 * t.vta->x + startW2 * t.vtb->x) * area, 0, 1);
@@ -145,7 +145,7 @@ namespace ue
     Real texPosXIncY = (k[0][1] * t.vtc->x + k[1][1] * t.vta->x + k[2][1] * t.vtb->x) * area;
     Real texPosYIncX = (k[0][0] * t.vtc->y + k[1][0] * t.vta->y + k[2][0] * t.vtb->y) * area;
     Real texPosYIncY = (k[0][1] * t.vtc->y + k[1][1] * t.vta->y + k[2][1] * t.vtb->y) * area;
-    */
+     */
 
     //Casts
     uint32_t width = (uint32_t)camera.width;
@@ -161,7 +161,22 @@ namespace ue
 
         Real z = startZ;
 
-        for(uint16_t y = (uint32_t)minCorner.y; y <= (uint16_t)maxCorner.y; y++)
+        uint16_t y;
+
+        //Search for the first pixel drawn
+        for(y = (uint32_t)minCorner.y; y <= (uint16_t)maxCorner.y; y++)
+          {
+            if(w0 >= R(0) && w1 >= R(0) && w2 >= R(0))
+              break;
+
+            w0 += k[0][1];
+            w1 += k[1][1];
+            w2 += k[2][1];
+
+            z += zIncY;
+          }
+
+        for(; y <= (uint16_t)maxCorner.y; y++)
           {
 
             //TODO: use a | sign bit computation instead
@@ -198,6 +213,13 @@ namespace ue
                     frameBuffer[i] = col;
                   }
               }
+            else
+              {
+                //Stop when exiting the triangle
+                //Reduce by 1/4 the number of pixel tested
+                break;
+              }
+
             w0 += k[0][1];
             w1 += k[1][1];
             w2 += k[2][1];
@@ -227,7 +249,7 @@ namespace ue
     //XXX optimisation in progress
     //Normalise the vectors before (Will overflow in Fixed32 otherwise)
     //Calculate the normal
-    s1 = a.normalise().cross(b.normalise());
+    s1 = a.approxNormalise().cross(b.approxNormalise());
 
     //Normalise the vectors
     s1 = s1.normalise();
@@ -286,7 +308,7 @@ namespace ue
       }
   }
 
-  Real Renderer3D::edgeFunction(Vector3 v0, Vector3 v1, Vector3 p)
+  Real Renderer3D::edgeFunction(Vector3& v0,Vector3& v1,Vector3& p)
   {
     Real val = (p.x - v0.x) * (v1.y - v0.y) - (p.y - v0.y) * (v1.x - v0.x);
     return val;

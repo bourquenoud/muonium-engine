@@ -83,7 +83,7 @@ namespace ue
     */
    Real Vector4::norm()
    {
-     return sqrtf(this->w*this->w + this->x*this->x + this->y*this->y + this->z*this->z);
+     return sqrtf((float)(this->w*this->w + this->x*this->x + this->y*this->y + this->z*this->z));
    }
 
    /*
@@ -98,6 +98,19 @@ namespace ue
 
      return *this * (R(1.0)/norm);
    }
+
+   /*
+    * Fast very approximate normalisation
+    */
+   Vector4 Vector4::approxNormalise()
+    {
+      Real norm = Real::abs(w)+Real::abs(x)+Real::abs(y)+Real::abs(z);
+
+      if(norm == R(0.0))
+        return *this;
+
+      return *this * (R(1.0) / norm);
+    }
 
    bool Vector4::operator==(Vector4 b)
    {

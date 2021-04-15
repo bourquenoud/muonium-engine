@@ -32,6 +32,7 @@ namespace ue {
 
     Real norm(void);
     Vector2 normalise(void);
+    Vector2 approxNormalise(void);
 
     static const Vector2 ZERO;
     static const Vector2 ONE;

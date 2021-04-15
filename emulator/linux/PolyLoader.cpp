@@ -159,19 +159,19 @@ ue::Poly PolyLoader::loadFromObj(const char* objectPath, const char* texturePath
           char* token = strtok_r(block, "/", &state2);
           triangle.va = &(vertices[atoi(token)-1]); //Vertex
           token = strtok_r(NULL, "/", &state2);
-          triangle.vta = &(textures[atoi(token)-1]); //Texture vertex
+          //triangle.vta = &(textures[atoi(token)-1]); //Texture vertex
 
           block = strtok_r(NULL, " ", &state1); //
           token = strtok_r(block, "/", &state2);
           triangle.vb = &(vertices[atoi(token)-1]);
           token = strtok_r(NULL, "/", &state2);
-          triangle.vtb = &(textures[atoi(token)-1]); //Texture vertex
+          //triangle.vtb = &(textures[atoi(token)-1]); //Texture vertex
 
           block = strtok_r(NULL, " ", &state1); //
           token = strtok_r(block, "/", &state2);
           triangle.vc = &(vertices[atoi(token)-1]);
           token = strtok_r(NULL, "/", &state2);
-          triangle.vtc = &(textures[atoi(token)-1]); //Texture vertex
+          //triangle.vtc = &(textures[atoi(token)-1]); //Texture vertex
 
           faces[faceCount++] = triangle;
         }
@@ -202,6 +202,7 @@ ue::Poly PolyLoader::loadFromObj(const char* objectPath, const char* texturePath
       vertices[i].z *= scale;
     }
 
+  /*
   //Load the texture
   if(texturePath)
     {
@@ -211,12 +212,13 @@ ue::Poly PolyLoader::loadFromObj(const char* objectPath, const char* texturePath
     {
       poly.texture = (ue::Texture){0,0,NULL}; //No texture
     }
+    */
 
   poly.faceCount = faceCount;
   poly.vertexCount = vertexCount;
-  poly.textureCount = textureCount;
+  //poly.textureCount = textureCount;
   poly.faces = faces;
-  poly.textureVerts = textures;
+  //poly.textureVerts = textures;
   poly.vertices = vertices;
   poly.position = ue::Vector3(R(0),R(0),R(0));
 

@@ -108,8 +108,21 @@ namespace ue
     if(norm == R(0.0))
       return *this;
 
-    return *this * (R(1.0)/norm);
+    return *this * (R(1.0) / norm);
   }
+
+  /*
+   * Fast very approximate normalisation
+   */
+  Vector3 Vector3::approxNormalise()
+   {
+     Real norm = Real::abs(x)+Real::abs(y)+Real::abs(z);
+
+     if(norm == R(0.0))
+       return *this;
+
+     return *this * (R(1.0) / norm);
+   }
 
   bool Vector3::operator==(Vector3 b)
                {

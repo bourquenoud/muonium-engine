@@ -34,6 +34,7 @@ namespace ue {
     Vector3 cross(Vector3 b);
     Real norm(void);
     Vector3 normalise(void);
+    Vector3 approxNormalise(void);
 
     static const Vector3 ZERO;
     static const Vector3 ONE;
