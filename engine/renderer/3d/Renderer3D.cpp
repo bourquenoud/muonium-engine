@@ -7,6 +7,8 @@
 
 #include "Renderer3D.hpp"
 
+#define SMALL_TRIANGLE_THRESHOLD (R(4))
+
 namespace ue
 {
 
@@ -95,6 +97,12 @@ namespace ue
     // TODO: add the option to disable back culling
     if (area <= R(0))
       return;
+    //TODO: Optimise for small triangles
+    /*else if(area <= SMALL_TRIANGLE_THRESHOLD)
+      {
+        renderSmallTriangle(t, minCorner, maxCorner, object, area);
+        return;
+      }*/
 
 #if UE_CONFIG_ENABLE_NORMAL == false
     //Light depend of the normal, which is the same everywhere on a flat triangle
@@ -236,6 +244,83 @@ namespace ue
       }
 
   }
+
+  /*//Expected to be faster for smaller triangles, as overhead is reduced. Seems like it's always slower
+  void Renderer3D::renderSmallTriangle(Triangle& t,Vector2& minCorner,Vector2& maxCorner, Poly& object, Real& area)
+  {
+
+#if UE_CONFIG_ENABLE_NORMAL == false
+    //Light depend of the normal, which is the same everywhere on a flat triangle
+    Real light = Real::min(computeLight(t), R(1.0));
+#if UE_CONFIG_ENABLE_TEXTURE == false
+    //If textures and normals are disabled we can process the colour in advance
+    Colour col;
+    col.colour.r = (uint8_t)((Real)0x7F * light);
+    col.colour.g = (uint8_t)((Real)0x1F * light);
+    col.colour.b = (uint8_t)((Real)0x80 * light);
+    col.colour.a = 0xFF;
+#endif
+#endif
+
+    //Precompute the area inverse for faster division
+    area = R(1)/area;
+
+    //Casts
+    uint32_t width = (uint32_t)camera.width;
+
+    uint32_t i = 0;
+
+    //TODO Optimise rendering order (Scanlines direction)
+    for(uint16_t x = (uint32_t)minCorner.x; x <= (uint16_t)maxCorner.x; x++)
+      {
+        for(uint16_t y = (uint32_t)minCorner.y; y <= (uint16_t)maxCorner.y; y++)
+          {
+
+            Vector3 p((Real)x, (Real)y, R(0.0));
+            Real w0 = edgeFunction(*(t.va),*(t.vb), p);
+            Real w1 = edgeFunction(*(t.vb),*(t.vc), p);
+            Real w2 = edgeFunction(*(t.vc),*(t.va), p);
+
+
+            //TODO: use a | sign bit computation instead
+            if(w0 >= R(0) && w1 >= R(0) && w2 >= R(0))
+              {
+
+                Real z = w0 * t.vc->z + w1 * t.va->z + w2 * t.vb->z;
+                z *= area;
+
+                i = x + y * width;
+
+                //Check the depth and draw if closer
+                if(z > depthBuffer[i])
+                  {
+                    depthBuffer[i] = z;
+
+                    //Sample the texture
+#if UE_CONFIG_ENABLE_TEXTURE == true
+                    Vector2 texPos;
+                    texPos.x = Real::clamp(
+                        (w0 * t.vtc->x + w1 * t.vta->x + w2 * t.vtb->x) * area,
+                        0, 1);
+                    texPos.y = Real::clamp(
+                        (w0 * t.vtc->y + w1 * t.vta->y + w2 * t.vtb->y) * area,
+                        0, 1);
+
+                    Colour col = object.texture.getPixelAt(texPos);
+
+                    col.colour.r = (uint8_t)((Real)col.colour.r * light);
+                    col.colour.g = (uint8_t)((Real)col.colour.g * light);
+                    col.colour.b = (uint8_t)((Real)col.colour.b * light);
+#endif
+
+                    frameBuffer[i] = col;
+                  }
+              }
+          }
+      }
+
+  }
+  */
 
   Real Renderer3D::computeLight(Triangle triangle)
   {
