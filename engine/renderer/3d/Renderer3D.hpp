@@ -39,7 +39,7 @@ namespace ue
     void renderTriangle(Triangle);
     Real edgeFunction(Vector3&,Vector3&,Vector3&);
     void renderTriangle(Triangle&,Vector2&,Vector2&,Poly&);
-    void renderSmallTriangle(Triangle&,Vector2&,Vector2&,Poly&,Real&);
+    //void renderSmallTriangle(Triangle&,Vector2&,Vector2&,Poly&,Real&);
     void clearDepthBuffer();
     void clearFrameBuffer(Colour);
     void clearFrameBufferGrid(Colour,Colour,uint32_t);
