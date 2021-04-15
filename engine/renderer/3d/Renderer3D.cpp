@@ -7,7 +7,7 @@
 
 #include "Renderer3D.hpp"
 
-#define SMALL_TRIANGLE_THRESHOLD (R(4))
+//#define SMALL_TRIANGLE_THRESHOLD (R(1))
 
 namespace ue
 {
@@ -245,7 +245,7 @@ namespace ue
 
   }
 
-  /*//Expected to be faster for smaller triangles, as overhead is reduced. Seems like it's always slower
+  /* //Expected to be faster for smaller triangles, as overhead is reduced. Seems like it's always slower than the main function
   void Renderer3D::renderSmallTriangle(Triangle& t,Vector2& minCorner,Vector2& maxCorner, Poly& object, Real& area)
   {
 
@@ -255,8 +255,8 @@ namespace ue
 #if UE_CONFIG_ENABLE_TEXTURE == false
     //If textures and normals are disabled we can process the colour in advance
     Colour col;
-    col.colour.r = (uint8_t)((Real)0x7F * light);
-    col.colour.g = (uint8_t)((Real)0x1F * light);
+    col.colour.r = (uint8_t)((Real)0x1F * light);
+    col.colour.g = (uint8_t)((Real)0x7F * light);
     col.colour.b = (uint8_t)((Real)0x80 * light);
     col.colour.a = 0xFF;
 #endif
@@ -319,8 +319,8 @@ namespace ue
           }
       }
 
-  }
-  */
+  }*/
+
 
   Real Renderer3D::computeLight(Triangle triangle)
   {
