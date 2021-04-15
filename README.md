@@ -14,11 +14,8 @@ without FPU.
 #### Floating point render
 ![Floating point render of a teapot](https://raw.githubusercontent.com/elzaidir/muonium-engine/main/image/muonium-teapot-fixed.png)
 
-However, computation with fixed point is slower than floating point if the system
-has a FPU. For example, on linux with a 4.5GHz 9750H with full frame render 
-we get about half the FPS:
- - Float : 153fps
- - Fixed : 86fps
+However, computation with fixed point is bit slower than floating point if the system
+has a FPU, about 10%.
 
 # 2D rendering
 In progess...
