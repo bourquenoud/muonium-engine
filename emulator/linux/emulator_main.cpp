@@ -5,6 +5,8 @@
  *      Author: mathieu
  */
 
+#include <x86intrin.h>
+#include <iostream>
 #include <ctime>
 #include <sys/time.h>
 
@@ -21,8 +23,8 @@
 
 #include "PolyLoader.hpp"
 
-#define WIDTH 640
-#define HEIGHT 480
+#define WIDTH 800
+#define HEIGHT 600
 #define SCALE 1
 
 SDL_Event event;
@@ -43,9 +45,15 @@ int emulator_main(void)
 {
   //Declare the time struct
   timeval tv;
-  int64_t lastTime = -1;
+  int64_t elapsedTime = 0;
+  int64_t totalTime = 0;
   int32_t frames = 0;
+  uint32_t totalFrames = 0;
   double fps = 0;
+  double averageFps = 0;
+  double averageCpf = 0; //Cycle per frame
+
+  uint64_t cycleCounter = 0;
 
   //********configure the renderer********
 
@@ -71,7 +79,7 @@ int emulator_main(void)
   //Create the light
   ue::Vector3 lightVector = ue::Vector3(R(0.2),R(-8.0),R(1.0));
   lightVector.normalise();
-  ue::LightSun sun = ue::LightSun(lightVector, R(0.7));
+  ue::LightSun sun = ue::LightSun(lightVector, R(0.6));
 
   //Create the poly loader
   PolyLoader polyLoader;
@@ -81,19 +89,17 @@ int emulator_main(void)
 
   //Load an obj file without texture
   ue::Vector3 cube = ue::Vector3(R(30.0), R(30.0), R(30.0));
-  objectList[0] = polyLoader.loadFromObj("emulator/resource/teapot.obj", NULL, cube);
+  objectList[0] = polyLoader.loadFromObj("emulator/resource/phantom.obj", "emulator/resource/phantom_texture.png", cube);
 
   //Move the poly to the front of the camera
   objectList[0].position = objectList[0].position
-      + ue::Vector3(R(0.0), R(-7.5), R(30.0));
-
-  polyLoader.printObject(objectList[0]);
+      + ue::Vector3(R(0.0), R(-10.0), R(30.0));
 
   //Build the renderer TODO: make a constructor
   renderer = ue::Renderer3D();
   renderer.camera = camera;
   renderer.sun = sun;
-  renderer.ambientLight = R(0.0);
+  renderer.ambientLight = R(0.1);
   renderer.depthBuffer = depthBuffer;
   renderer.frameBuffer = frameBuffer;
   renderer.objectList = objectList;
@@ -127,6 +133,7 @@ int emulator_main(void)
           switch (event.type)
           {
           case SDL_QUIT:
+            std::cout << "Total frames : " << totalFrames << std::endl;
             puts("Exit\n");
             quit = true;
             break;
@@ -151,6 +158,7 @@ int emulator_main(void)
               break;
             case SDLK_b:
               drawBuffer = !drawBuffer;
+              break;
             default:
               break;
             }
@@ -159,25 +167,62 @@ int emulator_main(void)
           }
         }
 
-      //Get the before rendering
-      if(lastTime < 0)
-        {
-          gettimeofday(&tv, NULL);
-          lastTime = tv.tv_usec + tv.tv_sec * 1000000;
-        }
+      //Get the time before rendering
+      gettimeofday(&tv, NULL);
+      int64_t lastTime = tv.tv_usec + tv.tv_sec * 1000000;
+
+      //Get the cycle count
+      uint64_t lastCycleCount = __rdtsc();
 
       //Render
       renderer.RenderFullFrame();
+      cycleCounter += __rdtsc() - lastCycleCount;
+
+      //Compute the cycles spent
 
       //Compute the FPS
       frames++;
+      totalFrames++;
       gettimeofday(&tv, NULL);
-      int64_t elapsedTime = (tv.tv_usec + tv.tv_sec * 1000000) - lastTime;
+      elapsedTime += (tv.tv_usec + tv.tv_sec * 1000000) - lastTime;
+      totalTime += (tv.tv_usec + tv.tv_sec * 1000000) - lastTime;
       if(elapsedTime >= 1000000)
         {
           fps = 1000000.0 * frames / elapsedTime;
-          lastTime = -1;
+          averageFps = 1000000.0 * totalFrames / totalTime;
           frames = 0;
+          elapsedTime = 0;
+
+          averageCpf = (double)cycleCounter / totalFrames;
+        }
+
+      if(totalFrames == 1000)
+        {
+          printf(
+              "*************************\n"
+              "Stats :\n"
+              "\tFrames -> 1'000\n"
+              "\tFPS -> %.2f\n"
+              "\tCPF -> %.5e\n"
+              "\tTime -> %.2f\n"
+              "*************************\n",
+              1000000.0 * totalFrames / totalTime,
+              (double)cycleCounter / totalFrames,
+              (double)totalTime / 1000000.0);
+        }
+      else if(totalFrames == 10000)
+        {
+          printf(
+              "*************************\n"
+              "Stats :\n"
+              "\tFrames -> 10'000\n"
+              "\tFPS -> %.2f\n"
+              "\tCPF -> %.5e\n"
+              "\tTime -> %.2f\n"
+              "*************************\n",
+              1000000.0 * totalFrames / totalTime,
+              (double)cycleCounter / totalFrames,
+              (double)totalTime / 1000000.0);
         }
 
       //Display the image
@@ -186,8 +231,14 @@ int emulator_main(void)
       //Display the fps
       TTF_Init();
       char charBuffer[64];
-      snprintf(charBuffer, sizeof(charBuffer), "FPS : %.2f", fps);
+      snprintf(charBuffer, sizeof(charBuffer), "Time : %.2fs", (double)totalTime / 1000000.0);
       drawText(surface, charBuffer, 12, 10, 10);
+      snprintf(charBuffer, sizeof(charBuffer), "FPS : %.2f", fps);
+      drawText(surface, charBuffer, 12, 10, 24);
+      snprintf(charBuffer, sizeof(charBuffer), "Average FPS : %.2f", averageFps);
+      drawText(surface, charBuffer, 12, 10, 38);
+      snprintf(charBuffer, sizeof(charBuffer), "Average CPF : %.5e", averageCpf);
+      drawText(surface, charBuffer, 12, 10, 52);
       TTF_Quit();
 
       SDL_UpdateWindowSurface(window);
@@ -268,12 +319,12 @@ void set_pixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
 
 ue::Matrix3 computeRotationMatrix(ue::Vector3 angles)
 {
-  ue::Real cosAlpha = cosf(angles.x);
-  ue::Real sinAlpha = sinf(angles.x);
-  ue::Real cosBeta = cosf(angles.y);
-  ue::Real sinBeta = sinf(angles.y);
-  ue::Real cosGamma = cosf(angles.z);
-  ue::Real sinGamma = sinf(angles.z);
+  ue::Real cosAlpha = cosf((float)angles.x);
+  ue::Real sinAlpha = sinf((float)angles.x);
+  ue::Real cosBeta = cosf((float)angles.y);
+  ue::Real sinBeta = sinf((float)angles.y);
+  ue::Real cosGamma = cosf((float)angles.z);
+  ue::Real sinGamma = sinf((float)angles.z);
 
   ue::Matrix3 A = {{{R(1.0), R(0.0) , R(0.0) },{R(0.0), cosAlpha, -sinAlpha},{R(0.0), sinAlpha, cosAlpha }}}; //X
   ue::Matrix3 B = {{{cosBeta , R(0.0), sinBeta},{R(0.0) ,R(1.0), R(0.0)},{-sinBeta, R(0.0), cosBeta}}}; //Y

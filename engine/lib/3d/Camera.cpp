@@ -62,9 +62,13 @@ namespace ue
     b = -t;
     l = -r;
 
-    width = imageWidth;
-    height = imageHeight;
+    width = (Real)imageWidth;
+    height = (Real)imageHeight;
     near = nearClippingPLane;
+
+    projAx = R(1.0) * R(0.5) * width;
+    projAy = height * R(0.5);
+    projB = near * R(0.5) * width;
   }
 
 #define FOV_FACTOR 8.72664626e-3
@@ -102,8 +106,8 @@ namespace ue
 
     //Project to screen
     vert = Vector3(
-        (R(1.0) + near * vert.x / -vert.z) * R(0.5) * (Real)width, //XXX Maybe store width as real ?
-        ((Real)height/(Real)width + near * vert.y / -vert.z) * R(0.5) * (Real)width,
+        projAx + projB * vert.x / -vert.z,
+        projAy + projB * vert.y / -vert.z,
         -vert.z);
 
 

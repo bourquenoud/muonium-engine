@@ -33,8 +33,8 @@ namespace ue
     Real r;
     Real near;
     Real far;
-    uint32_t width;
-    uint32_t height;
+    Real width;
+    Real height;
 
     Camera();
 
@@ -57,6 +57,11 @@ namespace ue
     Vector3 toRaster(Vector3 v);
 
   private:
+    //Precompute factors for the projections
+    Real projAx;
+    Real projAy;
+    Real projB;
+
     //Compute the projection matrix according to the camera parameters
     void computeProjectionMatrix();
   };

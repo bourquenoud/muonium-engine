@@ -10,6 +10,7 @@
 
 #include <cstdint>
 #include <cstdio>
+#include <cassert>
 
 #include "../../lib/arith.hpp"
 #include "../../lib/buffer.hpp"
@@ -37,10 +38,11 @@ namespace ue
     void renderObject(Poly);
     void renderTriangle(Triangle);
     Real edgeFunction(Vector3,Vector3,Vector3);
-    void renderTriangle(Triangle,Vector2,Vector2);
+    void renderTriangle(Triangle&,Vector2&,Vector2&,Poly&);
     void clearDepthBuffer();
     void clearFrameBuffer(Colour);
     void clearFrameBufferGrid(Colour,Colour,uint32_t);
+    void drawBackgroundGrid(Colour,Colour,uint32_t);
     Matrix3 computeRotationMatrix(Vector3 angles);
     Real computeLight(Triangle triangle);
   };

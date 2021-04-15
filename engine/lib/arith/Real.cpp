@@ -47,167 +47,6 @@ namespace ue
   }
 #endif //UE_CONFIG_ARITHMETIC
 
-
-  /****Arithmetic****/
-  Real Real::operator+() //Unary +
-  {
-    Real temp;
-    temp.val = val;
-    return temp;
-  }
-  Real Real::operator-() //Unary -
-  {
-    Real temp;
-    temp.val = -val;
-    return temp;
-  }
-  Real Real::operator+(Real a)//add
-  {
-    Real temp;
-    temp.val = val + a.val;
-    return temp;
-  }
-  Real Real::operator-(Real a)//sub
-  {
-    Real temp;
-    temp.val = val - a.val;
-    return temp;
-  }
-  Real Real::operator*(Real a)//mult
-  {
-    Real temp;
-    temp.val = val * a.val;
-    return temp;
-  }
-  Real Real::operator/(Real a)//div
-  {
-    Real temp;
-    temp.val = val / a.val;
-    return temp;
-  }
-  /*
-  Real Real::operator%(Real a)//mod
-  {
-          Real temp;
-          temp.val = val % a.val;
-          return temp;
-  }*/
-
-  /****Inc/dec****/
-  Real Real::operator++()
-      {
-    Real temp;
-    temp.val = ++val;
-    return temp;
-      }
-  Real Real::operator--()//pre dec
-      {
-    Real temp;
-    temp.val = --val;
-    return temp;
-      }
-  Real Real::operator++(int a)//post inc
-      {
-    Real temp;
-    temp.val = val++;
-    return temp;
-      }
-  Real Real::operator--(int a)//post dec
-      {
-    Real temp;
-    temp.val = val--;
-    return temp;
-      }
-
-  //****Assignment****//
-  Real Real::operator=(Real a)//assign
-  {
-    this->val = a.val;
-    return *this;
-  }
-  Real Real::operator+=(Real a)//add
-      {
-    this->val = val + a.val;
-    return *this;
-      }
-  Real Real::operator-=(Real a)//sub
-      {
-    this->val = val - a.val;
-    return *this;
-      }
-  Real Real::operator*=(Real a)//mult
-      {
-    this->val = val * a.val;
-    return *this;
-      }
-  Real Real::operator/=(Real a)//div
-      {
-    this->val = val / a.val;
-    return *this;
-      }
-  /*Real Real::operator%=(Real a)//mod
-  {
-          Real temp;
-          temp.val = val % a.val;
-          return temp;
-  }*/
-
-  //****Comparison****//
-  bool Real::operator==(Real a)//equal
-      {
-    return (val == a.val);
-      }
-  bool Real::operator!=(Real a)//not equal
-      {
-    return (val != a.val);
-      }
-  bool Real::operator<(Real a)//smaller
-  {
-    return (val < a.val);
-  }
-  bool Real::operator>(Real a)//bigger
-  {
-    return (val > a.val);
-  }
-  bool Real::operator<=(Real a)//smaller or equal
-      {
-    return (val <= a.val);
-      }
-  bool Real::operator>=(Real a)//bigger or equal
-      {
-    return (val >= a.val);
-      }
-
-  //****Typecast****//
-  Real::operator int8_t()
-      {
-    return (int8_t)(this->val);
-      }
-  Real::operator int16_t()
-      {
-    return (int16_t)(this->val);
-      }
-  Real::operator int32_t()
-      {
-    return (int32_t)(this->val);
-      }
-  Real::operator uint8_t()
-      {
-    return (uint8_t)(val);
-      }
-  Real::operator uint16_t()
-      {
-    return (uint16_t)(val);
-      }
-  Real::operator uint32_t()
-      {
-    return (uint32_t)(val);
-      }
-  Real::operator float()
-      {
-    return (float)(val);
-      }
-
   //****Basic arithmetic****
   Real Real::min(Real a, Real b)
   {
@@ -225,6 +64,10 @@ namespace ue
   {
     return max(a,max(b,c));
   }
+  Real Real::clamp(Real val, Real minVal, Real maxVal)
+  {
+    return max(min(val, maxVal), minVal);
+  }
   Real Real::abs(Real a)
   {
     return (a < R(0))?-a:a;
@@ -234,19 +77,19 @@ namespace ue
   Real Real::floor(Real a)
   {
     Real c;
-    c.val = floorf(a.val);
+    c.val = floorf((float)a.val);
     return c;
   }
   Real Real::ceil(Real a)
   {
     Real c;
-    c.val = ceilf(a.val);
+    c.val = ceilf((float)a.val);
     return c;
   }
   Real Real::round(Real a)
   {
     Real c;
-    c.val = roundf(a.val);
+    c.val = roundf((float)a.val);
     return c;
   }
 #elif UE_CONFIG_ARITHMETIC == FIXED32

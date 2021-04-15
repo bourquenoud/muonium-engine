@@ -17,7 +17,7 @@
 #define COMMENT "#"
 
 ue::Texture loadTexture(const char* path);
-void printObject(ue::Poly obj);
+__attribute((unused)) void printObject(ue::Poly obj);
 
 ue::Poly PolyLoader::loadFromObj(const char* objectPath, const char* texturePath, ue::Vector3 size)
 {
@@ -222,9 +222,9 @@ ue::Poly PolyLoader::loadFromObj(const char* objectPath, const char* texturePath
 
   for(uint32_t i = 0; i < lineCount; i++)
     {
-      delete lines[i];
+      free(lines[i]);
     }
-  delete lines;
+  delete[] lines;
 
   printf("Vertices : %i\n Faces : %i\n", poly.vertexCount, poly.faceCount);
 
@@ -256,7 +256,7 @@ ue::Texture loadTexture(const char* path)
     {
       tex.pixel[i].raw = 0x00000000;
 
-      //Why the fuck is it in BGRA order ? (ARGB ?)
+      //Why the fuck is it in BGRA order ? is it ARGB ?
       if(channels > 0)
         tex.pixel[i].colour.b = img[imgPtr++];
       if(channels > 1)

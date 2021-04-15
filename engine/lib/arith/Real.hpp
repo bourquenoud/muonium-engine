@@ -30,14 +30,14 @@
 #define UE_REAL_MAX ((Real){(Fixed32){0x7FFFFFFF}})
 #define UE_REAL_MIN ((Real){(Fixed32){0x80000000}})
 #endif //UE_CONFIG_ARITHMETIC
-*/
+ */
 //XXX BAD XXX
 #if UE_CONFIG_ARITHMETIC == FLOAT
-#define UE_REAL_MAX (R(1000))
-#define UE_REAL_MIN (R(-1000))
+#define UE_REAL_MAX (R(10000))
+#define UE_REAL_MIN (R(-10000))
 #elif UE_CONFIG_ARITHMETIC == FIXED32
-#define UE_REAL_MAX (R(1000))
-#define UE_REAL_MIN (R(-1000))
+#define UE_REAL_MAX (R(10000))
+#define UE_REAL_MIN (R(-10000))
 #endif //UE_CONFIG_ARITHMETIC
 
 namespace ue {
@@ -73,51 +73,173 @@ namespace ue {
     }
 #endif //UE_CONFIG_CPP17_SYNTAX
 
-    //****Arithmetic****
-    Real operator+(); //Unary +
-    Real operator-(); //Unary -
-    Real operator+(Real);//add
-    Real operator-(Real);//sub
-    Real operator*(Real);//mult
-    Real operator/(Real);//div
-    Real operator%(Real);//mod
 
-    //****Inc/dec****
-    Real operator++();//pre inc
-    Real operator--();//pre dec
-    Real operator++(int);//post inc
-    Real operator--(int);//post dec
+    /****Arithmetic****/
+    inline Real operator+() //Unary +
+    {
+      Real temp;
+      temp.val = val;
+      return temp;
+    }
+    inline Real operator-() //Unary -
+    {
+      Real temp;
+      temp.val = -val;
+      return temp;
+    }
+    inline Real operator+(Real a)//add
+    {
+      Real temp;
+      temp.val = val + a.val;
+      return temp;
+    }
+    inline Real operator-(Real a)//sub
+    {
+      Real temp;
+      temp.val = val - a.val;
+      return temp;
+    }
+    inline Real operator*(Real a)//mult
+    {
+      Real temp;
+      temp.val = val * a.val;
+      return temp;
+    }
+    inline Real operator/(Real a)//div
+    {
+      Real temp;
+      temp.val = val / a.val;
+      return temp;
+    }
+    /*
+    Real operator%(Real a)//mod
+    {
+            Real temp;
+            temp.val = val % a.val;
+            return temp;
+    }*/
 
-    //****Assignment****
-    Real operator=(Real);//assign
-    Real operator+=(Real);//add
-    Real operator-=(Real);//sub
-    Real operator*=(Real);//mult
-    Real operator/=(Real);//div
-    Real operator%=(Real);//mod
+    /****Inc/dec****/
+    inline Real operator++()
+                {
+      Real temp;
+      temp.val = ++val;
+      return temp;
+                }
+    inline Real operator--()//pre dec
+                {
+      Real temp;
+      temp.val = --val;
+      return temp;
+                }
+    inline Real operator++(int a)//post inc
+                {
+      Real temp;
+      temp.val = val++;
+      return temp;
+                }
+    inline Real operator--(int a)//post dec
+                {
+      Real temp;
+      temp.val = val--;
+      return temp;
+                }
 
-    //****Comparison****
-    bool operator==(Real);//equal
-    bool operator!=(Real);//not equal
-    bool operator<(Real);//smaller
-    bool operator>(Real);//bigger
-    bool operator<=(Real);//smaller or equal
-    bool operator>=(Real);//bigger or equal
+    //****Assignment****//
+    inline Real operator=(Real a)//assign
+    {
+      this->val = a.val;
+      return *this;
+    }
+    inline Real operator+=(Real a)//add
+                {
+      this->val = val + a.val;
+      return *this;
+                }
+    inline Real operator-=(Real a)//sub
+                {
+      this->val = val - a.val;
+      return *this;
+                }
+    inline Real operator*=(Real a)//mult
+                {
+      this->val = val * a.val;
+      return *this;
+                }
+    inline Real operator/=(Real a)//div
+                {
+      this->val = val / a.val;
+      return *this;
+                }
+    /*Real operator%=(Real a)//mod
+    {
+            Real temp;
+            temp.val = val % a.val;
+            return temp;
+    }*/
 
-    //****typecast****
-    operator int8_t();
-    operator int16_t();
-    operator int32_t();
-    operator uint8_t();
-    operator uint16_t();
-    operator uint32_t();
-    operator float();
+    //****Comparison****//
+    inline bool operator==(Real a)//equal
+                {
+      return (val == a.val);
+                }
+    inline bool operator!=(Real a)//not equal
+                {
+      return (val != a.val);
+                }
+    inline bool operator<(Real a)//smaller
+    {
+      return (val < a.val);
+    }
+    inline bool operator>(Real a)//bigger
+    {
+      return (val > a.val);
+    }
+    inline bool operator<=(Real a)//smaller or equal
+                {
+      return (val <= a.val);
+                }
+    inline bool operator>=(Real a)//bigger or equal
+                {
+      return (val >= a.val);
+                }
+
+    //****Typecast****//
+    inline operator int8_t()
+                {
+      return (int8_t)(this->val);
+                }
+    inline operator int16_t()
+                {
+      return (int16_t)(this->val);
+                }
+    inline operator int32_t()
+                {
+      return (int32_t)(this->val);
+                }
+    inline operator uint8_t()
+                {
+      return (uint8_t)(val);
+                }
+    inline operator uint16_t()
+                {
+      return (uint16_t)(val);
+                }
+    inline operator uint32_t()
+                {
+      return (uint32_t)(val);
+                }
+    inline operator float()
+                {
+      return (float)(val);
+                }
 
     //****basic arithmetics****
     static Real min(Real,Real);
     static Real min(Real,Real,Real);
     static Real max(Real,Real);
     static Real max(Real,Real,Real);
+    static Real clamp(Real,Real,Real);
     static Real abs(Real);
     //TODO: Check if it works for Fixed32 with negatives
     static Real floor(Real);
@@ -131,9 +253,9 @@ namespace ue {
 #if __cplusplus >= 201703L
 #define R(X) (X##_r)
 constexpr ue::Real operator"" _r(long double a)
-{
+    {
   return ue::Real(a);
-}
+    }
 #else
 #define R(X) ((ue::Real)X)
 #endif //UE_CONFIG_CPP17_SYNTAX

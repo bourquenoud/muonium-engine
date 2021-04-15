@@ -14,13 +14,16 @@ namespace ue
   {
     //Clear the depth buffer, clearing the frame buffer is not necessary
     clearDepthBuffer();
-    clearFrameBufferGrid((Colour){0xFFFFFFFF}, (Colour){0xFFCCCCCC}, 12);
+    //clearFrameBufferGrid((Colour){0xFFFFFFFF}, (Colour){0xFFCCCCCC}, 12);
 
     //Works object by object
     for(uint32_t i = 0; i < objectNumber; i++)
       {
         renderObject(objectList[i]);
       }
+
+    //drawn the background
+    drawBackgroundGrid((Colour){0xFFFFFFFF}, (Colour){0xFFCCCCCC}, 12);
   }
 
 
@@ -43,8 +46,8 @@ namespace ue
           continue;
 
         //Don't process triangles that are too far
-        //        if(projTriangle.va->z > camera.far && projTriangle.vb->z > camera.far && projTriangle.vc->z > camera.far)
-        //          continue;
+        if(projTriangle.va->z > camera.far && projTriangle.vb->z > camera.far && projTriangle.vc->z > camera.far)
+          continue;
 
         //Process the bounding rectangle
         Vector2 maxCorner = Vector2(
@@ -79,11 +82,11 @@ namespace ue
 
 #endif
 
-        renderTriangle(projTriangle, minCorner, maxCorner);
+        renderTriangle(projTriangle, minCorner, maxCorner, o);
       }
   }
 
-  void Renderer3D::renderTriangle(Triangle t,Vector2 minCorner,Vector2 maxCorner)
+  void Renderer3D::renderTriangle(Triangle& t,Vector2& minCorner,Vector2& maxCorner, Poly& object)
   {
     //Compute signed the area
     Real area = edgeFunction(*(t.va), *(t.vb), *(t.vc));
@@ -109,54 +112,105 @@ namespace ue
     k[2][1] = t.vc->x - t.va->x;
     k[2][2] = (t.vc->y * t.va->x) - (t.vc->x * t.va->y);
 
+
+#if UE_CONFIG_ENABLE_NORMAL == false
+    //Light depend of the normal, which everywhere on a flat triangle
     Real light = Real::min(computeLight(t), R(1.0));
+#if UE_CONFIG_ENABLE_TEXTURE == false
+    //If textures and normals are disabled we can process the colour in advance
     Colour col;
     col.colour.r = (uint8_t)((Real)0x7F * light);
     col.colour.g = (uint8_t)((Real)0x1F * light);
     col.colour.b = (uint8_t)((Real)0x80 * light);
     col.colour.a = 0xFF;
+#endif
+#endif
 
     //Starting point barycentric coordinates
     Real startW0 = k[0][0]*minCorner.x + k[0][1]*minCorner.y + k[0][2];
     Real startW1 = k[1][0]*minCorner.x + k[1][1]*minCorner.y + k[1][2];
     Real startW2 = k[2][0]*minCorner.x + k[2][1]*minCorner.y + k[2][2];
 
-    //Scan in the x direction TODO: scan in the y direction
-    for(uint16_t y = (uint32_t)minCorner.y; y <= (uint16_t)maxCorner.y; y++)
+    //Precompute z for interpolation
+    Real startZ = (startW0 * t.vc->z + startW1 * t.va->z + startW2 * t.vb->z) * area;
+    Real zIncX = (k[0][0] * t.vc->z + k[1][0] * t.va->z + k[2][0] * t.vb->z) * area;
+    Real zIncY = (k[0][1] * t.vc->z + k[1][1] * t.va->z + k[2][1] * t.vb->z) * area;
+
+    /* NOTE: Doesn't work
+    //Precompute texture position for interpolation
+    Vector2 startTexPos;
+    startTexPos.x = Real::clamp((startW0 * t.vtc->x + startW1 * t.vta->x + startW2 * t.vtb->x) * area, 0, 1);
+    startTexPos.y = Real::clamp((startW0 * t.vtc->y + startW1 * t.vta->y + startW2 * t.vtb->y) * area, 0, 1);
+    Real texPosXIncX = (k[0][0] * t.vtc->x + k[1][0] * t.vta->x + k[2][0] * t.vtb->x) * area;
+    Real texPosXIncY = (k[0][1] * t.vtc->x + k[1][1] * t.vta->x + k[2][1] * t.vtb->x) * area;
+    Real texPosYIncX = (k[0][0] * t.vtc->y + k[1][0] * t.vta->y + k[2][0] * t.vtb->y) * area;
+    Real texPosYIncY = (k[0][1] * t.vtc->y + k[1][1] * t.vta->y + k[2][1] * t.vtb->y) * area;
+    */
+
+    //Casts
+    uint32_t width = (uint32_t)camera.width;
+
+    uint32_t i = 0;
+
+    //TODO Optimise rendering order (Scanlines direction)
+    for(uint16_t x = (uint32_t)minCorner.x; x <= (uint16_t)maxCorner.x; x++)
       {
         Real w0 = startW0;
         Real w1 = startW1;
         Real w2 = startW2;
 
-        for(uint16_t x = (uint32_t)minCorner.x; x <= (uint16_t)maxCorner.x; x++)
+        Real z = startZ;
+
+        for(uint16_t y = (uint32_t)minCorner.y; y <= (uint16_t)maxCorner.y; y++)
           {
 
             //TODO: use a | sign bit computation instead
             if(w0 >= R(0) && w1 >= R(0) && w2 >= R(0))
               {
+                /*
                 Real z = w0 * t.vc->z + w1 * t.va->z + w2 * t.vb->z;
-                z *= area;
-                uint32_t i = x+y*camera.width;
+                z *= area;*/
+
+                i = x + y * width;
+
                 //Check the depth and draw if closer
-                //FIXME Remove the abs
                 if(z > depthBuffer[i])
                   {
                     depthBuffer[i] = z;
-                    //XXX THIS IS A TEMPORARY TEST XXX
+
+                    //Sample the texture
+#if UE_CONFIG_ENABLE_TEXTURE == true
+                    Vector2 texPos;
+                    texPos.x = Real::clamp(
+                        (w0 * t.vtc->x + w1 * t.vta->x + w2 * t.vtb->x) * area,
+                        0, 1);
+                    texPos.y = Real::clamp(
+                        (w0 * t.vtc->y + w1 * t.vta->y + w2 * t.vtb->y) * area,
+                        0, 1);
+
+                    Colour col = object.texture.getPixelAt(texPos);
+
+                    col.colour.r = (uint8_t)((Real)col.colour.r * light);
+                    col.colour.g = (uint8_t)((Real)col.colour.g * light);
+                    col.colour.b = (uint8_t)((Real)col.colour.b * light);
+#endif
+
                     frameBuffer[i] = col;
-                    //XXX ************************ XXX
                   }
               }
-            w0 += k[0][0];
-            w1 += k[1][0];
-            w2 += k[2][0];
+            w0 += k[0][1];
+            w1 += k[1][1];
+            w2 += k[2][1];
+
+            z += zIncY;
           }
 
         //Move on y
-        startW0 += k[0][1];
-        startW1 += k[1][1];
-        startW2 += k[2][1];
+        startW0 += k[0][0];
+        startW1 += k[1][0];
+        startW2 += k[2][0];
 
+        startZ += zIncX;
       }
 
   }
@@ -217,6 +271,21 @@ namespace ue
       }
   }
 
+  void Renderer3D::drawBackgroundGrid(Colour col1, Colour col2, uint32_t size)
+  {
+    for(uint32_t i = 0; i < frameBuffer.width * frameBuffer.height; i++)
+      {
+        //XXX BAD
+        if(depthBuffer[i] < R(-1000.0))
+          {
+            uint32_t x = i%frameBuffer.width;
+            uint32_t y = i/frameBuffer.width;
+
+            frameBuffer[i] = (((x/size) & 1)^((y/size) & 1))?col1:col2;
+          }
+      }
+  }
+
   Real Renderer3D::edgeFunction(Vector3 v0, Vector3 v1, Vector3 p)
   {
     Real val = (p.x - v0.x) * (v1.y - v0.y) - (p.y - v0.y) * (v1.x - v0.x);
@@ -227,12 +296,12 @@ namespace ue
   //TODO remove and make a proper quaternion system
   Matrix3 Renderer3D::computeRotationMatrix(Vector3 angles)
   {
-    Real cosAlpha = cosf(angles.x);
-    Real sinAlpha = sinf(angles.x);
-    Real cosBeta = cosf(angles.y);
-    Real sinBeta = sinf(angles.y);
-    Real cosGamma = cosf(angles.z);
-    Real sinGamma = sinf(angles.z);
+    Real cosAlpha = cosf((float)angles.x);
+    Real sinAlpha = sinf((float)angles.x);
+    Real cosBeta = cosf((float)angles.y);
+    Real sinBeta = sinf((float)angles.y);
+    Real cosGamma = cosf((float)angles.z);
+    Real sinGamma = sinf((float)angles.z);
 
     Matrix3 A = {{{R(1.0), R(0.0) , R(0.0) },{R(0.0), cosAlpha, -sinAlpha},{R(0.0), sinAlpha, cosAlpha }}}; //X
     Matrix3 B = {{{cosBeta , R(0.0), sinBeta},{R(0.0) ,R(1.0), R(0.0)},{-sinBeta, R(0.0), cosBeta}}}; //Y

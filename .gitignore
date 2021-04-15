@@ -6,3 +6,4 @@
 #Ignore the eclipse project
 .cproject
 .project
+/Debug_optimised/

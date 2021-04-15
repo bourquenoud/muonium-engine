@@ -9,8 +9,11 @@
 #define TEXTURE2_H_
 
 #include <cstdint>
+#include <cstdio>
 
 #include "Colour.hpp"
+#include "../arith.hpp"
+#include "../linal.hpp"
 
 namespace ue {
 
@@ -20,6 +23,8 @@ namespace ue {
     uint32_t width;
     uint32_t height;
     Colour* pixel;
+
+    Colour getPixelAt(Vector2&);
   };
 
 }
