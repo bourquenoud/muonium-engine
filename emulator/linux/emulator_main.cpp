@@ -33,8 +33,6 @@ SDL_Window* window;
 
 ue::Renderer3D renderer;
 
-bool drawBuffer = false;
-
 //Prototypes
 void drawToScreen();
 void set_pixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
@@ -108,7 +106,6 @@ int emulator_main(void)
   //********Configure the window********
   //Declare state vars
   bool quit = false;
-  //bool captureState = false;
   ue::Vector2 mouseDelta = ue::Vector2(R(0.0),R(0.0));
   SDL_Event event;
 
@@ -155,9 +152,6 @@ int emulator_main(void)
               SDL_SetRelativeMouseMode((SDL_bool)false);
               //captureState = false;
               puts("Uncapture");
-              break;
-            case SDLK_b:
-              drawBuffer = !drawBuffer;
               break;
             default:
               break;
@@ -273,7 +267,6 @@ void drawToScreen()
                   set_pixel(surface, x, y, renderer.frameBuffer[i+j*WIDTH].raw);
                 }
             }
-
         }
     }
 }
