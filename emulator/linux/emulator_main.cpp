@@ -23,9 +23,12 @@
 
 #include "PolyLoader.hpp"
 
-#define WIDTH 800
-#define HEIGHT 600
-#define SCALE 1
+#define WIDTH 300
+#define HEIGHT 225
+#define SCALE 3
+
+bool antiAliasing = false;
+float antiAliasingFactor = 1;
 
 SDL_Event event;
 SDL_Surface* surface;
@@ -75,7 +78,7 @@ int emulator_main(void)
   );
 
   //Create the light
-  ue::Vector3 lightVector = ue::Vector3(R(0.2),R(-2.0),R(1.0));
+  ue::Vector3 lightVector = ue::Vector3(R(4.0),R(0.1),R(1.0));
   lightVector.normalise();
   ue::LightSun sun = ue::LightSun(lightVector, R(0.6));
 
@@ -86,12 +89,12 @@ int emulator_main(void)
   ue::Poly* objectList = new ue::Poly[1];
 
   //Load an obj file without texture
-  ue::Vector3 cube = ue::Vector3(R(30.0), R(30.0), R(30.0));
-  objectList[0] = polyLoader.loadFromObj("emulator/resource/teapot.obj", NULL, cube);
+  ue::Vector3 cube = ue::Vector3(R(40.0), R(40.0), R(40.0));
+  objectList[0] = polyLoader.loadFromObj("emulator/resource/phantom.obj", "emulator/resource/phantom_texture.png", cube);
 
   //Move the poly to the front of the camera
   objectList[0].position = objectList[0].position
-      + ue::Vector3(R(0.0), R(-10.0), R(30.0));
+      + ue::Vector3(R(0.0), R(-10.0), R(40.0));
 
   //Build the renderer TODO: make a constructor
   renderer = ue::Renderer3D();
@@ -153,6 +156,15 @@ int emulator_main(void)
               //captureState = false;
               puts("Uncapture");
               break;
+            case SDLK_1:
+              antiAliasing = !antiAliasing;
+              break;
+            case SDLK_UP:
+              antiAliasingFactor *= 1/0.9f;
+              break;
+            case SDLK_DOWN:
+              antiAliasingFactor *= 0.9f;
+              break;
             default:
               break;
             }
@@ -170,9 +182,11 @@ int emulator_main(void)
 
       //Render
       renderer.RenderFullFrame();
-      cycleCounter += __rdtsc() - lastCycleCount;
+      if(antiAliasing)
+        renderer.blur(1, antiAliasingFactor);
 
       //Compute the cycles spent
+      cycleCounter += __rdtsc() - lastCycleCount;
 
       //Compute the FPS
       frames++;

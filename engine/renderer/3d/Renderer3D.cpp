@@ -16,7 +16,7 @@ namespace ue
   {
     //Clear the depth buffer, clearing the frame buffer is not necessary
     clearDepthBuffer();
-    clearFrameBuffer((Colour){0xFFFFFFFF});
+    clearFrameBuffer((Colour){0xFF000000});
 
     //Works object by object
     for(uint32_t i = 0; i < objectNumber; i++)
@@ -24,7 +24,7 @@ namespace ue
         renderObject(objectList[i]);
       }
 
-    //drawn the background
+
     //drawBackgroundGrid((Colour){0xFFFFFFFF}, (Colour){0xFFCCCCCC}, 12);
   }
 
@@ -214,6 +214,9 @@ namespace ue
 
                     //Add ambient light
                     light += ambientLight;
+
+                    //Limit to light value of 1
+                    light = Real::min(light, R(1.0));
 #if UE_CONFIG_ENABLE_TEXTURE == false
                     Colour col;
                     col.colour.r = (uint8_t)((Real)0x7F * light);
@@ -439,4 +442,163 @@ namespace ue
     return A*B*C;
   }
 
+#define UE_MAX_BLUR_RADIUS 16
+  void Renderer3D::blur(int radius, float threshold)
+  {
+    int windowPointer = 0;
+    Colour window[2 * UE_MAX_BLUR_RADIUS + 1];
+
+    if (radius<1 || radius>UE_MAX_BLUR_RADIUS)
+      return;
+
+    int diameter = 2*radius+1;
+
+    //Blur horizontally
+    for(int i = 0; i < frameBuffer.height; i++)
+      {
+        //Fill half the window with the first pixel
+        for(int j = 0; j < radius; j++)
+          {
+            window[j] = frameBuffer[i];
+          }
+        //The fill it with the following pixels
+        for(int j = 0; j < radius; j++)
+          {
+            window[j + radius] = frameBuffer[i*frameBuffer.width + j];
+          }
+
+        //Point to the oldest pixel
+        windowPointer = 0;
+
+        //Goes in the horizontal direction
+        for(int j = 0; j < frameBuffer.width; j++)
+          {
+            int pixelIndex = i*frameBuffer.width + j;
+
+            //Calculate the average colour of the window
+            Colour average;
+            uint32_t rSum, gSum, bSum;
+            rSum = gSum = bSum = 0;
+            for(int k = 0; k < diameter; k++)
+              {
+                rSum += window[k].colour.r;
+                gSum += window[k].colour.g;
+                bSum += window[k].colour.b;
+              }
+            average.colour.a = 0xFF;
+            average.colour.r = rSum / diameter;
+            average.colour.g = gSum / diameter;
+            average.colour.b = bSum / diameter;
+
+            //Compute the edge detection
+            float filterSum = 0;
+            float averageLuma = 0;
+            for(int k = 0; k < diameter; k++)
+              {
+                int index = (k+windowPointer)%diameter;
+                int sum = (3*window[index].colour.r +
+                    window[index].colour.b +
+                    4*window[index].colour.g) >> 3;
+
+                //Filter weights
+                if(k < radius)
+                  filterSum -= sum;
+                else if (k > radius)
+                  filterSum += sum;
+                averageLuma += sum;
+              }
+
+            filterSum = fabs(filterSum); //Absolute value
+            filterSum /= averageLuma;
+
+            //Set the pixel value if there is an edge
+            if(filterSum > threshold)
+              frameBuffer[pixelIndex].raw = average.raw;
+
+            //Push the new pixel
+            int newPixelIndex = (j + radius + 1< frameBuffer.width)?
+                pixelIndex + radius + 1:(i + 1)*frameBuffer.width-1;
+            window[windowPointer].raw = frameBuffer[newPixelIndex].raw;
+
+            //Acts like a circular buffer
+            windowPointer = (windowPointer + 1) % diameter;
+          }
+      }
+
+    //return;
+
+    //Blur vertically
+    for(int i = 0; i < frameBuffer.width; i++)
+      {
+        //Fill half the window with the first pixel
+        for(int j = 0; j < radius; j++)
+          {
+            window[j] = frameBuffer[i];
+          }
+        //The fill it with the following pixels
+        for(int j = 0; j < radius; j++)
+          {
+            window[j + radius] = frameBuffer[j*frameBuffer.width + i];
+          }
+
+        //Point to the oldest pixel
+        windowPointer = 0;
+
+        //Goes in the horizontal direction
+        for(int j = 0; j < frameBuffer.height; j++)
+          {
+            int pixelIndex = j*frameBuffer.width + i;
+
+            //Calculate the average colour of the window
+            Colour average;
+            uint32_t rSum, gSum, bSum;
+            rSum = gSum = bSum = 0;
+            for(int k = 0; k < diameter; k++)
+              {
+                rSum += window[k].colour.r;
+                gSum += window[k].colour.g;
+                bSum += window[k].colour.b;
+              }
+            average.colour.a = 0xFF;
+            average.colour.r = rSum / diameter;
+            average.colour.g = gSum / diameter;
+            average.colour.b = bSum / diameter;
+
+            //Compute the edge detection
+            float filterSum = 0;
+            float averageLuma = 0;
+            for(int k = 0; k < diameter; k++)
+              {
+                int index = (k+windowPointer)%diameter;
+                int sum = (3*window[index].colour.r +
+                    window[index].colour.b +
+                    4*window[index].colour.g) >> 3;
+
+                //Filter weights
+                if(k < radius)
+                  filterSum -= sum;
+                else if (k > radius)
+                  filterSum += sum;
+                averageLuma += sum;
+              }
+
+            filterSum = fabs(filterSum); //Absolute value
+            filterSum /= averageLuma;
+
+            //Set the pixel value if there is an edge
+            if(filterSum > threshold)
+              frameBuffer[pixelIndex].raw = average.raw;
+
+            //Push the new pixel
+            //TODO Correct the pixelIndex
+            int newPixelIndex = (j + radius + 1 < frameBuffer.height)?
+                pixelIndex + (radius + 1) * frameBuffer.width:(i + 1)*frameBuffer.width-1;
+            window[windowPointer].raw = frameBuffer[newPixelIndex].raw;
+
+            //Acts like a circular buffer
+            windowPointer = (windowPointer + 1) % diameter;
+          }
+      }
+
+  }
 }

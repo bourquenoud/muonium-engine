@@ -32,6 +32,7 @@ namespace ue
     uint32_t objectNumber;
 
     void RenderFullFrame(void);
+    void blur(int radius, float threshold);
 
   private:
     //XXX this is getting messy...
