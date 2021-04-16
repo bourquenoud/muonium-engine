@@ -89,7 +89,7 @@ int emulator_main(void)
 
   //Load an obj file without texture
   ue::Vector3 cube = ue::Vector3(R(30.0), R(30.0), R(30.0));
-  objectList[0] = polyLoader.loadFromObj("emulator/resource/Assembled_Oberon_Class.obj", NULL, cube);
+  objectList[0] = polyLoader.loadFromObj("emulator/resource/phantom.obj", "emulator/resource/phantom_texture.png", cube);
 
   //Move the poly to the front of the camera
   objectList[0].position = objectList[0].position

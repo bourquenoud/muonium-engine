@@ -32,7 +32,7 @@
    *
    * true or false
    */
-  #define UE_CONFIG_ENABLE_TEXTURE false
+  #define UE_CONFIG_ENABLE_TEXTURE true
 
   /*
    * Enable normals

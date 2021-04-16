@@ -201,22 +201,22 @@ namespace ue
                   {
                     depthBuffer[i] = z;
 
+#if UE_CONFIG_ENABLE_NORMAL == true
+
+#endif//UE_CONFIG_ENABLE_NORMAL
+
                     //Sample the texture
 #if UE_CONFIG_ENABLE_TEXTURE == true
-                    Vector2 texPos;
-                    texPos.x = Real::clamp(
-                        (w0 * t.vtc->x + w1 * t.vta->x + w2 * t.vtb->x) * area,
-                        0, 1);
-                    texPos.y = Real::clamp(
-                        (w0 * t.vtc->y + w1 * t.vta->y + w2 * t.vtb->y) * area,
-                        0, 1);
+                    Vector2 texPos = (*(t.vtc) * w0 + *(t.vta) * w1 + *(t.vtb) * w2) * area;
+                    texPos.x = Real::clamp(texPos.x, 0, 1);
+                    texPos.y = Real::clamp(texPos.y, 0, 1);
 
                     Colour col = object.texture.getPixelAt(texPos);
 
                     col.colour.r = (uint8_t)((Real)col.colour.r * light);
                     col.colour.g = (uint8_t)((Real)col.colour.g * light);
                     col.colour.b = (uint8_t)((Real)col.colour.b * light);
-#endif
+#endif//UE_CONFIG_ENABLE_TEXTURE
 
                     frameBuffer[i] = col;
                   }
