@@ -23,9 +23,9 @@
 
 #include "PolyLoader.hpp"
 
-#define WIDTH 300
-#define HEIGHT 225
-#define SCALE 3
+#define WIDTH 800
+#define HEIGHT 600
+#define SCALE 1
 
 SDL_Event event;
 SDL_Surface* surface;
@@ -73,7 +73,7 @@ int emulator_main(void)
       HEIGHT,
       ue::FitResolutionGate::fill,
       1, //Near-clipping plane
-      32 //Far-clipping plane
+      128 //Far-clipping plane
   );
 
   //Create the light
@@ -93,7 +93,7 @@ int emulator_main(void)
 
   //Move the poly to the front of the camera
   objectList[0].position = objectList[0].position
-      + ue::Vector3(R(0.0), R(-10.0), R(40.0));
+      + ue::Vector3(R(0.0), R(-10.0), R(30.0));
 
   //Build the renderer TODO: make a constructor
   renderer = ue::Renderer3D();
@@ -260,55 +260,20 @@ int emulator_main(void)
   return 0;
 }
 
-ue::Real maxDepth = R(0.0);
-ue::Real minDepth = R(1e20);
 void drawToScreen()
 {
-  if(drawBuffer)
-    {
-      for(int i = 0; i < WIDTH; i++)
-        {
-          for(int j = 0; j < HEIGHT; j++)
-            {
-              if(renderer.depthBuffer[i+j*WIDTH] > maxDepth && renderer.depthBuffer[i+j*WIDTH] < renderer.camera.far)
-                maxDepth = renderer.depthBuffer[i+j*WIDTH];
-              if(renderer.depthBuffer[i+j*WIDTH] < minDepth)
-                minDepth = renderer.depthBuffer[i+j*WIDTH];
-            }
-        }
-    }
   for(int i = 0; i < WIDTH; i++)
     {
       for(int j = 0; j < HEIGHT; j++)
         {
-          if(drawBuffer)
+          for(int x = i*SCALE; x < (i+1)*SCALE; x++)
             {
-              ue::Colour col;
-              float depthCol = ((renderer.depthBuffer[i+j*WIDTH] - minDepth) / (maxDepth - minDepth)) * R(255.0);
-
-              col.colour.r = 255 - depthCol;
-              col.colour.g = 0;
-              col.colour.b = depthCol;
-              col.colour.a = 0xFF;
-
-              for(int x = i*SCALE; x < (i+1)*SCALE; x++)
+              for(int y = j*SCALE; y < (j+1)*SCALE; y++)
                 {
-                  for(int y = j*SCALE; y < (j+1)*SCALE; y++)
-                    {
-                      set_pixel(surface, x, y, col.raw);
-                    }
+                  set_pixel(surface, x, y, renderer.frameBuffer[i+j*WIDTH].raw);
                 }
             }
-          else
-            {
-              for(int x = i*SCALE; x < (i+1)*SCALE; x++)
-                {
-                  for(int y = j*SCALE; y < (j+1)*SCALE; y++)
-                    {
-                      set_pixel(surface, x, y, renderer.frameBuffer[i+j*WIDTH].raw);
-                    }
-                }
-            }
+
         }
     }
 }

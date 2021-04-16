@@ -217,10 +217,10 @@ namespace ue
                     light += ambientLight;
 #if UE_CONFIG_ENABLE_TEXTURE == false
                     Colour col;
-                    col.raw = 0xFF7F7F7F;
-                    col.colour.r = (uint8_t)((Real)col.colour.r * light);
-                    col.colour.g = (uint8_t)((Real)col.colour.g * light);
-                    col.colour.b = (uint8_t)((Real)col.colour.b * light);
+                    col.colour.r = (uint8_t)((Real)0x7F * light);
+                    col.colour.g = (uint8_t)((Real)0x1F * light);
+                    col.colour.b = (uint8_t)((Real)0x80 * light);
+                    col.colour.a = 0xFF;
 #endif //UE_CONFIG_ENABLE_TEXTURE
 #endif //UE_CONFIG_ENABLE_NORMAL
 
