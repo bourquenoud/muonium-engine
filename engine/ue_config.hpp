@@ -43,7 +43,7 @@
    *
    * true or false
    */
-  #define UE_CONFIG_ENABLE_NORMAL true
+  #define UE_CONFIG_ENABLE_NORMAL false
 
   /*
    * Define the colour mode of the buffer.

@@ -97,7 +97,7 @@ int emulator_main(void)
   renderer = ue::Renderer3D();
   renderer.camera = camera;
   renderer.sun = sun;
-  renderer.ambientLight = R(0.1);
+  renderer.ambientLight = R(0.5);
   renderer.depthBuffer = depthBuffer;
   renderer.frameBuffer = frameBuffer;
   renderer.objectList = objectList;
@@ -243,10 +243,13 @@ int emulator_main(void)
         {
           objectList[0].vertices[i] = rotMat * objectList[0].vertices[i];
         }
+
+#if UE_CONFIG_ENABLE_NORMAL == true
       for(uint32_t i = 0; i < objectList[0].normalCount; i++)
         {
           objectList[0].normals[i] = rotMat * objectList[0].normals[i];
         }
+#endif
 
     }
 

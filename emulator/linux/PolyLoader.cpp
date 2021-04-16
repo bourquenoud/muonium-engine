@@ -28,15 +28,26 @@ ue::Poly PolyLoader::loadFromObj(const char* objectPath, const char* texturePath
   ssize_t read;
   char** lines;
   uint32_t lineCount = 0;
-  uint32_t vertexCount = 0;
-  uint32_t normalCount = 0;
-  uint32_t textureCount = 0;
-  uint32_t faceCount = 0;
 
-  ue::Vector3* vertices;
-  ue::Vector3* normals;
-  ue::Vector2* textures;
+  //Faces
+  uint32_t faceCount = 0;
   ue::Triangle* faces;
+
+  //Vertices
+  uint32_t vertexCount = 0;
+  ue::Vector3* vertices;
+
+#if UE_CONFIG_ENABLE_TEXTURE == true
+  //Texture
+  uint32_t textureCount = 0;
+  ue::Vector2* textures;
+#endif
+
+#if UE_CONFIG_ENABLE_NORMAL == true
+  //Normals
+  uint32_t normalCount = 0;
+  ue::Vector3* normals;
+#endif
 
   ue::Poly poly;
 
@@ -71,34 +82,51 @@ ue::Poly PolyLoader::loadFromObj(const char* objectPath, const char* texturePath
       if(strstr(lines[i], VERTEX))
         vertexCount++;
 
+#if UE_CONFIG_ENABLE_NORMAL == true
       //Count normals
       if(strstr(lines[i], NORMAL))
         normalCount++;
+#endif
 
+#if UE_CONFIG_ENABLE_TEXTURE == true
       //Count texture
       if(strstr(lines[i], TEXTURE))
         textureCount++;
+#endif
 
       //Count faces
       if(strstr(lines[i], FACE))
         faceCount++;
     }
 
-  //avoid using new with microcontrollers
-  vertices = new ue::Vector3[vertexCount];
-  normals = new ue::Vector3[normalCount];
-  textures = new ue::Vector2[textureCount];
+  //NOTE : avoid using new with microcontrollers
   faces = new ue::Triangle[faceCount];
+  vertices = new ue::Vector3[vertexCount];
 
-  if(vertices == NULL || textures == NULL || faces == NULL)
-    puts("Malloc error\n");
+#if UE_CONFIG_ENABLE_TEXTURE == true
+  textures = new ue::Vector2[textureCount];
+#endif
+
+#if UE_CONFIG_ENABLE_NORMAL == true
+  normals = new ue::Vector3[normalCount];
+#endif
+
+  //XXX Too lazy to put the #if stuff in a clean way
+  /*if(vertices == NULL || textures == NULL || faces == NULL)
+    puts("Malloc error\n");*/
 
   printf("Vertices : %i\n Faces : %i\n", vertexCount, faceCount);
 
-  vertexCount = 0;
-  normalCount = 0;
-  textureCount = 0;
   faceCount = 0;
+  vertexCount = 0;
+
+#if UE_CONFIG_ENABLE_NORMAL == true
+  normalCount = 0;
+#endif
+
+#if UE_CONFIG_ENABLE_TEXTURE == true
+  textureCount = 0;
+#endif
 
   ue::Vector3 max = {UE_REAL_MIN, UE_REAL_MIN, UE_REAL_MIN};
   ue::Vector3 min = {UE_REAL_MAX, UE_REAL_MAX, UE_REAL_MAX};
@@ -139,6 +167,25 @@ ue::Poly PolyLoader::loadFromObj(const char* objectPath, const char* texturePath
           vertices[vertexCount++] = vertex;
         }
 
+#if UE_CONFIG_ENABLE_TEXTURE == true
+      //Get texture vertices
+      if(strstr(lines[i], TEXTURE))
+        {
+          ue::Vector2 texture;
+
+          // Extract the first token
+          char * token = strtok(lines[i], " "); //First token is discarded
+          token = strtok(NULL, " ");
+          texture.x = (ue::Real)atof(token);
+
+          token = strtok(NULL, " ");
+          texture.y = (ue::Real)atof(token);
+
+          textures[textureCount++] = texture;
+        }
+#endif
+
+#if UE_CONFIG_ENABLE_NORMAL == true
       //Get normals
       if(strstr(lines[i], NORMAL))
         {
@@ -169,22 +216,7 @@ ue::Poly PolyLoader::loadFromObj(const char* objectPath, const char* texturePath
 
           normals[normalCount++] = normal;
         }
-
-      //Get vertices
-      if(strstr(lines[i], TEXTURE))
-        {
-          ue::Vector2 texture;
-
-          // Extract the first token
-          char * token = strtok(lines[i], " "); //First token is discarded
-          token = strtok(NULL, " ");
-          texture.x = (ue::Real)atof(token);
-
-          token = strtok(NULL, " ");
-          texture.y = (ue::Real)atof(token);
-
-          textures[textureCount++] = texture;
-        }
+#endif
 
       //Count faces
       if(strstr(lines[i], FACE))
@@ -199,25 +231,37 @@ ue::Poly PolyLoader::loadFromObj(const char* objectPath, const char* texturePath
           char* token = strtok_single_r(block, "/", &state2);
           triangle.va = &(vertices[atoi(token)-1]); //Vertex
           token = strtok_single_r(NULL, "/", &state2);
-          //triangle.vta = &(textures[atoi(token)-1]); //Texture vertex
+#if UE_CONFIG_ENABLE_TEXTURE == true
+          triangle.vta = &(textures[atoi(token)-1]); //Texture vertex
+#endif
           token = strtok_single_r(NULL, "/", &state2);
+#if UE_CONFIG_ENABLE_NORMAL == true
           triangle.vna = &(normals[atoi(token)-1]); //Normal
+#endif
 
           block = strtok_single_r(NULL, " ", &state1); //
           token = strtok_single_r(block, "/", &state2);
           triangle.vb = &(vertices[atoi(token)-1]);
           token = strtok_single_r(NULL, "/", &state2);
-          //triangle.vtb = &(textures[atoi(token)-1]); //Texture vertex
+#if UE_CONFIG_ENABLE_TEXTURE == true
+          triangle.vtb = &(textures[atoi(token)-1]); //Texture vertex
+#endif
           token = strtok_single_r(NULL, "/", &state2);
+#if UE_CONFIG_ENABLE_NORMAL == true
           triangle.vnb = &(normals[atoi(token)-1]); //Normal
+#endif
 
           block = strtok_single_r(NULL, " ", &state1); //
           token = strtok_single_r(block, "/", &state2);
           triangle.vc = &(vertices[atoi(token)-1]);
           token = strtok_single_r(NULL, "/", &state2);
-          //triangle.vtc = &(textures[atoi(token)-1]); //Texture vertex
+#if UE_CONFIG_ENABLE_TEXTURE == true
+          triangle.vtc = &(textures[atoi(token)-1]); //Texture vertex
+#endif
           token = strtok_single_r(NULL, "/", &state2);
+#if UE_CONFIG_ENABLE_NORMAL == true
           triangle.vnc = &(normals[atoi(token)-1]); //Normal
+#endif
 
           faces[faceCount++] = triangle;
         }
@@ -249,7 +293,8 @@ ue::Poly PolyLoader::loadFromObj(const char* objectPath, const char* texturePath
     }
 
 
-  /*
+
+#if UE_CONFIG_ENABLE_TEXTURE == true
   //Load the texture
   if(texturePath)
     {
@@ -259,18 +304,21 @@ ue::Poly PolyLoader::loadFromObj(const char* objectPath, const char* texturePath
     {
       poly.texture = (ue::Texture){0,0,NULL}; //No texture
     }
-    */
+  poly.textureVerts = textures;
+  poly.textureCount = textureCount;
+#endif
 
 
   poly.faceCount = faceCount;
-  poly.vertexCount = vertexCount;
-  //poly.textureCount = textureCount;
-  poly.normalCount = normalCount;
-  poly.normals = normals;
   poly.faces = faces;
-  //poly.textureVerts = textures;
+  poly.vertexCount = vertexCount;
   poly.vertices = vertices;
   poly.position = ue::Vector3(R(0),R(0),R(0));
+
+#if UE_CONFIG_ENABLE_NORMAL == true
+  poly.normalCount = normalCount;
+  poly.normals = normals;
+#endif
 
   for(uint32_t i = 0; i < lineCount; i++)
     {

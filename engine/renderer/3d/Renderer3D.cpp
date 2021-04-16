@@ -204,7 +204,6 @@ namespace ue
 #if UE_CONFIG_ENABLE_NORMAL == true
                     Real light;
                     Vector3 normal = (*(t.vnc) * w0 + *(t.vna) * w1 + *(t.vnb) * w2);
-                    //Vector3 normal = *(t.vnc) + *(t.vna) + *(t.vnb);
                     normal = normal.normalise();
 
                     //Calculate the dot product
@@ -351,9 +350,13 @@ namespace ue
     b = *triangle.vc - *triangle.va;
 
     //XXX optimisation in progress
-    //Normalise the vectors before (Will overflow in Fixed32 otherwise)
     //Calculate the normal
+#if UE_CONFIG_ARITHMETIC == FIXED32
+    //Normalise the vectors before (Will overflow in Fixed32 otherwise)
     s1 = a.approxNormalise().cross(b.approxNormalise());
+#else
+    s1 = a.cross(b);
+#endif
 
     //Normalise the vectors
     s1 = s1.normalise();
