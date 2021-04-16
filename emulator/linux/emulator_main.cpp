@@ -23,9 +23,9 @@
 
 #include "PolyLoader.hpp"
 
-#define WIDTH 800
-#define HEIGHT 600
-#define SCALE 1
+#define WIDTH 300
+#define HEIGHT 225
+#define SCALE 3
 
 SDL_Event event;
 SDL_Surface* surface;
@@ -77,7 +77,7 @@ int emulator_main(void)
   );
 
   //Create the light
-  ue::Vector3 lightVector = ue::Vector3(R(0.2),R(-8.0),R(1.0));
+  ue::Vector3 lightVector = ue::Vector3(R(0.2),R(-2.0),R(1.0));
   lightVector.normalise();
   ue::LightSun sun = ue::LightSun(lightVector, R(0.6));
 
@@ -89,7 +89,7 @@ int emulator_main(void)
 
   //Load an obj file without texture
   ue::Vector3 cube = ue::Vector3(R(30.0), R(30.0), R(30.0));
-  objectList[0] = polyLoader.loadFromObj("emulator/resource/phantom.obj", "emulator/resource/phantom_texture.png", cube);
+  objectList[0] = polyLoader.loadFromObj("emulator/resource/teapot.obj", NULL, cube);
 
   //Move the poly to the front of the camera
   objectList[0].position = objectList[0].position
@@ -248,6 +248,10 @@ int emulator_main(void)
       for(uint32_t i = 0; i < objectList[0].vertexCount; i++)
         {
           objectList[0].vertices[i] = rotMat * objectList[0].vertices[i];
+        }
+      for(uint32_t i = 0; i < objectList[0].normalCount; i++)
+        {
+          objectList[0].normals[i] = rotMat * objectList[0].normals[i];
         }
 
     }

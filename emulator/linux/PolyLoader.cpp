@@ -16,6 +16,7 @@
 #define MATERIAL "usemtl "
 #define COMMENT "#"
 
+char * strtok_single_r (char *, char const *, char**);
 ue::Texture loadTexture(const char* path);
 __attribute((unused)) void printObject(ue::Poly obj);
 
@@ -28,10 +29,12 @@ ue::Poly PolyLoader::loadFromObj(const char* objectPath, const char* texturePath
   char** lines;
   uint32_t lineCount = 0;
   uint32_t vertexCount = 0;
+  uint32_t normalCount = 0;
   uint32_t textureCount = 0;
   uint32_t faceCount = 0;
 
   ue::Vector3* vertices;
+  ue::Vector3* normals;
   ue::Vector2* textures;
   ue::Triangle* faces;
 
@@ -68,6 +71,10 @@ ue::Poly PolyLoader::loadFromObj(const char* objectPath, const char* texturePath
       if(strstr(lines[i], VERTEX))
         vertexCount++;
 
+      //Count normals
+      if(strstr(lines[i], NORMAL))
+        normalCount++;
+
       //Count texture
       if(strstr(lines[i], TEXTURE))
         textureCount++;
@@ -79,6 +86,7 @@ ue::Poly PolyLoader::loadFromObj(const char* objectPath, const char* texturePath
 
   //avoid using new with microcontrollers
   vertices = new ue::Vector3[vertexCount];
+  normals = new ue::Vector3[normalCount];
   textures = new ue::Vector2[textureCount];
   faces = new ue::Triangle[faceCount];
 
@@ -88,6 +96,7 @@ ue::Poly PolyLoader::loadFromObj(const char* objectPath, const char* texturePath
   printf("Vertices : %i\n Faces : %i\n", vertexCount, faceCount);
 
   vertexCount = 0;
+  normalCount = 0;
   textureCount = 0;
   faceCount = 0;
 
@@ -130,6 +139,37 @@ ue::Poly PolyLoader::loadFromObj(const char* objectPath, const char* texturePath
           vertices[vertexCount++] = vertex;
         }
 
+      //Get normals
+      if(strstr(lines[i], NORMAL))
+        {
+          ue::Vector3 normal;
+
+          // Extract the first token
+          char * token = strtok(lines[i], " "); //First token is discarded
+          token = strtok(NULL, " ");
+          normal.x = (ue::Real)atof(token);
+          if(normal.x > max.x)
+            max.x = normal.x;
+          if(normal.x < min.x)
+            min.x = normal.x;
+
+          token = strtok(NULL, " ");
+          normal.y = (ue::Real)atof(token);
+          if(normal.y > max.y)
+            max.y = normal.y;
+          if(normal.y < min.y)
+            min.y = normal.y;
+
+          token = strtok(NULL, " ");
+          normal.z = (ue::Real)atof(token);
+          if(normal.z > max.z)
+            max.z = normal.z;
+          if(normal.z < min.z)
+            min.z = normal.z;
+
+          normals[normalCount++] = normal;
+        }
+
       //Get vertices
       if(strstr(lines[i], TEXTURE))
         {
@@ -156,22 +196,28 @@ ue::Poly PolyLoader::loadFromObj(const char* objectPath, const char* texturePath
           char* block = strtok_r(lines[i], " ", &state1); //First token is discarded
           block = strtok_r(NULL, " ", &state1); // Second block is the vertex 1
 
-          char* token = strtok_r(block, "/", &state2);
+          char* token = strtok_single_r(block, "/", &state2);
           triangle.va = &(vertices[atoi(token)-1]); //Vertex
-          token = strtok_r(NULL, "/", &state2);
-          triangle.vta = &(textures[atoi(token)-1]); //Texture vertex
+          token = strtok_single_r(NULL, "/", &state2);
+          //triangle.vta = &(textures[atoi(token)-1]); //Texture vertex
+          token = strtok_single_r(NULL, "/", &state2);
+          triangle.vna = &(normals[atoi(token)-1]); //Normal
 
-          block = strtok_r(NULL, " ", &state1); //
-          token = strtok_r(block, "/", &state2);
+          block = strtok_single_r(NULL, " ", &state1); //
+          token = strtok_single_r(block, "/", &state2);
           triangle.vb = &(vertices[atoi(token)-1]);
-          token = strtok_r(NULL, "/", &state2);
-          triangle.vtb = &(textures[atoi(token)-1]); //Texture vertex
+          token = strtok_single_r(NULL, "/", &state2);
+          //triangle.vtb = &(textures[atoi(token)-1]); //Texture vertex
+          token = strtok_single_r(NULL, "/", &state2);
+          triangle.vnb = &(normals[atoi(token)-1]); //Normal
 
-          block = strtok_r(NULL, " ", &state1); //
-          token = strtok_r(block, "/", &state2);
+          block = strtok_single_r(NULL, " ", &state1); //
+          token = strtok_single_r(block, "/", &state2);
           triangle.vc = &(vertices[atoi(token)-1]);
-          token = strtok_r(NULL, "/", &state2);
-          triangle.vtc = &(textures[atoi(token)-1]); //Texture vertex
+          token = strtok_single_r(NULL, "/", &state2);
+          //triangle.vtc = &(textures[atoi(token)-1]); //Texture vertex
+          token = strtok_single_r(NULL, "/", &state2);
+          triangle.vnc = &(normals[atoi(token)-1]); //Normal
 
           faces[faceCount++] = triangle;
         }
@@ -203,6 +249,7 @@ ue::Poly PolyLoader::loadFromObj(const char* objectPath, const char* texturePath
     }
 
 
+  /*
   //Load the texture
   if(texturePath)
     {
@@ -212,13 +259,16 @@ ue::Poly PolyLoader::loadFromObj(const char* objectPath, const char* texturePath
     {
       poly.texture = (ue::Texture){0,0,NULL}; //No texture
     }
+    */
 
 
   poly.faceCount = faceCount;
   poly.vertexCount = vertexCount;
-  poly.textureCount = textureCount;
+  //poly.textureCount = textureCount;
+  poly.normalCount = normalCount;
+  poly.normals = normals;
   poly.faces = faces;
-  poly.textureVerts = textures;
+  //poly.textureVerts = textures;
   poly.vertices = vertices;
   poly.position = ue::Vector3(R(0),R(0),R(0));
 
@@ -274,6 +324,7 @@ ue::Texture loadTexture(const char* path)
   return tex;
 }
 
+/*
 void PolyLoader::printObject(ue::Poly obj)
 {
   printf("********Vertices (%i)********\n", obj.vertexCount);
@@ -305,5 +356,28 @@ void PolyLoader::printObject(ue::Poly obj)
           (float)obj.textureVerts[i].y);
     }
 #endif
-}
+}*/
 
+char * strtok_single_r (char * str, char const * delims, char** src)
+{
+  //static char  * src = NULL;
+  char  *  p,  * ret = 0;
+
+  if (str != NULL)
+    *src = str;
+
+  if (*src == NULL)
+    return NULL;
+
+  if ((p = strpbrk (*src, delims)) != NULL) {
+    *p  = 0;
+    ret = *src;
+    *src = ++p;
+
+  } else if (**src) {
+    ret = *src;
+    *src = NULL;
+  }
+
+  return ret;
+}

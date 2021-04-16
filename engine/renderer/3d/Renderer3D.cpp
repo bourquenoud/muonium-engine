@@ -70,8 +70,8 @@ namespace ue
 #if UE_CONFIG_ENABLE_NORMAL == true
         //Copy the normal vectors
         projTriangle.vna = o.faces[i].vna;
-        projTriangle.vna = o.faces[i].vnb;
-        projTriangle.vna = o.faces[i].vnc;
+        projTriangle.vnb = o.faces[i].vnb;
+        projTriangle.vnc = o.faces[i].vnc;
 #endif
 
 #if UE_CONFIG_FAST_CLIPPING == true
@@ -202,8 +202,27 @@ namespace ue
                     depthBuffer[i] = z;
 
 #if UE_CONFIG_ENABLE_NORMAL == true
+                    Real light;
+                    Vector3 normal = (*(t.vnc) * w0 + *(t.vna) * w1 + *(t.vnb) * w2);
+                    //Vector3 normal = *(t.vnc) + *(t.vna) + *(t.vnb);
+                    normal = normal.normalise();
 
-#endif//UE_CONFIG_ENABLE_NORMAL
+                    //Calculate the dot product
+                    light = Real::max(R(0.0),(-sun.direction)*normal); //Prevent negative light
+
+                    //Compute the directional light
+                    light *= sun.intensity;
+
+                    //Add ambient light
+                    light += ambientLight;
+#if UE_CONFIG_ENABLE_TEXTURE == false
+                    Colour col;
+                    col.raw = 0xFF7F7F7F;
+                    col.colour.r = (uint8_t)((Real)col.colour.r * light);
+                    col.colour.g = (uint8_t)((Real)col.colour.g * light);
+                    col.colour.b = (uint8_t)((Real)col.colour.b * light);
+#endif //UE_CONFIG_ENABLE_TEXTURE
+#endif //UE_CONFIG_ENABLE_NORMAL
 
                     //Sample the texture
 #if UE_CONFIG_ENABLE_TEXTURE == true

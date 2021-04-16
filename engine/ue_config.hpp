@@ -32,7 +32,7 @@
    *
    * true or false
    */
-  #define UE_CONFIG_ENABLE_TEXTURE true
+  #define UE_CONFIG_ENABLE_TEXTURE false
 
   /*
    * Enable normals
@@ -43,7 +43,7 @@
    *
    * true or false
    */
-  #define UE_CONFIG_ENABLE_NORMAL false
+  #define UE_CONFIG_ENABLE_NORMAL true
 
   /*
    * Define the colour mode of the buffer.
