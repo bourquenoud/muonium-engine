@@ -74,21 +74,31 @@ int emulator_main(void)
 
   //Create a 32x32 red to green gradient texture for the particle
   ue::Texture gradTex;
-  gradTex.height = 32;
-  gradTex.width = 32;
+  gradTex.height = 512;
+  gradTex.width = 512;
   ue::Colour colArray[gradTex.height * gradTex.width];
   gradTex.pixel = colArray;
 
-  //Generate the colour
+  //Generate the texture
   for(int x = 0; x < (int)gradTex.width; x++)
     {
       for(int y = 0; y < (int)gradTex.height; y++)
         {
+          //Calculate the colour
           ue::Colour col;
-          col.colour.r = (x+y) * 4;
-          col.colour.g = 255 - col.colour.r;
-          col.colour.b = 0;
-          col.colour.a = 255;
+          col.colour.b = (255*(x+y) / (gradTex.width+gradTex.height));
+          col.colour.g = 255 - col.colour.b;
+          col.colour.r = 0;
+
+          //Calculate the alpha (make a circle)
+          int ax = (x - gradTex.width/2);
+          int ay = (y - gradTex.height/2);
+          if(ax*ax + ay*ay < gradTex.width * gradTex.width / 6)
+            col.colour.a = 200;
+          else
+            col.colour.a = 0;
+
+
           gradTex.pixel[x + y*(int)gradTex.width] = col;
         }
     }

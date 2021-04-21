@@ -102,7 +102,9 @@ namespace ue
                 texPos.x = ((Real)x - startCorner.x) / (endCorner.x - startCorner.x);
                 texPos.y = ((Real)y - startCorner.y) / (endCorner.y - startCorner.y);
 
-                frameBuffer[i] = o.texture.getPixelAt(texPos);
+                //Blend the texture
+                Colour col = o.texture.getPixelAt(texPos);
+                frameBuffer[i] = col.over(frameBuffer[i]);
               }
           }
       }
