@@ -12,23 +12,6 @@
 namespace ue
 {
 
-  void Renderer3D::RenderFullFrame()
-  {
-    //Clear the depth buffer, clearing the frame buffer is not necessary
-    clearDepthBuffer();
-    clearFrameBuffer((Colour){0xFF000000});
-
-    //Works object by object
-    for(uint32_t i = 0; i < objectNumber; i++)
-      {
-        renderObject(objectList[i]);
-      }
-
-
-    //drawBackgroundGrid((Colour){0xFFFFFFFF}, (Colour){0xFFCCCCCC}, 12);
-  }
-
-
   void Renderer3D::renderObject(Poly o)
   {
     for(uint32_t i = 0; i < o.faceCount; i++)
@@ -85,6 +68,43 @@ namespace ue
 #endif
 
         renderTriangle(projTriangle, minCorner, maxCorner, o);
+      }
+  }
+
+
+  void Renderer3D::renderParticle(Particle o)
+  {
+    Vector3 startCorner = o.position;
+    Vector3 endCorner = o.position;
+
+    startCorner.x += o.size.x / R(2.0);
+    startCorner.y += o.size.y / R(2.0);
+
+    endCorner.x -= o.size.x / R(2.0);
+    endCorner.y -= o.size.y / R(2.0);
+
+    startCorner = camera.toRaster(startCorner);
+    endCorner = camera.toRaster(endCorner);
+
+    //Cast before, increase speed
+    uint32_t width = (uint32_t)camera.width;
+
+    Vector2 texPos(R(0), R(0));
+
+    for(int x = startCorner.x; x < (int)endCorner.x; x++)
+      {
+        for(int y = startCorner.y; y < (int)endCorner.y; y++)
+          {
+            int i = x + y * width;
+            if(startCorner.z > depthBuffer[i])
+              {
+                //TODO : interpolate faster (addition and stuff)
+                texPos.x = ((Real)x - startCorner.x) / (endCorner.x - startCorner.x);
+                texPos.y = ((Real)y - startCorner.y) / (endCorner.y - startCorner.y);
+
+                frameBuffer[i] = o.texture.getPixelAt(texPos);
+              }
+          }
       }
   }
 
@@ -443,7 +463,7 @@ namespace ue
   }
 
 #define UE_MAX_BLUR_RADIUS 16
-  void Renderer3D::blur(int radius, float threshold)
+  void Renderer3D::antiAliasing(int radius, float threshold)
   {
     int windowPointer = 0;
     Colour window[2 * UE_MAX_BLUR_RADIUS + 1];

@@ -12,5 +12,6 @@
 #include "3d/Poly.hpp"
 #include "3d/Camera.hpp"
 #include "3d/LightSun.hpp"
+#include "3d/Particle.hpp"
 
 #endif /* _3D_H_ */

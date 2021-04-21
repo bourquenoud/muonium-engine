@@ -11,10 +11,10 @@
 //Set the configuration for the engine
 
 
+#include "lib/3d.hpp"
 #include "lib/arith.hpp"
 #include "lib/buffer.hpp"
 #include "lib/linal.hpp"
-#include "lib/poly.hpp"
 #include "lib/sprite.hpp"
 #include "lib/texture.hpp"
 

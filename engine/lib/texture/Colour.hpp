@@ -15,7 +15,7 @@
 namespace ue {
 
 #if UE_CONFIG_COLOUR == RGBA8888
-  struct CoulourRGB
+  struct ColourRGB
   {
     uint32_t r : 8;
     uint32_t g : 8;
@@ -25,10 +25,10 @@ namespace ue {
   union Colour
   {
     uint32_t raw;
-    CoulourRGB colour;
+    ColourRGB colour;
   };
 #elif UE_CONFIG_COLOUR == ARGB8888
-  struct CoulourRGB
+  struct ColourRGB
   {
     uint32_t a : 8;
     uint32_t r : 8;
@@ -38,10 +38,10 @@ namespace ue {
   union Colour
   {
     uint32_t raw;
-    CoulourRGB colour;
+    ColourRGB colour;
   };
 #elif UE_CONFIG_COLOUR == ARGB1555
-  struct CoulourRGB
+  struct ColourRGB
   {
     uint16_t a : 1;
     uint16_t r : 5;
@@ -51,10 +51,10 @@ namespace ue {
   union Colour
   {
     uint16_t raw;
-    CoulourRGB colour;
+    ColourRGB colour;
   };
 #elif UE_CONFIG_COLOUR == RGBA5551
-  struct CoulourRGB
+  struct ColourRGB
   {
     uint16_t r : 5;
     uint16_t g : 5;
@@ -64,10 +64,10 @@ namespace ue {
   union Colour
   {
     uint16_t raw;
-    CoulourRGB colour;
+    ColourRGB colour;
   };
 #elif UE_CONFIG_COLOUR == RGB565
-  struct CoulourRGB
+  struct ColourRGB
   {
     uint16_t r : 5;
     uint16_t g : 6;
@@ -76,10 +76,10 @@ namespace ue {
   union Colour
   {
     uint16_t raw;
-    CoulourRGB colour;
+    ColourRGB colour;
   };
 #elif UE_CONFIG_COLOUR == RGB332
-  struct CoulourRGB
+  struct ColourRGB
   {
     uint8_t r : 3;
     uint8_t g : 3;
@@ -88,17 +88,17 @@ namespace ue {
   union Colour
   {
     uint16_t raw;
-    CoulourRGB colour;
+    ColourRGB colour;
   };
 #elif UE_CONFIG_COLOUR == MONO8
-  struct CoulourRGB
+  struct ColourRGB
   {
     uint8_t l;
   };
   union Colour
   {
     uint8_t raw;
-    CoulourRGB colour;
+    ColourRGB colour;
   };
 #else
 #error MUONIUM ENGINE : \

@@ -1,26 +1,29 @@
 /*
- * Sprite.h
+ * Sprite.hpp
  *
- *  Created on: 6 Apr 2021
+ *  Created on: 20 Apr 2021
  *      Author: mathieu
  */
 
-#ifndef SPRITE_H_
-#define SPRITE_H_
+#ifndef LIB_SPRITE_SPRITE_HPP_
+#define LIB_SPRITE_SPRITE_HPP_
 
-namespace ue {
+#include "../arith.hpp"
+#include "../texture.hpp"
+#include "../linal.hpp"
 
-class Sprite {
-public:
-	Sprite() {
-		// TODO Auto-generated constructor stub
+namespace ue
+{
 
-	}
-	virtual ~Sprite() {
-		// TODO Auto-generated destructor stub
-	}
-};
+  class Sprite
+  {
+  public:
+    Texture texture;
+    Vector2 scale;
+    Vector2 position;
+    Real rotation; //Trigonometric angle in rad
+  };
 
-}
+} /* namespace ue */
 
-#endif /* SPRITE_H_ */
+#endif /* LIB_SPRITE_SPRITE_HPP_ */

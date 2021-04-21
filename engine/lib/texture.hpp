@@ -10,5 +10,6 @@
 
 #include "texture/Colour.hpp"
 #include "texture/Texture.hpp"
+#include "texture/Mask.hpp"
 
 #endif /* TEXTURE_H_ */

@@ -3,6 +3,10 @@
 /Release
 /Test
 
+#ignore the build files
+*.o
+*.d
+
 #Ignore the eclipse project
 .cproject
 .project

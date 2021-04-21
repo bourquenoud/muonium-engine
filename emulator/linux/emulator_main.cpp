@@ -23,9 +23,9 @@
 
 #include "PolyLoader.hpp"
 
-#define WIDTH 300
-#define HEIGHT 225
-#define SCALE 3
+#define WIDTH 800
+#define HEIGHT 600
+#define SCALE 1
 
 bool antiAliasing = false;
 float antiAliasingFactor = 1;
@@ -56,6 +56,50 @@ int emulator_main(void)
 
   uint64_t cycleCounter = 0;
 
+  //********Load the objects********
+
+  //Create the poly loader
+  PolyLoader polyLoader;
+
+  //Create the object list
+  ue::Poly* objectList = new ue::Poly[1];
+
+  //Load an obj file without texture
+  ue::Vector3 cube = ue::Vector3(R(40.0), R(40.0), R(40.0));
+  objectList[0] = polyLoader.loadFromObj("emulator/resource/phantom.obj", "emulator/resource/phantom_texture.png", cube);
+
+  //Move the poly to the front of the camera
+  objectList[0].position = objectList[0].position
+      + ue::Vector3(R(0.0), R(-10.0), R(40.0));
+
+  //Create a 32x32 red to green gradient texture for the particle
+  ue::Texture gradTex;
+  gradTex.height = 32;
+  gradTex.width = 32;
+  ue::Colour colArray[gradTex.height * gradTex.width];
+  gradTex.pixel = colArray;
+
+  //Generate the colour
+  for(int x = 0; x < (int)gradTex.width; x++)
+    {
+      for(int y = 0; y < (int)gradTex.height; y++)
+        {
+          ue::Colour col;
+          col.colour.r = (x+y) * 4;
+          col.colour.g = 255 - col.colour.r;
+          col.colour.b = 0;
+          col.colour.a = 255;
+          gradTex.pixel[x + y*(int)gradTex.width] = col;
+        }
+    }
+
+  //Create the particle
+  ue::Particle particle;
+  particle.texture = gradTex;
+  particle.size = ue::Vector2(R(20.0), R(20.0));
+  particle.position = ue::Vector3(R(0.0), R(-10.0), R(40.0));
+
+
   //********configure the renderer********
 
   //Allocate memory for the buffers
@@ -82,20 +126,6 @@ int emulator_main(void)
   lightVector.normalise();
   ue::LightSun sun = ue::LightSun(lightVector, R(0.6));
 
-  //Create the poly loader
-  PolyLoader polyLoader;
-
-  //Create the object list
-  ue::Poly* objectList = new ue::Poly[1];
-
-  //Load an obj file without texture
-  ue::Vector3 cube = ue::Vector3(R(40.0), R(40.0), R(40.0));
-  objectList[0] = polyLoader.loadFromObj("emulator/resource/phantom.obj", "emulator/resource/phantom_texture.png", cube);
-
-  //Move the poly to the front of the camera
-  objectList[0].position = objectList[0].position
-      + ue::Vector3(R(0.0), R(-10.0), R(40.0));
-
   //Build the renderer TODO: make a constructor
   renderer = ue::Renderer3D();
   renderer.camera = camera;
@@ -103,8 +133,6 @@ int emulator_main(void)
   renderer.ambientLight = R(0.5);
   renderer.depthBuffer = depthBuffer;
   renderer.frameBuffer = frameBuffer;
-  renderer.objectList = objectList;
-  renderer.objectNumber = 1;
 
   //********Configure the window********
   //Declare state vars
@@ -181,9 +209,13 @@ int emulator_main(void)
       uint64_t lastCycleCount = __rdtsc();
 
       //Render
-      renderer.RenderFullFrame();
-      if(antiAliasing)
-        renderer.blur(1, antiAliasingFactor);
+      //Clear the depth buffer and the frame buffer
+      renderer.clearDepthBuffer();
+      renderer.clearFrameBufferGrid((ue::Colour){0xFFFFFFFF},(ue::Colour){0xFFCFCFCF}, 12);
+
+      //Works object by object
+      renderer.renderObject(objectList[0]);
+      renderer.renderParticle(particle);
 
       //Compute the cycles spent
       cycleCounter += __rdtsc() - lastCycleCount;
