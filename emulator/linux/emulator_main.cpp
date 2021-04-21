@@ -56,6 +56,9 @@ int emulator_main(void)
 
   uint64_t cycleCounter = 0;
 
+  //Initialise the pseudo random generator
+  srand(97543); //Chosen by hitting my head on the numpad
+
   //********Load the objects********
 
   //Create the poly loader
@@ -73,42 +76,16 @@ int emulator_main(void)
       + ue::Vector3(R(0.0), R(-10.0), R(40.0));
 
   //Create a 32x32 red to green gradient texture for the particle
-  ue::Texture gradTex;
-  gradTex.height = 512;
-  gradTex.width = 512;
-  ue::Colour colArray[gradTex.height * gradTex.width];
-  gradTex.pixel = colArray;
+  ue::Texture smokeTex = polyLoader.loadTexture("emulator/resource/smoke.png");
 
-  //Generate the texture
-  for(int x = 0; x < (int)gradTex.width; x++)
+  //Create 20 particles
+  ue::Particle particles[20];
+  for(int i = 0; i < sizeof(particles)/sizeof(particles[0]); i++) //XXX ++i is faster when not optimised
     {
-      for(int y = 0; y < (int)gradTex.height; y++)
-        {
-          //Calculate the colour
-          ue::Colour col;
-          col.colour.b = (255*(x+y) / (gradTex.width+gradTex.height));
-          col.colour.g = 255 - col.colour.b;
-          col.colour.r = 0;
-
-          //Calculate the alpha (make a circle)
-          int ax = (x - gradTex.width/2);
-          int ay = (y - gradTex.height/2);
-          if(ax*ax + ay*ay < gradTex.width * gradTex.width / 6)
-            col.colour.a = 200;
-          else
-            col.colour.a = 0;
-
-
-          gradTex.pixel[x + y*(int)gradTex.width] = col;
-        }
+      particles[i].texture = smokeTex;
+      particles[i].size = ue::Vector2(R(20.0), R(20.0));
+      particles[i].position = ue::Vector3((ue::Real)(rand()%20 - 10), (ue::Real)(rand()%20 - 10), (ue::Real)(rand()%90 + 10));
     }
-
-  //Create the particle
-  ue::Particle particle;
-  particle.texture = gradTex;
-  particle.size = ue::Vector2(R(20.0), R(20.0));
-  particle.position = ue::Vector3(R(0.0), R(-10.0), R(40.0));
-
 
   //********configure the renderer********
 
@@ -223,9 +200,26 @@ int emulator_main(void)
       renderer.clearDepthBuffer();
       renderer.clearFrameBufferGrid((ue::Colour){0xFFFFFFFF},(ue::Colour){0xFFCFCFCF}, 12);
 
-      //Works object by object
+      //Render the object
       renderer.renderObject(objectList[0]);
-      renderer.renderParticle(particle);
+
+      //Render the particles, farthest first
+      ue::Real farthestRendered = UE_REAL_MAX;
+      for(int i = 0; i < sizeof(particles)/sizeof(particles[0]); i++)
+        {
+          int toRenderIndex = 0;
+          ue::Real far = UE_REAL_MIN;
+          for(int j = 0; j < sizeof(particles)/sizeof(particles[0]); j++)
+            {
+              if(particles[j].position.z > far && particles[j].position.z < farthestRendered)
+                {
+                  far = particles[j].position.z;
+                  toRenderIndex = j;
+                }
+            }
+          farthestRendered = far;
+          renderer.renderParticle(particles[toRenderIndex]);
+        }
 
       //Compute the cycles spent
       cycleCounter += __rdtsc() - lastCycleCount;

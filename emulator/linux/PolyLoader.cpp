@@ -331,7 +331,7 @@ ue::Poly PolyLoader::loadFromObj(const char* objectPath, const char* texturePath
   return poly;
 }
 
-ue::Texture loadTexture(const char* path)
+ue::Texture PolyLoader::loadTexture(const char* path)
 {
   uint32_t imgPtr = 0;
   int width, height, channels;
@@ -357,6 +357,7 @@ ue::Texture loadTexture(const char* path)
       tex.pixel[i].raw = 0x00000000;
 
       //Why the fuck is it in BGRA order ? is it ARGB ?
+      // It's me from the future, it's even worse than you thought and I still don't know why this works
       if(channels > 0)
         tex.pixel[i].colour.b = img[imgPtr++];
       if(channels > 1)

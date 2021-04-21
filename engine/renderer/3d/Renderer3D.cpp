@@ -72,6 +72,7 @@ namespace ue
   }
 
 
+  //XXX This is the slowest thing I have ever seen, fix that
   void Renderer3D::renderParticle(Particle o)
   {
     Vector3 startCorner = o.position;
@@ -86,21 +87,26 @@ namespace ue
     startCorner = camera.toRaster(startCorner);
     endCorner = camera.toRaster(endCorner);
 
+    int startX = Real::max(startCorner.x, R(0.0));
+    int startY = Real::max(startCorner.y, R(0.0));
+    int endX = Real::min(endCorner.x, camera.width);
+    int endY = Real::min(endCorner.y, camera.height);
+
     //Cast before, increase speed
     uint32_t width = (uint32_t)camera.width;
 
     Vector2 texPos(R(0), R(0));
 
-    for(int x = startCorner.x; x < (int)endCorner.x; x++)
+    for(int x = startX; x < endX; x++)
       {
-        for(int y = startCorner.y; y < (int)endCorner.y; y++)
+        for(int y = startY; y < endY; y++)
           {
             int i = x + y * width;
             if(startCorner.z > depthBuffer[i])
               {
                 //TODO : interpolate faster (addition and stuff)
-                texPos.x = ((Real)x - startCorner.x) / (endCorner.x - startCorner.x);
-                texPos.y = ((Real)y - startCorner.y) / (endCorner.y - startCorner.y);
+                texPos.x = Real::clamp(((Real)x - startCorner.x) / (endCorner.x - startCorner.x), 0, 1);
+                texPos.y = Real::clamp(((Real)y - startCorner.y) / (endCorner.y - startCorner.y), 0, 1);
 
                 //Blend the texture
                 Colour col = o.texture.getPixelAt(texPos);
@@ -251,6 +257,7 @@ namespace ue
                     //Sample the texture
 #if UE_CONFIG_ENABLE_TEXTURE == true
                     Vector2 texPos = (*(t.vtc) * w0 + *(t.vta) * w1 + *(t.vtb) * w2) * area;
+                    //TODO: make it so we don't have to clamp the value
                     texPos.x = Real::clamp(texPos.x, 0, 1);
                     texPos.y = Real::clamp(texPos.y, 0, 1);
 

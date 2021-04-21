@@ -29,6 +29,7 @@ public:
       const char* texturePath,
       ue::Vector3 size
   );
+  ue::Texture loadTexture(const char* path);
   void printObject(ue::Poly);
 
 };
