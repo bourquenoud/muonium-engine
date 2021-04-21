@@ -110,7 +110,7 @@ namespace ue
 
                 //Blend the texture
                 Colour col = o.texture.getPixelAt(texPos);
-                frameBuffer[i] = col.over(frameBuffer[i]);
+                frameBuffer[i] = col.over(frameBuffer[i], o.transparency);
               }
           }
       }

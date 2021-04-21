@@ -11,6 +11,7 @@
 #include <cstdint>
 
 #include "../../ue_config.hpp"
+#include "../arith.hpp"
 
 namespace ue {
 
@@ -27,7 +28,7 @@ namespace ue {
   {
     uint32_t raw;
     ColourRGB colour;
-    inline Colour over(Colour&);
+    inline Colour over(Colour& in, Real transparency);
   };
 #elif UE_CONFIG_COLOUR == ARGB8888
 #define UE_ALPHA_MAX 255
@@ -42,7 +43,7 @@ namespace ue {
   {
     uint32_t raw;
     ColourRGB colour;
-    inline Colour over(Colour&);
+    inline Colour over(Colour& in, Real transparency);
   };
 #elif UE_CONFIG_COLOUR == ARGB1555
 #define UE_ALPHA_MAX 1
@@ -57,7 +58,7 @@ namespace ue {
   {
     uint16_t raw;
     ColourRGB colour;
-    inline Colour over(Colour&);
+    inline Colour over(Colour& in, Real transparency);
   };
 #elif UE_CONFIG_COLOUR == RGBA5551
 #define UE_ALPHA_MAX 1
@@ -72,7 +73,7 @@ namespace ue {
   {
     uint16_t raw;
     ColourRGB colour;
-    inline Colour over(Colour&);
+    inline Colour over(Colour& in, Real transparency);
   };
 #elif UE_CONFIG_COLOUR == RGB565
   struct ColourRGB
@@ -85,7 +86,7 @@ namespace ue {
   {
     uint16_t raw;
     ColourRGB colour;
-    inline Colour over(Colour&);
+    inline Colour over(Colour& in, Real transparency);
   };
 #elif UE_CONFIG_COLOUR == RGB332
   struct ColourRGB
@@ -98,7 +99,7 @@ namespace ue {
   {
     uint16_t raw;
     ColourRGB colour;
-    inline Colour over(Colour&);
+    inline Colour over(Colour& in, Real transparency);
   };
 #elif UE_CONFIG_COLOUR == MONO8
   struct ColourRGB
@@ -109,7 +110,7 @@ namespace ue {
   {
     uint8_t raw;
     ColourRGB colour;
-    inline Colour over(Colour&);
+    inline Colour over(Colour& in, Real transparency);
   };
 #else
 #error MUONIUM ENGINE : \
@@ -117,9 +118,10 @@ namespace ue {
 #endif
 
   //TODO : make it work with all configurations
-  inline Colour Colour::over(Colour& in)
+  inline Colour Colour::over(Colour& in, Real transparency)
   {
     Colour result;
+    colour.a = Real::clamp((Real)colour.a * transparency, 0, UE_ALPHA_MAX);
 
     //Don't blend if not necessary
     if(colour.a == UE_ALPHA_MAX)

@@ -22,6 +22,7 @@ namespace ue
     Vector2 size; //Size in world dimension
     Vector3 position;
     Real rotation;
+    Real transparency; //0 to 1
 
     //Use masks only if there is no alpha channel
     #if UE_CONFIG_COLOUR != ARGB8888 \

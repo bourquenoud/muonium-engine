@@ -57,7 +57,7 @@ int emulator_main(void)
   uint64_t cycleCounter = 0;
 
   //Initialise the pseudo random generator
-  srand(97543); //Chosen by hitting my head on the numpad
+  srand(975843); //Chosen by hitting my head on the numpad
 
   //********Load the objects********
 
@@ -79,12 +79,14 @@ int emulator_main(void)
   ue::Texture smokeTex = polyLoader.loadTexture("emulator/resource/smoke.png");
 
   //Create 20 particles
-  ue::Particle particles[20];
+  ue::Particle particles[30];
   for(int i = 0; i < sizeof(particles)/sizeof(particles[0]); i++) //XXX ++i is faster when not optimised
     {
+      particles[i].transparency = R(0.5);
       particles[i].texture = smokeTex;
       particles[i].size = ue::Vector2(R(20.0), R(20.0));
-      particles[i].position = ue::Vector3((ue::Real)(rand()%20 - 10), (ue::Real)(rand()%20 - 10), (ue::Real)(rand()%90 + 10));
+      particles[i].position = ue::Vector3((ue::Real)(rand()%4000 - 2000)/R(100.0),
+          (ue::Real)(rand()%4000 - 2000)/R(100.0), (ue::Real)(rand()%5000 + 2000)/R(100.0));
     }
 
   //********configure the renderer********
