@@ -21,10 +21,6 @@ has a FPU, about 10%.
 In progess...
 
 # About
-## Origin
-A while ago I started experimenting with 3D and graphics in general on PIC32, and
- wanted to make a game console with 3D capabilities. My console (somewhat) works,
-  and I wanted to make a more structured code and open it for everyone to use 
 
 # Disclaimer
 The software is provided "as is", without warranty of any kind, express or implied,
