@@ -12,6 +12,8 @@
 
 #include "../../arith.hpp"
 #include "../vector/Vector3.hpp"
+#include "../matrix/Matrix3.hpp"
+#include "../matrix/Matrix4.hpp"
 
 namespace ue {
 
@@ -38,7 +40,7 @@ namespace ue {
      * @param axis NORMALISED vector of this rotation axis.
      * @param angle rotation angle in radian
      */
-    Quaternion(Vector3 axis,Real angle);
+    Quaternion(const Vector3& axis,Real angle);
 
     /**
      * Constructor from euler angles
@@ -49,6 +51,16 @@ namespace ue {
      * @param angles Euler angles in radians
      */
     Quaternion(Vector3 angles);
+
+    /**
+     * Constructor from euler angles
+     *
+     * Construct a quaternion from the euleur angles.
+     * Applied in the order of y, z, x
+     *
+     * @param angles Euler angles in radians
+     */
+    Quaternion(Real angleX, Real angleY, Real angleZ);
 
     /**
      * Constructor with the values
@@ -73,11 +85,18 @@ namespace ue {
 
 
     Quaternion operator-();
-    Quaternion operator~(); //Calculate the inverse
-    Quaternion operator+(Quaternion);
-    Quaternion operator-(Quaternion);
-    Quaternion operator*(Quaternion);
+    Quaternion operator+(Quaternion&);
+    Quaternion operator-(Quaternion&);
+    Quaternion operator*(const Quaternion& q) const;
     Quaternion operator*(Real);
+
+
+    /**
+     * Calculate the inverse
+     *
+     * @return inverse of the quaternion
+     */
+    Quaternion inv() const;
 
     /**
      * Calculate the conjugate.
@@ -87,7 +106,7 @@ namespace ue {
      *
      * @return quaternion conjugate
      */
-    Quaternion conj();
+    Quaternion conj() const;
 
     /**
      * Calculate the normalised quaternion.
@@ -115,6 +134,30 @@ namespace ue {
      * the quaternion without allocating a new quaternion memory.
      */
     void normalise();
+
+    /**
+     * Compute the rotation matrix
+     *
+     * Return the rotation matrix 3x3 computed from the quaternion
+     *
+     * @return rotation matrix
+     */
+    Matrix3 rotationMatrix3() const;
+
+    /**
+     * Compute the 4x4 rotation matrix
+     *
+     * Return the rotation matrix 4x4 computed from the quaternion,
+     * as homogeneous coordinates
+     *
+     * @return rotation matrix
+     */
+    Matrix4 rotationMatrix4();
+
+    /**
+     * Rotate a given vector
+     */
+    Vector3 rotateVector(const Vector3&) const;
   };
 
 }

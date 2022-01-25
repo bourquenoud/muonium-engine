@@ -19,8 +19,9 @@
 #include <cstdint>
 #include <cfloat>
 #include <cmath>
-#include "engine/ue_config.hpp"
+
 #include "fixed/Fixed32.hpp"
+#include "../../ue_config.hpp"
 
 /* FIXME
 #if UE_CONFIG_ARITHMETIC == FLOAT
@@ -33,11 +34,11 @@
  */
 //XXX BAD XXX
 #if UE_CONFIG_ARITHMETIC == FLOAT
-#define UE_REAL_MAX (R(10000))
-#define UE_REAL_MIN (R(-10000))
+#define UE_REAL_MAX (R(10000.0))
+#define UE_REAL_MIN (R(-10000.0))
 #elif UE_CONFIG_ARITHMETIC == FIXED32
-#define UE_REAL_MAX (R(10000))
-#define UE_REAL_MIN (R(-10000))
+#define UE_REAL_MAX (R(10000.0))
+#define UE_REAL_MIN (R(-10000.0))
 #endif //UE_CONFIG_ARITHMETIC
 
 namespace ue {
@@ -52,22 +53,72 @@ namespace ue {
 #endif //UE_CONFIG_ARITHMETIC
 
     //****Constructor****
-    Real();
-    Real(int);
-    Real(unsigned int);
-    Real(float);
+    /****Constructor****///USING FLOATING POINT OPERATIONS
+  #if UE_CONFIG_ARITHMETIC == FLOAT
+    inline Real()
+    {
+
+    }
+    inline Real(const int a)
+    {
+      val = (float)a;
+    }
+    inline Real(const unsigned int a)
+    {
+      val = (float)a;
+    }
+    inline Real(const char a)
+    {
+      val = (float)a;
+    }
+    inline Real(const unsigned char a)
+    {
+      val = (float)a;
+    }
+    inline Real(const float a)
+    {
+      val = a;
+    }
+    inline Real(const double a)
+    {
+      val = (float)a;
+    }
+    //USING 32bits FIXED POINT OPERATIONS
+  #elif UE_CONFIG_ARITHMETIC == FIXED32
+    inline Real()
+    {
+
+    }
+    inline Real(const int a)
+    {
+      val = (Fixed32)a;
+    }
+    inline Real(const unsigned int a)
+    {
+      val = (Fixed32)a;
+    }
+    inline Real(const float a)
+    {
+      val = (Fixed32)a;
+    }
+    inline Real(const double a)
+    {
+      val = (Fixed32)a;
+    }
+  #endif //UE_CONFIG_ARITHMETIC
+
 #if __cplusplus >= 201703L
-    constexpr Real(long double a) : val(a)
+    constexpr Real(const long double a) : val(a)
     {
       val = (float)a;
     }
 #elif UE_CONFIG_ARITHMETIC == FLOAT
-    Real(double a)
+    inline Real(const double a)
     {
       val = (float)a;
     }
 #elif UE_CONFIG_ARITHMETIC == FIXED32
-    Real(double a)
+    inline Real(const double a)
     {
       val = (Fixed32)(float)a;
     }
@@ -75,37 +126,37 @@ namespace ue {
 
 
     /****Arithmetic****/
-    inline Real operator+() //Unary +
+    inline Real operator+() const //Unary +
     {
       Real temp;
       temp.val = val;
       return temp;
     }
-    inline Real operator-() //Unary -
+    inline Real operator-() const //Unary -
     {
       Real temp;
       temp.val = -val;
       return temp;
     }
-    inline Real operator+(Real a)//add
+    inline Real operator+(const Real a) const//add
     {
       Real temp;
       temp.val = val + a.val;
       return temp;
     }
-    inline Real operator-(Real a)//sub
+    inline Real operator-(const Real a) const//sub
     {
       Real temp;
       temp.val = val - a.val;
       return temp;
     }
-    inline Real operator*(Real a)//mult
+    inline Real operator*(const Real a) const//mult
     {
       Real temp;
       temp.val = val * a.val;
       return temp;
     }
-    inline Real operator/(Real a)//div
+    inline Real operator/(const Real a) const//div
     {
       Real temp;
       temp.val = val / a.val;
@@ -205,31 +256,31 @@ namespace ue {
                 }
 
     //****Typecast****//
-    inline operator int8_t()
+    inline operator int8_t() const
                 {
       return (int8_t)(this->val);
                 }
-    inline operator int16_t()
+    inline operator int16_t() const
                 {
       return (int16_t)(this->val);
                 }
-    inline operator int32_t()
+    inline operator int32_t() const
                 {
       return (int32_t)(this->val);
                 }
-    inline operator uint8_t()
+    inline operator uint8_t() const
                 {
       return (uint8_t)(val);
                 }
-    inline operator uint16_t()
+    inline operator uint16_t() const
                 {
       return (uint16_t)(val);
                 }
-    inline operator uint32_t()
+    inline operator uint32_t() const
                 {
       return (uint32_t)(val);
                 }
-    inline operator float()
+    inline operator float() const
                 {
       return (float)(val);
                 }
@@ -242,22 +293,60 @@ namespace ue {
     static Real clamp(Real,Real,Real);
     static Real abs(Real);
     //TODO: Check if it works for Fixed32 with negatives
-    static Real floor(Real);
-    static Real ceil(Real);
-    static Real round(Real);
-
+#if UE_CONFIG_ARITHMETIC == FLOAT
+  static inline Real floor(Real a)
+  {
+    Real c;
+    c.val = floorf((float)a.val);
+    return c;
+  }
+  static inline Real ceil(Real a)
+  {
+    Real c;
+    c.val = ceilf((float)a.val);
+    return c;
+  }
+  static inline Real round(Real a)
+  {
+    Real c;
+    c.val = roundf((float)a.val);
+    return c;
+  }
+#elif UE_CONFIG_ARITHMETIC == FIXED32
+  static inline Real floor(Real a)
+  {
+    Real c;
+    //Mask the fractional part
+    c.val.val = a.val.val & 0xFFFF0000;
+    return c;
+  }
+  static inline Real ceil(Real a)
+  {
+    Real c;
+    //+1 then floor except for round numbers
+    c.val.val = ((a.val.val + 0x0000FFFF) & 0xFFFF0000);
+    return c;
+  }
+  static inline Real round(Real a)
+  {
+    Real c;
+    //+0.5 then floor
+    c.val.val = ((a.val.val + 0x00008000) & 0xFFFF0000);
+    return c;
+  }
+#endif
   };
 }
 
-//Literal definition
+
 #if __cplusplus >= 201703L
-#define R(X) (X##_r)
-constexpr ue::Real operator"" _r(long double a)
+constexpr ue::Real operator""_r(long double a)
     {
   return ue::Real(a);
     }
+#define R(X) (X##_r)
 #else
-#define R(X) ((ue::Real)X)
+#define R(X) ((ue::Real)(X))
 #endif //UE_CONFIG_CPP17_SYNTAX
 
 #endif /* REAL_H_ */

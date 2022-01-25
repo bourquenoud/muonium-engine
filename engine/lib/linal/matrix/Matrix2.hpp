@@ -18,10 +18,10 @@ namespace ue {
   public:
     Real d[2][2];
     Matrix2 operator-();
-    Matrix2 operator+(Matrix2 B);
-    Matrix2 operator-(Matrix2 B);
-    Matrix2 operator*(Matrix2 B);
-    Vector2 operator*(Vector2 v);
+    Matrix2 operator+(Matrix2& B);
+    Matrix2 operator-(Matrix2& B);
+    Matrix2 operator*(Matrix2& B);
+    Vector2 operator*(Vector2& v);
     Real* operator[](int);
 
   };

@@ -5,7 +5,7 @@
  *      Author: mathieu
  */
 
-#include <engine/lib/texture/Mask.hpp>
+#include "Mask.hpp"
 
 namespace ue
 {

@@ -16,55 +16,116 @@
 
 namespace ue
 {
-  enum class FitResolutionGate
-  {
-    fill,
-    overscan
-  };
+enum class FitResolutionGate
+{
+	fill,
+	overscan
+};
 
-  class Camera : public ue::Object3D
-  {
-  public:
-    Matrix4 worldToCamera;
-    Real fov_deg;
-    Real b;
-    Real l;
-    Real t;
-    Real r;
-    Real near;
-    Real far;
-    Real width;
-    Real height;
+class Camera : public ue::Object3D
+{
+public:
+	Matrix4 worldToCamera;
+	Real fov_deg;
+	Real b;
+	Real l;
+	Real t;
+	Real r;
+	Real near;
+	Real far;
+	Real width;
+	Real height;
 
-    Camera();
+	Camera();
 
-    /** TODO: Finish description
-     *
-     */
-    Camera(
-        const float &filmApertureWidth,
-        const float &filmApertureHeight,
-        const uint32_t &imageWidth,
-        const uint32_t &imageHeight,
-        const FitResolutionGate &fitFilm,
-        const float &nearClippingPLane,
-        const float &focalLength
-    );
+	/** TODO: Finish description
+	 *
+	 */
+	Camera(
+			const float &filmApertureWidth,
+			const float &filmApertureHeight,
+			const uint32_t &imageWidth,
+			const uint32_t &imageHeight,
+			const FitResolutionGate &fitFilm,
+			const float &nearClippingPLane,
+			const float &focalLength
+	);
 
-    /** TODO: Finish description
-     * Convert a a world position to a raster position
-     */
-    Vector3 toRaster(Vector3 v);
+	/** TODO: Finish description
+	 * Convert a a world position to a raster position
+	 */
+	inline Vector3 toRaster(const Vector3& vert) const
+	{
 
-  private:
-    //Precompute factors for the projections
-    Real projAx;
-    Real projAy;
-    Real projB;
+		//Project to screen
+		Vector3 result(
+				projAx + projB * vert.x / -vert.z,
+				projAy + projB * vert.y / -vert.z,
+				-vert.z);
 
-    //Compute the projection matrix according to the camera parameters
-    void computeProjectionMatrix();
-  };
+		return result;
+	}
+
+	/*
+	 * TODO : raster or screen position ?
+	 * Convert from a raster position to a world position
+	 */
+	inline Vector3 fromRaster(const Vector3& v) const
+	{
+		Vector3 result
+		(
+				(v.x - projAx) * v.z / projB,
+				(v.y - projAy) * v.z / projB,
+				-v.z
+		);
+
+		return result;
+	}
+
+	/*
+	 * TODO : raster or screen position ?
+	 * Convert from a raster position to a world position
+	 * Implies a z = -1
+	 */
+	inline Vector3 fromRaster(const Vector2& v) const
+	{
+		Vector3 result
+		(
+				(v.x - projAx) / projB,
+				(v.y - projAy) / projB,
+				1
+		);
+
+		return result;
+	}
+
+	/*
+	 * TODO : raster or screen position ?
+	 * Convert from a raster position to a world position
+	 * Implies a z = -1
+	 */
+	inline Vector3 fromRaster(Real x, Real y)
+	{
+		Vector3 result
+		(
+				(x - projAx) / projB,
+				(y - projAy) / projB,
+				1
+		);
+
+		return result;
+	}
+
+private:
+	//Precompute factors for the projections
+	Real projAx;
+	Real projAy;
+	Real projB;
+
+	//TODO: fucking use it
+	//Compute the projection matrix according to the camera parameters
+	void computeProjectionMatrix();
+};
 
 }
 

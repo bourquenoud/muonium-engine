@@ -9,6 +9,7 @@
 #define VECTOR2_H_
 
 #include <cmath>
+
 #include "../../arith.hpp"
 
 namespace ue {

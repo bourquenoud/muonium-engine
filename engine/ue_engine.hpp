@@ -8,6 +8,13 @@
 #ifndef UE_ENGINE_H_
 #define UE_ENGINE_H_
 
+/*
+#undef min
+#undef max
+#undef round
+#undef abs
+*/
+
 //Set the configuration for the engine
 
 
@@ -17,8 +24,7 @@
 #include "lib/linal.hpp"
 #include "lib/sprite.hpp"
 #include "lib/texture.hpp"
-
-#include "renderer/3d/Renderer3D.hpp"
 #include "renderer/2d/Renderer2D.hpp"
+#include "renderer/3d/Renderer3D.hpp"
 
 #endif /* UE_ENGINE_H_ */

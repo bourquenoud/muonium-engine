@@ -35,7 +35,7 @@ namespace ue
 
     return C;
   }
-  Matrix4 Matrix4::operator+(Matrix4 B)
+  Matrix4 Matrix4::operator+(Matrix4& B)
   {
     Matrix4 C;
 
@@ -61,7 +61,7 @@ namespace ue
 
     return C;
   }
-  Matrix4 Matrix4::operator-(Matrix4 B)
+  Matrix4 Matrix4::operator-(Matrix4& B)
   {
     Matrix4 C;
 
@@ -90,7 +90,7 @@ namespace ue
   /*
    * Calculate the product of matrix 4x4 A and B
    */
-  Matrix4 Matrix4::operator*(Matrix4 B)
+  Matrix4 Matrix4::operator*(Matrix4& B)
   {
     Matrix4 C;
 
@@ -119,7 +119,7 @@ namespace ue
     return C;
   }
 
-  Vector4 Matrix4::operator*(Vector4 v)
+  Vector4 Matrix4::operator*(Vector4& v)
   {
     Vector4 u;
 
@@ -127,6 +127,17 @@ namespace ue
     u.y = v.x * d[1][0] + v.y * d[1][1] + v.z * d[1][2] + v.w * d[1][3];
     u.z = v.x * d[2][0] + v.y * d[2][1] + v.z * d[2][2] + v.w * d[2][3];
     u.w = v.x * d[3][0] + v.y * d[3][1] + v.z * d[3][2] + v.w * d[3][3];
+
+    return u;
+  }
+
+  Vector3 Matrix4::operator*(Vector3& v)
+  {
+    Vector3 u;
+
+    u.x = v.x * d[0][0] + v.y * d[0][1] + v.z * d[0][2] + d[0][3];
+    u.y = v.x * d[1][0] + v.y * d[1][1] + v.z * d[1][2] + d[1][3];
+    u.z = v.x * d[2][0] + v.y * d[2][1] + v.z * d[2][2] + d[2][3];
 
     return u;
   }

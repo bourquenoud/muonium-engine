@@ -8,6 +8,8 @@
 #ifndef LIB_TEXTURE_MASK_HPP_
 #define LIB_TEXTURE_MASK_HPP_
 
+/* FIXME: compilation error. Like, 1400 errors
+
 #include <bitset>
 #include <cstdint>
 

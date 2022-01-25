@@ -9,12 +9,27 @@
 
 namespace ue
 {
-  Colour Texture::getPixelAt(Vector2& pos)
+#if UE_CONFIG_COLOUR == ARGB8888 \
+ or UE_CONFIG_COLOUR == RGBA8888 \
+ or UE_CONFIG_COLOUR == ARGB1555 \
+ or UE_CONFIG_COLOUR == RGBA5551
+  //Premultiply all pixel with the alpha value
+  void Texture::premultiplyAlpha(Real transparency)
   {
-    //TODO : make it so we don't have to floor the value (Something is wrong somewhere)
-    uint32_t x = (uint32_t)Real::floor(pos.x * (Real)(width - 1));
-    uint32_t y = (uint32_t)Real::floor((R(1.0) - pos.y) * (Real)(height - 1));
+    for(uint32_t i = 0; i < width*height; i++)
+    {
+      pixel[i].colour.a = (Real)pixel[i].colour.a * transparency;
+      pixel[i].premultiplyAlpha();
+    }
+  }
+#endif
 
-     return pixel[x + (width * y)];
+  void Texture::setDimensions(uint32_t _width, uint32_t _height)
+  {
+	  width = _width;
+	  height = _height;
+
+	  preprocessedWidth = (Real)(width);
+	  preprocessedHeight = (Real)(height);
   }
 }

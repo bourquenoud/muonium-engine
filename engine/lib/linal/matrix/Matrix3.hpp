@@ -19,10 +19,10 @@ namespace ue {
     //Matrix data
     Real d[3][3];
     Matrix3 operator-();
-    Matrix3 operator+(Matrix3 B);
-    Matrix3 operator-(Matrix3 B);
-    Matrix3 operator*(Matrix3 B);
-    Vector3 operator*(Vector3 v);
+    Matrix3 operator+(Matrix3& B);
+    Matrix3 operator-(Matrix3& B);
+    Matrix3 operator*(Matrix3& B);
+    Vector3 operator*(const Vector3& v) const;
     Real* operator[](int);
   };
 

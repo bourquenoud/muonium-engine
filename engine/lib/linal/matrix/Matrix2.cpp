@@ -21,7 +21,7 @@ namespace ue
 
     return C;
   }
-  Matrix2 Matrix2::operator+(Matrix2 B)
+  Matrix2 Matrix2::operator+(Matrix2& B)
   {
     Matrix2 C;
 
@@ -33,7 +33,7 @@ namespace ue
 
     return C;
   }
-  Matrix2 Matrix2::operator-(Matrix2 B)
+  Matrix2 Matrix2::operator-(Matrix2& B)
   {
     Matrix2 C;
 
@@ -49,7 +49,7 @@ namespace ue
   /*
    * Calculate the product of matrix 2x2 A and B
    */
-  Matrix2 Matrix2::operator*(Matrix2 B)
+  Matrix2 Matrix2::operator*(Matrix2& B)
   {
     Matrix2 C;
 
@@ -65,7 +65,7 @@ namespace ue
     return C;
   }
 
-  Vector2 Matrix2::operator*(Vector2 v)
+  Vector2 Matrix2::operator*(Vector2& v)
   {
     Vector2 u;
 

@@ -27,7 +27,7 @@ namespace ue
 
     return C;
   }
-  Matrix3 Matrix3::operator+(Matrix3 B)
+  Matrix3 Matrix3::operator+(Matrix3& B)
   {
     Matrix3 C;
 
@@ -45,7 +45,7 @@ namespace ue
 
     return C;
   }
-  Matrix3 Matrix3::operator-(Matrix3 B)
+  Matrix3 Matrix3::operator-(Matrix3& B)
   {
     Matrix3 C;
 
@@ -66,7 +66,7 @@ namespace ue
   /*
    * Calculate the product of matrix 3x3 A and B
    */
-  Matrix3 Matrix3::operator*(Matrix3 B)
+  Matrix3 Matrix3::operator*(Matrix3& B)
   {
     Matrix3 C;
 
@@ -89,7 +89,7 @@ namespace ue
     return C;
   }
 
-  Vector3 Matrix3::operator*(Vector3 v)
+  Vector3 Matrix3::operator*(const Vector3& v) const
   {
     Vector3 u;
 

@@ -5,7 +5,7 @@
  *      Author: mathieu
  */
 
-#include <engine/lib/3d/Particle.hpp>
+#include "Particle.hpp"
 
 namespace ue
 {

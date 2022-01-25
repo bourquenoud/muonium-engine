@@ -20,18 +20,20 @@ namespace ue {
     Real y;
     Real z;
 
+    //TODO: set everything to const in other VectorX.hpp
     Vector3();
-    Vector3(Real,Real,Real);
+    Vector3(const Vector3&);
+    Vector3(const Real&,const Real&,const Real&);
 
-    Vector3 operator+(Vector3 b);
-    Vector3 operator-(Vector3 b);
-    Vector3 operator-();
-    Vector3 operator*(Real val);
-    Real operator*(Vector3 b); //Dot product
+    Vector3 operator+(const Vector3 b) const;
+    Vector3 operator-(const Vector3 b) const;
+    Vector3 operator-() const;
+    Vector3 operator*(const Real val) const;
+    Real operator*(const Vector3 b) const; //Dot product
 
-    bool operator==(Vector3);
+    bool operator==(const Vector3);
 
-    Vector3 cross(Vector3 b);
+    Vector3 cross(const Vector3 b);
     Real norm(void);
     Vector3 normalise(void);
     Vector3 approxNormalise(void);

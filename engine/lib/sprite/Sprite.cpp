@@ -5,7 +5,7 @@
  *      Author: mathieu
  */
 
-#include <engine/lib/sprite/Sprite.hpp>
+#include "Sprite.hpp"
 
 namespace ue
 {

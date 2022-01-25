@@ -18,6 +18,18 @@ namespace ue
   public:
     Quaternion rotation;
     Vector3 position;
+    inline Vector3 getForwardVector() const
+    {
+    	return rotation.rotationMatrix3() * Vector3::Z;
+    }
+    inline Vector3 getUpVector() const
+    {
+    	return rotation.rotationMatrix3() * Vector3::Y;
+    }
+    inline Vector3 getRightVector() const
+    {
+    	return rotation.rotationMatrix3() * Vector3::X;
+    }
   };
 
 }

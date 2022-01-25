@@ -21,7 +21,7 @@ namespace ue
     Texture texture;
     Vector2 size; //Size in world dimension
     Vector3 position;
-    Real rotation;
+    Real rotation; //TODO: make use of it
     Real transparency; //0 to 1
 
     //Use masks only if there is no alpha channel
@@ -29,7 +29,7 @@ namespace ue
       and UE_CONFIG_COLOUR != RGBA8888 \
       and UE_CONFIG_COLOUR != ARGB1555 \
       and UE_CONFIG_COLOUR != RGBA5551
-        Mask mask;
+//        Mask mask;
     #endif
   };
 

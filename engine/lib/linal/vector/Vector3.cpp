@@ -14,14 +14,21 @@ namespace ue
 
   }
 
-  Vector3::Vector3(Real x_, Real y_, Real z_)
+  Vector3::Vector3(const Vector3& v)
+  {
+    x = v.x;
+    y = v.y;
+    z = v.z;
+  }
+
+  Vector3::Vector3(const Real& x_, const Real& y_, const Real& z_)
   {
     x = x_;
     y = y_;
     z = z_;
   }
 
-  Vector3 Vector3::operator+(Vector3 b)
+  Vector3 Vector3::operator+(Vector3 b) const
   {
     Vector3 c;
 
@@ -32,7 +39,7 @@ namespace ue
     return c;
   }
 
-  Vector3 Vector3::operator-(Vector3 b)
+  Vector3 Vector3::operator-(Vector3 b) const
   {
     Vector3 c;
 
@@ -43,7 +50,7 @@ namespace ue
     return c;
   }
 
-  Vector3 Vector3::operator-()
+  Vector3 Vector3::operator-() const
   {
     Vector3 c;
 
@@ -57,7 +64,7 @@ namespace ue
   /*
    * Return the vector3 multiplied by a scalar
    */
-  Vector3 Vector3::operator*(Real scal)
+  Vector3 Vector3::operator*(Real scal) const
   {
     Vector3 c;
 
@@ -71,7 +78,7 @@ namespace ue
   /*
    * Return the dot product
    */
-  Real Vector3::operator*(Vector3 b)
+  Real Vector3::operator*(Vector3 b) const
   {
     return x*b.x + y*b.y + z*b.z;
   }
@@ -112,7 +119,7 @@ namespace ue
   }
 
   /*
-   * Fast very approximate normalisation
+   * Fast very approximative normalisation. Mostly used to bring FIXED32 value closer to 1
    */
   Vector3 Vector3::approxNormalise()
    {

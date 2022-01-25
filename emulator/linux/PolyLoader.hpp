@@ -32,6 +32,8 @@ public:
   ue::Texture loadTexture(const char* path);
   void printObject(ue::Poly);
 
+  ue::CubeMap loadCubeMap(const char* path);
+
 };
 
 #endif /* POLYLOADER_HPP_ */

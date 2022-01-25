@@ -28,7 +28,7 @@ namespace ue {
     Vector2* vtc;
 #endif
 
-#if UE_CONFIG_ENABLE_NORMAL == true
+#if UE_CONFIG_ENABLE_SMOOTH_NORMAL == true
     //Normal vector
     Vector3* vna;
     Vector3* vnb;

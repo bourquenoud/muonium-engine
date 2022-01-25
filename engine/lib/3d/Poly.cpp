@@ -28,7 +28,7 @@ namespace ue
     textureCount = object.vertexCount;
 #endif
 
-#if UE_CONFIG_ENABLE_NORMAL == true
+#if UE_CONFIG_ENABLE_SMOOTH_NORMAL == true
     normals = object.normals;
     normalCount = object.normalCount;
 #endif

@@ -66,7 +66,8 @@ namespace ue
     height = (Real)imageHeight;
     near = nearClippingPLane;
 
-    projAx = R(1.0) * R(0.5) * width;
+    //XXX: why the *1 ?
+    projAx = R(0.5) * width;
     projAy = height * R(0.5);
     projB = near * R(0.5) * width;
   }
@@ -95,23 +96,6 @@ namespace ue
     worldToCamera[3][1] = 0;
     worldToCamera[3][2] = -far*near/(far-near);
     worldToCamera[3][3] = 0;
-  }
-
-  Vector3 Camera::toRaster(Vector3 vert)
-  {
-    /*
-    //Rotate
-    vert = worldToCamera * vert;
-     */
-
-    //Project to screen
-    vert = Vector3(
-        projAx + projB * vert.x / -vert.z,
-        projAy + projB * vert.y / -vert.z,
-        -vert.z);
-
-
-    return vert;
   }
 
 }
