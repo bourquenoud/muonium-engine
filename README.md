@@ -21,17 +21,6 @@ has a FPU, about 10%.
 In progess...
 
 # About
-## Origin
-A while ago I started experimenting with 3D and graphics in general on PIC32, and
- wanted to make a game console with 3D capabilities. My console (somewhat) works,
-  and I wanted to make a more structured code and open it for everyone to use 
-
-## Why this name ?
-*Muonium is an exotic atom made up of an antimuon(μ) and an electron(e) [...]
- muonium(μe)* (Wikipedia)
-
-Micro (graphic) Engine -> μe -> Muonium. Yup. Thank you for coming to my TED 
-talk.
 
 # Disclaimer
 The software is provided "as is", without warranty of any kind, express or implied,
