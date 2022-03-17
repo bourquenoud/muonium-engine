@@ -3,7 +3,9 @@ Muonium is a highly customisable 3D/2D rendering engine for microcontrollers
 incorporating multiple kind of optimisations.
 
 # Notice
-***THIS IS A WORK IN PROGRESS, MOST FEATURES ARE UNSTABLE OR UNIMPLEMENTED***
+**THIS IS A WORK IN PROGRESS, A LOT OF FEATURES ARE UNSTABLE OR UNIMPLEMENTED**
+
+Documentation is greatly outdated and will be updated soon.
 
 # 3D rendering
 ## Configurable to work in floating or fixed point
@@ -21,7 +23,7 @@ However, computation with fixed point is bit slower than floating point if the s
 has a FPU, about 10%.
 
 ## Textures and normal interpolation
-The engine supports textures up to 65536x65536. It can interpolate normals for smoother lighting.
+The engine supports textures up to 65536x65536. It can interpolate normals for smoother lighting. Performance is significantly impacted,  with a reduction of performance between 30% and 50%. Textures use affine interpolation to improve performance, and therefore suffer from distortions.
 
 ### Texture and normal interpolation enabled
 ![Moon render with texture](https://raw.githubusercontent.com/bourquenoud/muonium-engine/main/doc/images/moon.png)
