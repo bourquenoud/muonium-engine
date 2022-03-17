@@ -2,6 +2,9 @@
 Muonium is a highly customisable 3D/2D rendering engine for microcontrollers 
 incorporating multiple kind of optimisations.
 
+# Notice
+***THIS IS A WORK IN PROGRESS, MOST FEATURES ARE UNSTABLE OR UNIMPLEMENTED***
+
 # 3D rendering
 ## Configurable to work in floating or fixed point
 It is possible to configure Muonium to work exclusively with fixed point arithmetic.
@@ -17,10 +20,17 @@ without FPU.
 However, computation with fixed point is bit slower than floating point if the system
 has a FPU, about 10%.
 
-# 2D rendering
-In progess...
+## Textures and normal interpolation
+The engine supports textures up to 65536x65536. It can interpolate normals for smoother lighting.
 
-# About
+### Texture and normal interpolation enabled
+![Moon render with texture](https://raw.githubusercontent.com/bourquenoud/muonium-engine/main/doc/images/moon.png)
+
+### Texture and normal interpolation disabled
+![Moon render without texture](https://raw.githubusercontent.com/bourquenoud/muonium-engine/main/doc/images/moon_no_tex.png)
+
+# 2D rendering
+The 2D engine has not benn implemented yet.
 
 # Disclaimer
 The software is provided "as is", without warranty of any kind, express or implied,
