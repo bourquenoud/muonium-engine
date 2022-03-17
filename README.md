@@ -9,10 +9,10 @@ The difference is not noticeable, and computation is significantly faster on MCU
 without FPU.
 
 #### Fixed point render
-![Fixed point render of a teapot](https://raw.githubusercontent.com/elzaidir/muonium-engine/main/image/muonium-teapot-fixed.png)
+![Fixed point render of a teapot](https://raw.githubusercontent.com/bourquenoud/muonium-engine/main/doc/images/muonium-teapot-fixed.png)
 
 #### Floating point render
-![Floating point render of a teapot](https://raw.githubusercontent.com/elzaidir/muonium-engine/main/image/muonium-teapot-fixed.png)
+![Floating point render of a teapot](https://raw.githubusercontent.com/bourquenoud/muonium-engine/main/doc/images/muonium-teapot-fixed.png)
 
 However, computation with fixed point is bit slower than floating point if the system
 has a FPU, about 10%.
