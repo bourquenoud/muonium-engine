@@ -12,19 +12,19 @@ namespace ue
   //****Basic arithmetic****
   Real Real::min(Real a, Real b)
   {
-    return (a<b)?a:b;
+    return (a < b) ? a : b;
   }
-  Real Real::min(Real a,Real b,Real c)
+  Real Real::min(Real a, Real b, Real c)
   {
-    return min(a,min(b,c));
+    return min(a, min(b, c));
   }
-  Real Real::max(Real a,Real b)
+  Real Real::max(Real a, Real b)
   {
-    return (a>b)?a:b;
+    return (a > b) ? a : b;
   }
-  Real Real::max(Real a,Real b,Real c)
+  Real Real::max(Real a, Real b, Real c)
   {
-    return max(a,max(b,c));
+    return max(a, max(b, c));
   }
   Real Real::clamp(Real val, Real minVal, Real maxVal)
   {
@@ -32,9 +32,7 @@ namespace ue
   }
   Real Real::abs(Real a)
   {
-    return (a < R(0.0))?-a:a;
+    return (a < R(0.0)) ? -a : a;
   }
 
 }
-
-

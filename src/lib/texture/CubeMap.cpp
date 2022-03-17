@@ -7,9 +7,10 @@
 
 #include "CubeMap.hpp"
 
-namespace ue {
+namespace ue
+{
 
-  Colour CubeMap::getPixelAt(Vector3& direction)
+  Colour CubeMap::getPixelAt(Vector3 &direction)
   {
     int index;
     Vector2 uvCoordinates(CubeMap::samplingCoordinates(direction, index));

@@ -12,19 +12,20 @@
 #include "../vector/Vector3.hpp"
 #include "../vector/Vector4.hpp"
 
-namespace ue {
+namespace ue
+{
 
   class Matrix4
   {
   public:
     Real d[4][4];
     Matrix4 operator-();
-    Matrix4 operator+(Matrix4& B);
-    Matrix4 operator-(Matrix4& B);
-    Matrix4 operator*(Matrix4& B);
-    Vector4 operator*(Vector4& v);
+    Matrix4 operator+(Matrix4 &B);
+    Matrix4 operator-(Matrix4 &B);
+    Matrix4 operator*(Matrix4 &B);
+    Vector4 operator*(Vector4 &v);
 
-    //TODO: create an homogeneous coordinates matrix class to reduce memory usage
+    // TODO: create an homogeneous coordinates matrix class to reduce memory usage
     /**
      * Compute the product as homogeneous coordinates
      *
@@ -32,11 +33,10 @@ namespace ue {
      *
      * @return transformed vector
      */
-    Vector3 operator*(Vector3& v);
+    Vector3 operator*(Vector3 &v);
 
-    Real* operator[](int);
+    Real *operator[](int);
   };
-
 
 }
 

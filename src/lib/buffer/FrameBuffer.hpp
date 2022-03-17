@@ -20,12 +20,12 @@ namespace ue
   public:
     uint16_t width;
     uint16_t height;
-    Colour* buffer;
+    Colour *buffer;
 
     FrameBuffer();
-    FrameBuffer(uint16_t width_, uint16_t height_, Colour* buffer_);
+    FrameBuffer(uint16_t width_, uint16_t height_, Colour *buffer_);
 
-    Colour& operator[](int i)
+    Colour &operator[](int i)
     {
       return buffer[i];
     }

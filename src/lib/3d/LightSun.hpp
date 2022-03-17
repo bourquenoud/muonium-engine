@@ -19,7 +19,7 @@ namespace ue
   {
   public:
     LightSun();
-    LightSun(Vector3,Real);
+    LightSun(Vector3, Real);
 
     Vector3 direction;
     Real intensity;

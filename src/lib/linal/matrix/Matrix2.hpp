@@ -11,19 +11,19 @@
 #include "../../arith.hpp"
 #include "../vector/Vector2.hpp"
 
-namespace ue {
+namespace ue
+{
 
   class Matrix2
   {
   public:
     Real d[2][2];
     Matrix2 operator-();
-    Matrix2 operator+(Matrix2& B);
-    Matrix2 operator-(Matrix2& B);
-    Matrix2 operator*(Matrix2& B);
-    Vector2 operator*(Vector2& v);
-    Real* operator[](int);
-
+    Matrix2 operator+(Matrix2 &B);
+    Matrix2 operator-(Matrix2 &B);
+    Matrix2 operator*(Matrix2 &B);
+    Vector2 operator*(Vector2 &v);
+    Real *operator[](int);
   };
 
 }

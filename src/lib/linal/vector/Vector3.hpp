@@ -11,7 +11,8 @@
 #include <cmath>
 #include "../../arith.hpp"
 
-namespace ue {
+namespace ue
+{
 
   class Vector3
   {
@@ -20,16 +21,16 @@ namespace ue {
     Real y;
     Real z;
 
-    //TODO: set everything to const in other VectorX.hpp
+    // TODO: set everything to const in other VectorX.hpp
     Vector3();
-    Vector3(const Vector3&);
-    Vector3(const Real&,const Real&,const Real&);
+    Vector3(const Vector3 &);
+    Vector3(const Real &, const Real &, const Real &);
 
     Vector3 operator+(const Vector3 b) const;
     Vector3 operator-(const Vector3 b) const;
     Vector3 operator-() const;
     Vector3 operator*(const Real val) const;
-    Real operator*(const Vector3 b) const; //Dot product
+    Real operator*(const Vector3 b) const; // Dot product
 
     bool operator==(const Vector3);
 

@@ -21,7 +21,7 @@ namespace ue
 
     return C;
   }
-  Matrix2 Matrix2::operator+(Matrix2& B)
+  Matrix2 Matrix2::operator+(Matrix2 &B)
   {
     Matrix2 C;
 
@@ -33,7 +33,7 @@ namespace ue
 
     return C;
   }
-  Matrix2 Matrix2::operator-(Matrix2& B)
+  Matrix2 Matrix2::operator-(Matrix2 &B)
   {
     Matrix2 C;
 
@@ -49,23 +49,22 @@ namespace ue
   /*
    * Calculate the product of matrix 2x2 A and B
    */
-  Matrix2 Matrix2::operator*(Matrix2& B)
+  Matrix2 Matrix2::operator*(Matrix2 &B)
   {
     Matrix2 C;
 
-    //Unfolded, faster
+    // Unfolded, faster
 
-    C.d[0][0] = d[0][0]*B.d[0][0] + d[0][1]*B.d[1][0];
-    C.d[0][1] = d[0][0]*B.d[0][1] + d[0][1]*B.d[1][1];
+    C.d[0][0] = d[0][0] * B.d[0][0] + d[0][1] * B.d[1][0];
+    C.d[0][1] = d[0][0] * B.d[0][1] + d[0][1] * B.d[1][1];
 
-
-    C.d[1][0] = d[1][0]*B.d[0][0] + d[1][1]*B.d[1][0];
-    C.d[1][1] = d[1][0]*B.d[0][1] + d[1][1]*B.d[1][1];
+    C.d[1][0] = d[1][0] * B.d[0][0] + d[1][1] * B.d[1][0];
+    C.d[1][1] = d[1][0] * B.d[0][1] + d[1][1] * B.d[1][1];
 
     return C;
   }
 
-  Vector2 Matrix2::operator*(Vector2& v)
+  Vector2 Matrix2::operator*(Vector2 &v)
   {
     Vector2 u;
 
@@ -75,7 +74,7 @@ namespace ue
     return u;
   }
 
-  Real* Matrix2::operator[](int i)
+  Real *Matrix2::operator[](int i)
   {
     return d[i];
   }

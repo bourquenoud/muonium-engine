@@ -11,7 +11,8 @@
 #include <cmath>
 #include "../../arith.hpp"
 
-namespace ue {
+namespace ue
+{
 
   class Vector4
   {
@@ -22,13 +23,13 @@ namespace ue {
     Real w;
 
     Vector4();
-    Vector4(Real,Real,Real,Real);
+    Vector4(Real, Real, Real, Real);
 
     Vector4 operator+(Vector4 b);
     Vector4 operator-(Vector4 b);
     Vector4 operator-();
     Vector4 operator*(Real val);
-    Real operator*(Vector4 b); //Dot product
+    Real operator*(Vector4 b); // Dot product
 
     bool operator==(Vector4);
 

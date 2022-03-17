@@ -11,7 +11,6 @@ namespace ue
 {
   Camera::Camera()
   {
-
   }
 
   Camera::Camera(
@@ -21,8 +20,7 @@ namespace ue
       const uint32_t &imageHeight,
       const FitResolutionGate &fitFilm,
       const float &nearClippingPLane,
-      const float &focalLength
-  )
+      const float &focalLength)
   {
     float filmAspectRatio = filmApertureWidth / filmApertureHeight;
     float deviceAspectRatio = imageWidth / (float)imageHeight;
@@ -36,22 +34,27 @@ namespace ue
     float xscale = 1;
     float yscale = 1;
 
-    switch (fitFilm) {
+    switch (fitFilm)
+    {
     default:
     case FitResolutionGate::fill:
-      if (filmAspectRatio > deviceAspectRatio) {
-          xscale = deviceAspectRatio / filmAspectRatio;
+      if (filmAspectRatio > deviceAspectRatio)
+      {
+        xscale = deviceAspectRatio / filmAspectRatio;
       }
-      else {
-          yscale = filmAspectRatio / deviceAspectRatio;
+      else
+      {
+        yscale = filmAspectRatio / deviceAspectRatio;
       }
       break;
     case FitResolutionGate::overscan:
-      if (filmAspectRatio > deviceAspectRatio) {
-          yscale = filmAspectRatio / deviceAspectRatio;
+      if (filmAspectRatio > deviceAspectRatio)
+      {
+        yscale = filmAspectRatio / deviceAspectRatio;
       }
-      else {
-          xscale = deviceAspectRatio / filmAspectRatio;
+      else
+      {
+        xscale = deviceAspectRatio / filmAspectRatio;
       }
       break;
     }
@@ -66,7 +69,7 @@ namespace ue
     height = (Real)imageHeight;
     near = nearClippingPLane;
 
-    //XXX: why the *1 ?
+    // XXX: why the *1 ?
     projAx = R(0.5) * width;
     projAy = height * R(0.5);
     projB = near * R(0.5) * width;
@@ -75,7 +78,7 @@ namespace ue
 #define FOV_FACTOR 8.72664626e-3
   void Camera::computeProjectionMatrix()
   {
-    Real S = 1/(tanf((float)fov_deg * FOV_FACTOR));
+    Real S = 1 / (tanf((float)fov_deg * FOV_FACTOR));
 
     worldToCamera[0][0] = S;
     worldToCamera[0][1] = 0;
@@ -89,12 +92,12 @@ namespace ue
 
     worldToCamera[2][0] = 0;
     worldToCamera[2][1] = 0;
-    worldToCamera[2][2] = -far/(far-near);
+    worldToCamera[2][2] = -far / (far - near);
     worldToCamera[2][3] = -1;
 
     worldToCamera[3][0] = 0;
     worldToCamera[3][1] = 0;
-    worldToCamera[3][2] = -far*near/(far-near);
+    worldToCamera[3][2] = -far * near / (far - near);
     worldToCamera[3][3] = 0;
   }
 

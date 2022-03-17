@@ -14,31 +14,31 @@
 #include "../linal.hpp"
 #include "../texture.hpp"
 
-
-namespace ue {
+namespace ue
+{
 
   class Poly : public Object3D
   {
   public:
-    Triangle* faces;
+    Triangle *faces;
     uint32_t faceCount;
 
-    Vector3* vertices;
+    Vector3 *vertices;
     uint32_t vertexCount;
 
 #if UE_CONFIG_ENABLE_TEXTURE == true
     Texture texture;
-    Vector2* textureVerts;
+    Vector2 *textureVerts;
     uint32_t textureCount;
-#endif //UE_CONFIG_TEXTURE
+#endif // UE_CONFIG_TEXTURE
 
 #if UE_CONFIG_ENABLE_SMOOTH_NORMAL == true
-    Vector3* normals;
+    Vector3 *normals;
     uint32_t normalCount;
-#endif //UE_CONFIG_NORMAL
+#endif // UE_CONFIG_NORMAL
 
     Poly();
-    Poly(const Poly& object);
+    Poly(const Poly &object);
   };
 
 }

@@ -11,19 +11,20 @@
 #include "../../arith.hpp"
 #include "../vector/Vector3.hpp"
 
-namespace ue {
+namespace ue
+{
 
   class Matrix3
   {
   public:
-    //Matrix data
+    // Matrix data
     Real d[3][3];
     Matrix3 operator-();
-    Matrix3 operator+(Matrix3& B);
-    Matrix3 operator-(Matrix3& B);
-    Matrix3 operator*(Matrix3& B);
-    Vector3 operator*(const Vector3& v) const;
-    Real* operator[](int);
+    Matrix3 operator+(Matrix3 &B);
+    Matrix3 operator-(Matrix3 &B);
+    Matrix3 operator*(Matrix3 &B);
+    Vector3 operator*(const Vector3 &v) const;
+    Real *operator[](int);
   };
 
 }

@@ -11,7 +11,6 @@ namespace ue
 {
   Vector2::Vector2()
   {
-
   }
 
   Vector2::Vector2(Real x_, Real y_)
@@ -52,7 +51,7 @@ namespace ue
 
   Real Vector2::operator*(Vector2 b)
   {
-    return this->x*b.x + this->y*b.y;
+    return this->x * b.x + this->y * b.y;
   }
 
   /*
@@ -73,7 +72,7 @@ namespace ue
    */
   Real Vector2::norm()
   {
-    return sqrtf((float)(this->x*this->x + this->y*this->y));
+    return sqrtf((float)(this->x * this->x + this->y * this->y));
   }
 
   /*
@@ -83,33 +82,33 @@ namespace ue
   {
     Real norm = this->norm();
 
-    if(norm == R(0.0))
+    if (norm == R(0.0))
       return *this;
 
-    return *this * (R(1.0)/norm);
+    return *this * (R(1.0) / norm);
   }
 
   /*
    * Fast very approximate normalisation
    */
   Vector2 Vector2::approxNormalise()
-   {
-     Real norm = Real::abs(x)+Real::abs(y);
+  {
+    Real norm = Real::abs(x) + Real::abs(y);
 
-     if(norm == R(0.0))
-       return *this;
+    if (norm == R(0.0))
+      return *this;
 
-     return *this* (R(1.0)/norm); //There are no divide function
-   }
+    return *this * (R(1.0) / norm); // There are no divide function
+  }
 
   bool Vector2::operator==(Vector2 b)
   {
-    return(x==b.x && y==b.y);
+    return (x == b.x && y == b.y);
   }
 
   //****Constants****
-  const Vector2 Vector2::ZERO = {0,0};
-  const Vector2 Vector2::ONE = {1,1};
-  const Vector2 Vector2::X = {1,0};
-  const Vector2 Vector2::Y = {0,1};
+  const Vector2 Vector2::ZERO = {0, 0};
+  const Vector2 Vector2::ONE = {1, 1};
+  const Vector2 Vector2::X = {1, 0};
+  const Vector2 Vector2::Y = {0, 1};
 }

@@ -15,41 +15,41 @@
 #include "Colour.hpp"
 #include "../arith.hpp"
 
-namespace ue {
-
-class Texture
+namespace ue
 {
-public:
 
-	Colour* pixel;
-
-	inline Colour getPixelAt(const Vector2& pos) const
+	class Texture
 	{
-		//FIXME: no flooring create errors with FIXED32
-		uint32_t x = pos.x * (preprocessedWidth - R(1.0));
-		uint32_t y = (R(1.0) - pos.y) * (preprocessedHeight - R(1.0));
+	public:
+		Colour *pixel;
 
-		return pixel[(uint32_t)(x + (width * y))];
-	}
+		inline Colour getPixelAt(const Vector2 &pos) const
+		{
+			// FIXME: no flooring create errors with FIXED32
+			uint32_t x = pos.x * (preprocessedWidth - R(1.0));
+			uint32_t y = (R(1.0) - pos.y) * (preprocessedHeight - R(1.0));
 
-	inline Colour getPixelAt_old(const Vector2& pos) const
-	{
-		//TODO : make it so we don't have to floor the value (Something is wrong somewhere)
-		uint32_t x = (uint32_t)Real::floor(pos.x * (Real)(width - 1));
-		uint32_t y = (uint32_t)Real::floor((R(1.0) - pos.y) * (Real)(height - 1));
+			return pixel[(uint32_t)(x + (width * y))];
+		}
 
-		return pixel[x + (width * y)];
-	}
+		inline Colour getPixelAt_old(const Vector2 &pos) const
+		{
+			// TODO : make it so we don't have to floor the value (Something is wrong somewhere)
+			uint32_t x = (uint32_t)Real::floor(pos.x * (Real)(width - 1));
+			uint32_t y = (uint32_t)Real::floor((R(1.0) - pos.y) * (Real)(height - 1));
 
-	void premultiplyAlpha(Real);
-	void setDimensions(uint32_t _width, uint32_t _height);
+			return pixel[x + (width * y)];
+		}
 
-private :
-	uint32_t width;
-	uint32_t height;
-	Real preprocessedWidth;
-	Real preprocessedHeight;
-};
+		void premultiplyAlpha(Real);
+		void setDimensions(uint32_t _width, uint32_t _height);
+
+	private:
+		uint32_t width;
+		uint32_t height;
+		Real preprocessedWidth;
+		Real preprocessedHeight;
+	};
 
 }
 

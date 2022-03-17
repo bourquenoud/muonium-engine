@@ -21,16 +21,16 @@ namespace ue
   public:
     uint16_t width;
     uint16_t height;
-    Real* buffer;
+    Real *buffer;
 
     DepthBuffer();
-    DepthBuffer(uint16_t width_, uint16_t height_, Real* buffer_);
+    DepthBuffer(uint16_t width_, uint16_t height_, Real *buffer_);
 
-    //Indexing directly returns the buffer array
-	inline Real& operator[](int i)
-	{
-		return buffer[i];
-	}
+    // Indexing directly returns the buffer array
+    inline Real &operator[](int i)
+    {
+      return buffer[i];
+    }
 
     void clear();
   };

@@ -11,17 +11,16 @@ namespace ue
 {
   Vector3::Vector3()
   {
-
   }
 
-  Vector3::Vector3(const Vector3& v)
+  Vector3::Vector3(const Vector3 &v)
   {
     x = v.x;
     y = v.y;
     z = v.z;
   }
 
-  Vector3::Vector3(const Real& x_, const Real& y_, const Real& z_)
+  Vector3::Vector3(const Real &x_, const Real &y_, const Real &z_)
   {
     x = x_;
     y = y_;
@@ -80,7 +79,7 @@ namespace ue
    */
   Real Vector3::operator*(Vector3 b) const
   {
-    return x*b.x + y*b.y + z*b.z;
+    return x * b.x + y * b.y + z * b.z;
   }
 
   /*
@@ -90,9 +89,9 @@ namespace ue
   {
     Vector3 s1;
 
-    s1.x = y*b.z - z*b.y;
-    s1.y = z*b.x - x*b.z;
-    s1.z = x*b.y - y*b.x;
+    s1.x = y * b.z - z * b.y;
+    s1.y = z * b.x - x * b.z;
+    s1.z = x * b.y - y * b.x;
 
     return s1;
   }
@@ -102,7 +101,7 @@ namespace ue
    */
   Real Vector3::norm()
   {
-    return sqrtf((float)(x*x + y*y + z*z));
+    return sqrtf((float)(x * x + y * y + z * z));
   }
 
   /*
@@ -112,7 +111,7 @@ namespace ue
   {
     Real norm = this->norm();
 
-    if(norm == R(0.0))
+    if (norm == R(0.0))
       return *this;
 
     return *this * (R(1.0) / norm);
@@ -122,25 +121,24 @@ namespace ue
    * Fast very approximative normalisation. Mostly used to bring FIXED32 value closer to 1
    */
   Vector3 Vector3::approxNormalise()
-   {
-     Real norm = Real::abs(x)+Real::abs(y)+Real::abs(z);
+  {
+    Real norm = Real::abs(x) + Real::abs(y) + Real::abs(z);
 
-     if(norm == R(0.0))
-       return *this;
+    if (norm == R(0.0))
+      return *this;
 
-     return *this * (R(1.0) / norm);
-   }
+    return *this * (R(1.0) / norm);
+  }
 
   bool Vector3::operator==(Vector3 b)
-               {
-    return(x==b.x && y==b.y && z==b.z);
-               }
+  {
+    return (x == b.x && y == b.y && z == b.z);
+  }
 
   //****Constants****
-  const Vector3 Vector3::ZERO = {0,0,0};
-  const Vector3 Vector3::ONE = {1,1,1};
-  const Vector3 Vector3::X = {1,0,0};
-  const Vector3 Vector3::Y = {0,1,0};
-  const Vector3 Vector3::Z = {0,0,1};
+  const Vector3 Vector3::ZERO = {0, 0, 0};
+  const Vector3 Vector3::ONE = {1, 1, 1};
+  const Vector3 Vector3::X = {1, 0, 0};
+  const Vector3 Vector3::Y = {0, 1, 0};
+  const Vector3 Vector3::Z = {0, 0, 1};
 }
-

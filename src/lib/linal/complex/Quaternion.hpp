@@ -15,9 +15,11 @@
 #include "../matrix/Matrix3.hpp"
 #include "../matrix/Matrix4.hpp"
 
-namespace ue {
+namespace ue
+{
 
-  class Quaternion {
+  class Quaternion
+  {
   public:
     Real w;
     Real x;
@@ -40,7 +42,7 @@ namespace ue {
      * @param axis NORMALISED vector of this rotation axis.
      * @param angle rotation angle in radian
      */
-    Quaternion(const Vector3& axis,Real angle);
+    Quaternion(const Vector3 &axis, Real angle);
 
     /**
      * Constructor from euler angles
@@ -72,7 +74,7 @@ namespace ue {
      * @param y_ quaternion j imaginary part
      * @param z_ quaternion k imaginary part
      */
-    Quaternion(Real w_,Real x_,Real y_,Real z_);
+    Quaternion(Real w_, Real x_, Real y_, Real z_);
 
     /**
      * Constructor from quaternion
@@ -81,15 +83,13 @@ namespace ue {
      *
      * @param q Quaternion to clone
      */
-    Quaternion(const Quaternion& q);
-
+    Quaternion(const Quaternion &q);
 
     Quaternion operator-();
-    Quaternion operator+(Quaternion&);
-    Quaternion operator-(Quaternion&);
-    Quaternion operator*(const Quaternion& q) const;
+    Quaternion operator+(Quaternion &);
+    Quaternion operator-(Quaternion &);
+    Quaternion operator*(const Quaternion &q) const;
     Quaternion operator*(Real);
-
 
     /**
      * Calculate the inverse
@@ -157,7 +157,7 @@ namespace ue {
     /**
      * Rotate a given vector
      */
-    Vector3 rotateVector(const Vector3&) const;
+    Vector3 rotateVector(const Vector3 &) const;
   };
 
 }

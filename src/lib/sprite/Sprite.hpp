@@ -21,7 +21,7 @@ namespace ue
     Texture texture;
     Vector2 scale;
     Vector2 position;
-    Real rotation; //Trigonometric angle in rad
+    Real rotation; // Trigonometric angle in rad
   };
 
 } /* namespace ue */

@@ -1,14 +1,5 @@
-#ignore the build directories
-/Debug
-/Release
-/Test
+#ignore the build directorie
+/build
 
 #ignore the build files
 *.o
-*.d
-
-#Ignore the eclipse project
-.cproject
-.project
-/Debug_optimised/
-/Profile/

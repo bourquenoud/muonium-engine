@@ -8,18 +8,21 @@
 #ifndef COMPLEX_H_
 #define COMPLEX_H_
 
-namespace ue {
+namespace ue
+{
 
-class Complex {
-public:
-	Complex() {
-		// TODO Auto-generated constructor stub
-
-	}
-	virtual ~Complex() {
-		// TODO Auto-generated destructor stub
-	}
-};
+	class Complex
+	{
+	public:
+		Complex()
+		{
+			// TODO Auto-generated constructor stub
+		}
+		virtual ~Complex()
+		{
+			// TODO Auto-generated destructor stub
+		}
+	};
 
 }
 

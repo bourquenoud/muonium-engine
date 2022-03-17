@@ -16,7 +16,7 @@ namespace ue
 		buffer = NULL;
 	}
 
-	DepthBuffer::DepthBuffer(uint16_t width_, uint16_t height_, Real* buffer_)
+	DepthBuffer::DepthBuffer(uint16_t width_, uint16_t height_, Real *buffer_)
 	{
 		width = width_;
 		height = height_;
@@ -25,7 +25,7 @@ namespace ue
 
 	void DepthBuffer::clear()
 	{
-		for(uint32_t i = 0; i < width * height; i++)
+		for (uint32_t i = 0; i < width * height; i++)
 		{
 			buffer[i] = UE_REAL_MIN;
 		}

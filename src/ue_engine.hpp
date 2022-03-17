@@ -8,16 +8,7 @@
 #ifndef UE_ENGINE_H_
 #define UE_ENGINE_H_
 
-/*
-#undef min
-#undef max
-#undef round
-#undef abs
-*/
-
-//Set the configuration for the engine
-
-
+// Set the configuration for the engine
 #include "lib/3d.hpp"
 #include "lib/arith.hpp"
 #include "lib/buffer.hpp"

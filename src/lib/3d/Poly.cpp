@@ -11,10 +11,9 @@ namespace ue
 {
   Poly::Poly()
   {
-
   }
 
-  Poly::Poly(const Poly& object)
+  Poly::Poly(const Poly &object)
   {
     rotation = object.rotation;
     position = object.position;

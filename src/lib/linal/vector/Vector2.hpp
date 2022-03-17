@@ -12,7 +12,8 @@
 
 #include "../../arith.hpp"
 
-namespace ue {
+namespace ue
+{
 
   class Vector2
   {
@@ -21,13 +22,13 @@ namespace ue {
     Real y;
 
     Vector2();
-    Vector2(Real,Real);
+    Vector2(Real, Real);
 
     Vector2 operator+(Vector2 b);
     Vector2 operator-(Vector2 b);
     Vector2 operator-();
     Vector2 operator*(Real val);
-    Real operator*(Vector2 b); //Dot product
+    Real operator*(Vector2 b); // Dot product
 
     bool operator==(Vector2);
 

@@ -13,26 +13,27 @@
 #include "../arith.hpp"
 #include "../linal.hpp"
 
-namespace ue {
+namespace ue
+{
   struct Triangle
   {
-    //Vertex
-    Vector3* va;
-    Vector3* vb;
-    Vector3* vc;
+    // Vertex
+    Vector3 *va;
+    Vector3 *vb;
+    Vector3 *vc;
 
 #if UE_CONFIG_ENABLE_TEXTURE == true
-    //Texture vertex
-    Vector2* vta;
-    Vector2* vtb;
-    Vector2* vtc;
+    // Texture vertex
+    Vector2 *vta;
+    Vector2 *vtb;
+    Vector2 *vtc;
 #endif
 
 #if UE_CONFIG_ENABLE_SMOOTH_NORMAL == true
-    //Normal vector
-    Vector3* vna;
-    Vector3* vnb;
-    Vector3* vnc;
+    // Normal vector
+    Vector3 *vna;
+    Vector3 *vnb;
+    Vector3 *vnc;
 
 #endif
   };
