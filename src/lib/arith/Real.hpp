@@ -106,10 +106,15 @@ namespace ue
     }
 #endif // UE_CONFIG_ARITHMETIC
 
-#if __cplusplus >= 201703L
+#if __cplusplus >= 201703L && UE_CONFIG_ARITHMETIC == FLOAT
     constexpr Real(const long double a) : val(a)
     {
       val = (float)a;
+    }
+#elif __cplusplus >= 201703L && UE_CONFIG_ARITHMETIC == FIXED32
+    constexpr Real(const long double a) : val(a)
+    {
+      val = (Fixed32)a;
     }
 #elif UE_CONFIG_ARITHMETIC == FLOAT
     inline Real(const double a)

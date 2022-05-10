@@ -22,7 +22,7 @@
  * FLOAT
  * FIXED32
  */
-#define UE_CONFIG_ARITHMETIC FLOAT
+#define UE_CONFIG_ARITHMETIC FIXED32
 
 /*
  * Define the number of decimals used for the 32 bits fixed point arithmetic
@@ -33,7 +33,7 @@
  * 0 to 32
  *
  */
-#define UE_CONFIG_FIXED32_DECIMALS 16
+#define UE_CONFIG_FIXED32_DECIMALS 24
 
 /*
  * Enable render texture
